@@ -3,7 +3,6 @@ info:
   title: Flavorite - OpenAPI 3.0
   description: >-
     This is a Flavorite Server based on the OpenAPI 3.0 specification. 
-  termsOfService: http://swagger.io/terms/
   contact:
     email: apiteam@swagger.io
   license:
@@ -16,17 +15,17 @@ externalDocs:
 servers:
   - url: https://localhost:8000/api/v1
 tags:
-  - name: review
-    description: User's post of review on a restaurant that serves one or more of their favorite dishes
-  - name: restaurant
-    description: All restaurants that has reviews from our users
-  - name: user
-    description: Operations about user
+  - name: reviews
+    description: User's post of reviews for restaurants that serve one or more of their favorite dishes
+  - name: restaurants
+    description: All restaurants that have reviews from users
+  - name: users
+    description: Operations about users
 paths:
-  /review:
+  /reviews:
     put:
       tags:
-        - review
+        - reviews
       summary: Update an existing review
       description: Update an existing review by Id
       operationId: updateReview
@@ -35,22 +34,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Review'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/Review'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Review'
+              $ref: '#/components/schemas/UpdateReview'
         required: true
       responses:
         '200':
           description: Successful operation
           content:
             application/json:
-              schema:
-                $ref: '#/components/schemas/Review'
-            application/xml:
               schema:
                 $ref: '#/components/schemas/Review'
         '400':
@@ -59,13 +49,9 @@ paths:
           description: Review not found
         '405':
           description: Validation exception
-      security:
-        - flavorite_auth:
-            - write:reviews
-            - read:reviews
     post:
       tags:
-        - review
+        - reviews
       summary: Add a new review about a restaurant
       description: Add a new review about a restaurant
       operationId: addReview
@@ -74,13 +60,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Review'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/Review'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Review'
+              $ref: '#/components/schemas/CreateReview'
         required: true
       responses:
         '200':
@@ -89,20 +69,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Review'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Review'
         '405':
           description: Invalid input
-      security:
-        - flavorite_auth:
-            - write:reviews
-            - read:reviews
   
-  /review/{reviewId}:
+  /reviews/{reviewId}:
     get:
       tags:
-        - review
+        - reviews
       summary: Find review by ID
       description: Returns a single review
       operationId: getReviewById
@@ -121,31 +94,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Review'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Review'
         '400':
           description: Invalid ID supplied
         '404':
           description: Review not found
-      security:
-        - api_key: []
-        - flavorite_auth:
-            - write:reviews
-            - read:reviews
     delete:
       tags:
-        - review
+        - reviews
       summary: Deletes a review
       description: delete a review
       operationId: deleteReview
       parameters:
-        - name: api_key
-          in: header
-          description: ''
-          required: false
-          schema:
-            type: string
         - name: reviewId
           in: path
           description: Review id to delete
@@ -154,89 +113,17 @@ paths:
             type: integer
             format: int64
       responses:
+        '204':
+          description: Successful operation
         '400':
           description: Invalid review value
-      security:
-        - flavorite_auth:
-            - write:reviews
-            - read:reviews
-            
-  /review/{userId}:
-    get:
-      tags:
-        - review
-      summary: Find reviews by user
-      description: Returns all reviews by a single user
-      operationId: getReviewByUser
-      parameters:
-        - name: userId
-          in: path
-          description: ID of user to return user's reviews
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Review'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Review'
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Review not found
-      security:
-        - api_key: []
-        - flavorite_auth:
-            - write:reviews
-            - read:reviews
-  /review/{restaurantId}:
-    get:
-      tags:
-        - review
-      summary: Find reviews by restaurant
-      description: Returns all reviews for a single restaurant
-      operationId: getReviewByRestaurant
-      parameters:
-        - name: restaurantId
-          in: path
-          description: ID of restaurant to return all reviews for a single restaurant
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Review'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Review'
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Review not found
-      security:
-        - api_key: []
-        - flavorite_auth:
-            - write:reviews
-            - read:reviews
-
-  /review/{reviewId}/uploadImage:
+  /reviews/{reviewId}/image:
     post:
       tags:
-        - review
+        - reviews
       summary: uploads an image
       description: ''
-      operationId: uploadFile
+      operationId: uploadImage
       parameters:
         - name: reviewId
           in: path
@@ -264,14 +151,37 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponse'
-      security:
-        - flavorite_auth:
-            - write:reviews
-            - read:reviews
-  /restaurant:
+    delete:
+      tags:
+        - reviews
+      summary: deletes an image
+      description: ''
+      operationId: deleteImage
+      parameters:
+        - name: reviewId
+          in: path
+          description: ID of review to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: additionalMetadata
+          in: query
+          description: Additional Metadata
+          required: false
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Successful operation
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Review or image not found
+  /restaurants:
     get:
       tags:
-        - restaurant
+        - restaurants
       summary: Find restaurants in user location given
       description: Returns all restauarants in given location radius
       operationId: getRestaurants
@@ -303,23 +213,41 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Restaurant'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Restaurant'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Restaurant'
         '400':
           description: Invalid query supplied
-        '404':
-          description: Restaurants not found
-      security:
-        - api_key: []
-        - flavorite_auth:
-            - write:restaurants
-            - read:restaurants
-  /user:
+  /restaurants/{restaurantId}/reviews:
+    get:
+      tags:
+        - restaurants
+      summary: Find reviews by restaurant
+      description: Returns all reviews for a single restaurant
+      operationId: getReviewByRestaurant
+      parameters:
+        - name: restaurantId
+          in: path
+          description: ID of restaurant to return all reviews for a single restaurant
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Review'
+        '400':
+          description: Invalid ID supplied
+  /users:
     post:
       tags:
-        - user
+        - users
       summary: Create user
       description: This can only be done by the logged in user.
       operationId: createUser
@@ -328,13 +256,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/User'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/CreateUser'
       responses:
         default:
           description: successful operation
@@ -342,13 +264,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/User'
-  /user/createWithList:
+  /users/createWithList:
     post:
       tags:
-        - user
+        - users
       summary: Creates list of users with given input array
       description: Creates list of users with given input array
       operationId: createUsersWithListInput
@@ -358,7 +277,7 @@ paths:
             schema:
               type: array
               items:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/CreateUser'
       responses:
         '200':
           description: Successful operation
@@ -366,69 +285,45 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/User'
         default:
           description: successful operation
-  /user/login:
-    get:
+  /users/login:
+    post:
       tags:
-        - user
+        - users
       summary: Logs user into the system
       description: ''
       operationId: loginUser
-      parameters:
-        - name: username
-          in: query
-          description: The user name for login
-          required: false
-          schema:
-            type: string
-        - name: password
-          in: query
-          description: The password for login in clear text
-          required: false
-          schema:
-            type: string
+      requestBody:
+        description: Login information
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginUser'
       responses:
         '200':
           description: successful operation
-          headers:
-            X-Rate-Limit:
-              description: calls per hour allowed by the user
-              schema:
-                type: integer
-                format: int32
-            X-Expires-After:
-              description: date in UTC when token expires
-              schema:
-                type: string
-                format: date-time
           content:
-            application/xml:
-              schema:
-                type: string
             application/json:
               schema:
                 type: string
         '400':
           description: Invalid username/password supplied
-  /user/logout:
-    get:
+  /users/logout:
+    post:
       tags:
-        - user
+        - users
       summary: Logs out current logged in user session
       description: ''
       operationId: logoutUser
       parameters: []
       responses:
-        default:
+        '204':
           description: successful operation
-  /user/{username}:
+  /users/{username}:
     get:
       tags:
-        - user
+        - users
       summary: Get user by user name
       description: ''
       operationId: getUserByName
@@ -446,16 +341,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/User'
         '400':
           description: Invalid username supplied
         '404':
           description: User not found
     put:
       tags:
-        - user
+        - users
       summary: Update user
       description: This can only be done by the logged in user.
       operationId: updateUser
@@ -471,19 +363,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/User'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UpdateUser'
       responses:
         default:
           description: successful operation
     delete:
       tags:
-        - user
+        - users
       summary: Delete user
       description: This can only be done by the logged in user.
       operationId: deleteUser
@@ -495,10 +381,37 @@ paths:
           schema:
             type: string
       responses:
+        '204':
+          description: Successful operation
         '400':
           description: Invalid username supplied
         '404':
           description: User not found
+  /users/{username}/reviews:
+    get:
+      tags:
+        - users
+      summary: Get reviews by user name
+      description: Returns all reviews by a single user
+      operationId: getReviewsByUsername
+      parameters:
+        - name: username
+          in: path
+          description: The name of user to return user's reviews
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Review'
+        '400':
+          description: Invalid username supplied
 components:
   schemas:
     Review:
@@ -516,6 +429,32 @@ components:
           type: integer
           format: int64
           example: 19877
+        content:
+          type: string
+          example: Awesome
+        photoUrl:
+          type: string
+          example: www.photouploaded.com
+    CreateReview:
+      type: object
+      properties:
+        userId:
+          type: integer
+          format: int64
+          example: 198772
+        restaurantId:
+          type: integer
+          format: int64
+          example: 19877
+        content:
+          type: string
+          example: Awesome
+        photoUrl:
+          type: string
+          example: www.photouploaded.com
+    UpdateReview:
+      type: object
+      properties:
         content:
           type: string
           example: Awesome
@@ -557,8 +496,67 @@ components:
           description: User Status
           format: int32
           example: 1
-      xml:
-        name: user
+    CreateUser:
+      type: object
+      properties:
+        username:
+          type: string
+          example: theUser
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: James
+        email:
+          type: string
+          example: john@email.com
+        password:
+          type: string
+          example: '12345'
+    UpdateUser:
+      type: object
+      properties:
+        username:
+          type: string
+          example: theUser
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: James
+        email:
+          type: string
+          example: john@email.com
+        password:
+          type: string
+          example: '12345'
+        favoriteFoods:
+          type: array
+          items: 
+            $ref: '#/components/schemas/FavoriteFood'
+        friends:
+          type: array
+          items: 
+            $ref: '#/components/schemas/User'
+        userStatus:
+          type: integer
+          description: User Status
+          format: int32
+          example: 1
+    LoginUser:
+      type: object
+      properties:
+        username:
+          type: string
+          example: theUser
+        email:
+          type: string
+          example: john@email.com
+        password:
+          type: string
+          example: '12345'
     Restaurant:
       type: object
       properties:
@@ -604,16 +602,11 @@ components:
           type: string
         message:
           type: string
-      xml:
-        name: '##default'
   requestBodies:
     Review:
       description: Review object that needs to be added to the Reviews
       content:
         application/json:
-          schema:
-            $ref: '#/components/schemas/Review'
-        application/xml:
           schema:
             $ref: '#/components/schemas/Review'
     UserArray:
@@ -624,16 +617,3 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/User'
-  securitySchemes:
-    flavorite_auth:
-      type: oauth2
-      flows:
-        implicit:
-          authorizationUrl: https://petstore3.swagger.io/oauth/authorize
-          scopes:
-            write:reviews: modify your reviews 
-            read:reviews: read your reviews or reviews made by your friends
-    api_key:
-      type: apiKey
-      name: api_key
-      in: header
