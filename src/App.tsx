@@ -1,24 +1,65 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link
+} from 'react-router-dom';
+
+import Navbar from './components/partials/NavBar';
+import Home from './components/pages/Home'
+import Profile from './components/pages/Profile'
+import Login from './components/pages/Login'
+import Register from './components/pages/Register'
+import FavoriteFoods from './components/pages/FavoriteFoods';
+import FavoriteFood from './components/pages/FavoriteFood';
+import Friends from './components/pages/Friends';
+import UserReviews from './components/pages/UserReviews';
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='App'>
+      <Router>
+        <header>
+          <Navbar />
+        </header>
+        <Routes>
+          <Route 
+            path='/'
+            element={<Home />}          
+          />
+          <Route 
+            path='/:username'
+            element={<Profile />}          
+          />
+          <Route 
+            path='/:username/friends'
+            element={<Friends />}          
+          />
+          <Route 
+            path='/:username/reviews'
+            element={<UserReviews />}          
+          />
+          <Route 
+            path='/:username/favorites'
+            element={<FavoriteFoods />}          
+          />
+          <Route 
+            path='/:username/favorites/:favorite'
+            element={<FavoriteFood />}          
+          />
+          <Route 
+            path='/register'
+            element={<Register />}          
+          />
+          <Route 
+            path='/login'
+            element={<Login />}          
+          />
+        </Routes>
+      </Router>
+     
     </div>
   );
 }

@@ -3,15 +3,17 @@ info:
   title: Flavorite - OpenAPI 3.0
   description: >-
     This is a Flavorite Server based on the OpenAPI 3.0 specification. 
-  contact:
-    email: apiteam@swagger.io
-  license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 1.0.11
-externalDocs:
-  description: Find out more about Swagger
-  url: http://swagger.io
+# Should we delete the below commented out?
+
+#   contact:
+#     email: apiteam@swagger.io
+#   license:
+#     name: Apache 2.0
+#     url: http://www.apache.org/licenses/LICENSE-2.0.html
+#   version: 1.0.11
+# externalDocs:
+#   description: Find out more about Swagger
+#   url: http://swagger.io
 servers:
   - url: https://localhost:8000/api/v1
 tags:
@@ -415,6 +417,11 @@ paths:
 components:
   schemas:
     Review:
+      required:
+        - userId
+        - restaurantId
+        - rating
+        - content
       type: object
       properties:
         id:
@@ -429,6 +436,10 @@ components:
           type: integer
           format: int64
           example: 19877
+        rating:
+          type: integer
+          format: int64
+          example: 5
         content:
           type: string
           example: Awesome
@@ -436,6 +447,11 @@ components:
           type: string
           example: www.photouploaded.com
     CreateReview:
+      required:
+        - userId
+        - restaurantId
+        - rating
+        - content
       type: object
       properties:
         userId:
@@ -446,6 +462,10 @@ components:
           type: integer
           format: int64
           example: 19877
+        rating:
+          type: integer
+          format: int64
+          example: 5
         content:
           type: string
           example: Awesome
@@ -453,8 +473,15 @@ components:
           type: string
           example: www.photouploaded.com
     UpdateReview:
+      required:
+        - rating
+        - content
       type: object
       properties:
+        rating:
+          type: integer
+          format: int64
+          example: 5
         content:
           type: string
           example: Awesome
@@ -462,6 +489,12 @@ components:
           type: string
           example: www.photouploaded.com
     User:
+      required:
+        - username
+        - firstName
+        - lastName
+        - email
+        - password
       type: object
       properties:
         id:
@@ -491,12 +524,19 @@ components:
           type: array
           items: 
             $ref: '#/components/schemas/User'
-        userStatus:
-          type: integer
-          description: User Status
-          format: int32
-          example: 1
+        # I'm not sure what this was.... should we remove?
+        # userStatus:
+        #   type: integer
+        #   description: User Status
+        #   format: int32
+        #   example: 1
     CreateUser:
+      required:
+        - username
+        - firstName
+        - lastName
+        - email
+        - password
       type: object
       properties:
         username:
@@ -515,6 +555,14 @@ components:
           type: string
           example: '12345'
     UpdateUser:
+    # I'm not sure about this one.. thinking all should be required whether the update is made on them or not..?
+      required:
+        - username
+        - firstName
+        - lastName
+        - email
+        - password
+        - favoriteFoods
       type: object
       properties:
         username:
@@ -540,24 +588,33 @@ components:
           type: array
           items: 
             $ref: '#/components/schemas/User'
-        userStatus:
-          type: integer
-          description: User Status
-          format: int32
-          example: 1
+        # userStatus:
+        #   type: integer
+        #   description: User Status
+        #   format: int32
+        #   example: 1
     LoginUser:
+      required:
+        - username
+        - password
       type: object
       properties:
         username:
           type: string
           example: theUser
-        email:
-          type: string
-          example: john@email.com
+        # Maybe should be one or the other of username/email?
+        # email:
+        #   type: string
+        #   example: john@email.com
         password:
           type: string
           example: '12345'
     Restaurant:
+      required:
+        - name
+        - longitude
+        - latitude
+        - address
       type: object
       properties:
         id:
@@ -567,7 +624,7 @@ components:
         name:
           type: string
           example: Outback
-        logitude:
+        longitude:
           type: number
           format: double
           example: 32.6
@@ -579,6 +636,8 @@ components:
           type: string
           example: '120 Detroit Ave, CA 94520'
     FavoriteFood:
+      required:
+        - name
       type: object
       properties:
         id:
@@ -609,6 +668,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Review'
+    User:
+      description: User object that needs to be added to the Users
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/User'
     UserArray:
       description: List of user object
       content:

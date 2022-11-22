@@ -1,3 +1,3 @@
-export * from './RestaurantApi';
-export * from './ReviewApi';
-export * from './UserApi';
+export * from './RestaurantsApi';
+export * from './ReviewsApi';
+export * from './UsersApi';
