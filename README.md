@@ -65,13 +65,9 @@
 .
 ├── README.md          # project description 
 ├── client             # OpenAPI generated files containing models and API
-├── node_modules       # contains all the dependencies
-├── openapitools.json  # OpenAPI generator configuration file
-├── package-lock.json  # contains versions of installed dependancies
-├── package.json       # contains various relevant metadata
 ├── public             # contains static files
 ├── src                # source files including components, tests, css files
-└── tsconfig.json      # specifies the root files and the compiler options required 
+
 ```
 
 
@@ -87,25 +83,80 @@
 
 1. Get a Google Maps API Key at [https://mapsplatform.google.com/](https://mapsplatform.google.com/)
 2. Clone the repo
-   ```sh
+   ```
    git clone https://github.com/flavorite/web-app.git
    ```
 3. touch ```.env.local``` file and add the API Key as follows:
-    ```sh
+    ```
     REACT_APP_API_KEY=<YOUR API KEY HERE>
     ```
 3. Install NPM packages
-   ```sh
+   ```
    npm install
    ```
 4. Run this script to update Client model from OAS
-   ```sh
+   ```
    npm run generate
    ```
-5. Start the application
-   ```sh
-   npm run start
+
+### Available Scripts
+
+In the project directory, you can run:
+
    ```
+   npm start
+   ```
+
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+
+
+   ```
+   npm test
+   ```
+
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+
+   ```
+   npm run build
+   ```
+
+Builds the app for production to the `build` folder.\
+
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+   ```
+   npm run eject
+   ```
+
+**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+
+If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+
+
+   ```
+   npm run lint
+   ```
+
+   Run ESLint
+
+   ```
+   npm run lint:fix
+   ```
+
+   Run ESLint --fix
+
+   ```
+   npm run format
+   ```
+
+   Run Prettier
+
+   ```
+   npm run generate
+   ```
+   Run OpenAPI generator to generate/update client models
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
