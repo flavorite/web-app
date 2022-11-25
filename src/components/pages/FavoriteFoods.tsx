@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
-import AddFavorite from '../partials/AddFavorite';
+import AddFavorite from '../partials/AddFavorite'
 
-export default function FavoriteFoods () {
+export default function FavoriteFoods() {
     const username = 'testUser'
     const favoriteName = 'sushi'
     return (

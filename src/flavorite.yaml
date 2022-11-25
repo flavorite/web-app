@@ -1,6 +1,7 @@
 openapi: 3.0.3
 info:
   title: Flavorite - OpenAPI 3.0
+  version: 3.0
   description: >-
     This is a Flavorite Server based on the OpenAPI 3.0 specification. 
 # Should we delete the below commented out?
