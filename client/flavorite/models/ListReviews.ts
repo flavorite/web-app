@@ -23,46 +23,32 @@ import {
 /**
  * 
  * @export
- * @interface FavoriteFood
+ * @interface ListReviews
  */
-export interface FavoriteFood {
-    /**
-     * 
-     * @type {number}
-     * @memberof FavoriteFood
-     */
-    id: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof FavoriteFood
-     */
-    name: string;
+export interface ListReviews {
     /**
      * 
      * @type {Array<Review>}
-     * @memberof FavoriteFood
+     * @memberof ListReviews
      */
     reviews: Array<Review>;
 }
 
-export function FavoriteFoodFromJSON(json: any): FavoriteFood {
-    return FavoriteFoodFromJSONTyped(json, false);
+export function ListReviewsFromJSON(json: any): ListReviews {
+    return ListReviewsFromJSONTyped(json, false);
 }
 
-export function FavoriteFoodFromJSONTyped(json: any, ignoreDiscriminator: boolean): FavoriteFood {
+export function ListReviewsFromJSONTyped(json: any, ignoreDiscriminator: boolean): ListReviews {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'id': json['id'],
-        'name': json['name'],
         'reviews': ((json['reviews'] as Array<any>).map(ReviewFromJSON)),
     };
 }
 
-export function FavoriteFoodToJSON(value?: FavoriteFood | null): any {
+export function ListReviewsToJSON(value?: ListReviews | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -71,8 +57,6 @@ export function FavoriteFoodToJSON(value?: FavoriteFood | null): any {
     }
     return {
         
-        'id': value.id,
-        'name': value.name,
         'reviews': ((value.reviews as Array<any>).map(ReviewToJSON)),
     };
 }

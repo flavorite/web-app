@@ -10,6 +10,7 @@ import FavoriteFoods from './components/pages/FavoriteFoods'
 import FavoriteFood from './components/pages/FavoriteFood'
 import Friends from './components/pages/Friends'
 import UserReviews from './components/pages/UserReviews'
+import NewReview from './components/pages/NewReview'
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path='/:username/favorites/:favorite' element={<FavoriteFood />} />
           <Route path='/register' element={<Register />} />
           <Route path='/login' element={<Login />} />
+          <Route path='/writeareview' element={<NewReview />} />
         </Routes>
       </Router>
     </div>
