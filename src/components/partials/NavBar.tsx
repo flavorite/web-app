@@ -13,13 +13,14 @@ import MenuItem from '@mui/material/MenuItem'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 
-let pages: string[]
+
 const settings = ['Profile', 'Find Friends', 'Logout']
 
 export default function Navbar() {
-  // test user
   const navigate = useNavigate()
+  // test user
   const [username, setUsername] = useState<null | string>('testUser')
+  const [pages, setPages] = useState<string[]>([''])
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null)
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -30,7 +31,7 @@ export default function Navbar() {
   }
 
   useEffect(() => {
-    username ? (pages = ['Write a Review']) : (pages = ['Login', 'Register', 'Write a Review'])
+    if (username) {setPages(['Write a Review'])} else {setPages(['Login', 'Register'])}
   }, [username])
 
   const handleCloseNavMenu = (e: any) => {
@@ -146,7 +147,7 @@ export default function Navbar() {
             ))}
           </Box>
 
-          <Box sx={{ flexGrow: 0 }}>
+          <Box style={{display: username ? 'block' : 'none'}} sx={{ flexGrow: 0 }}>
             <Tooltip title='Open settings'>
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt='Remy Sharp' src='/static/images/avatar/2.jpg' />
