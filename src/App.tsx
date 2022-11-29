@@ -1,5 +1,8 @@
 import './App.css'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+import { QueryClient, QueryClientProvider } from 'react-query';
+const queryClient = new QueryClient();
+
 
 import Navbar from './components/partials/NavBar'
 import Home from './components/pages/Home'
@@ -15,6 +18,7 @@ import NewReview from './components/pages/NewReview'
 function App() {
   return (
     <div className='App'>
+    <QueryClientProvider client={queryClient}>
       <Router>
         <header>
           <Navbar />
@@ -31,6 +35,8 @@ function App() {
           <Route path='/writeareview' element={<NewReview />} />
         </Routes>
       </Router>
+            
+    </QueryClientProvider>
     </div>
   )
 }
