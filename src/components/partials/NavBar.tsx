@@ -31,6 +31,7 @@ export default function Navbar() {
   }
 
   useEffect(() => {
+    // set currentUser's username here
     if (username) {setPages(['Write a Review'])} else {setPages(['Login', 'Register'])}
   }, [username])
 
