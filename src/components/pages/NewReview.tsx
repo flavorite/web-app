@@ -1,5 +1,9 @@
+import * as Mui from '@mui/material';
+
 export default function NewReview() {
-  // only for route testing
-  const username = 'testUser'
-  return <div>Search Bar for Restaurant to WriteReview Review Form</div>
+  return (
+    <Mui.Container fixed>
+    {/* To discuss: How to set up this page */}
+  </Mui.Container>
+  )
 }

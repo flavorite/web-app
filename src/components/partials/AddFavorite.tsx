@@ -1,3 +1,5 @@
+import * as Mui from '@mui/material';
+
 export default function AddFavorite() {
   return (
     <div>

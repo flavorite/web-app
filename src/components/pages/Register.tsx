@@ -1,31 +1,22 @@
-import Avatar from '@mui/material/Avatar'
-import Button from '@mui/material/Button'
-import CssBaseline from '@mui/material/CssBaseline'
-import TextField from '@mui/material/TextField'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import Checkbox from '@mui/material/Checkbox'
 import Link from '@mui/material/Link'
-import Grid from '@mui/material/Grid'
-import Box from '@mui/material/Box'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
-import Typography from '@mui/material/Typography'
-import Container from '@mui/material/Container'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import useCreateUser from '../../hooks/useCreateUser'
 import {useState} from 'react'
 import { CreateUser } from '../../client/flavorite/models'
 import { useNavigate } from 'react-router'
+import * as Mui from '@mui/material';
 
 function Copyright(props: any) {
   return (
-    <Typography variant='body2' color='text.secondary' align='center' {...props}>
+    <Mui.Typography variant='body2' color='text.secondary' align='center' {...props}>
       {'Copyright © '}
       <Link color='inherit' href='https://mui.com/'>
         Your Website
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
-    </Typography>
+    </Mui.Typography>
   )
 }
 
@@ -60,9 +51,9 @@ export default function Register() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component='main' maxWidth='xs'>
-        <CssBaseline />
-        <Box
+      <Mui.Container component='main' maxWidth='xs'>
+        <Mui.CssBaseline />
+        <Mui.Box
           sx={{
             marginTop: 8,
             display: 'flex',
@@ -70,16 +61,16 @@ export default function Register() {
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Mui.Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <LockOutlinedIcon />
-          </Avatar>
-          <Typography component='h1' variant='h5'>
+          </Mui.Avatar>
+          <Mui.Typography component='h1' variant='h5'>
             Sign up
-          </Typography>
-          <Box component='form' noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
+          </Mui.Typography>
+          <Mui.Box component='form' noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+            <Mui.Grid container spacing={2}>
+              <Mui.Grid item xs={12} sm={6}>
+                <Mui.TextField
                   autoComplete='given-name'
                   name='firstName'
                   required
@@ -88,9 +79,9 @@ export default function Register() {
                   label='First Name'
                   autoFocus
                 />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
+              </Mui.Grid>
+              <Mui.Grid item xs={12} sm={6}>
+                <Mui.TextField
                   required
                   fullWidth
                   id='lastName'
@@ -98,9 +89,9 @@ export default function Register() {
                   name='lastName'
                   autoComplete='family-name'
                 />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
+              </Mui.Grid>
+              <Mui.Grid item xs={12}>
+                <Mui.TextField
                   required
                   fullWidth
                   id='email'
@@ -108,9 +99,9 @@ export default function Register() {
                   name='email'
                   autoComplete='email'
                 />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
+              </Mui.Grid>
+              <Mui.Grid item xs={12}>
+                <Mui.TextField
                   required
                   fullWidth
                   id='username'
@@ -118,9 +109,9 @@ export default function Register() {
                   name='username'
                   autoComplete='username'
                 />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
+              </Mui.Grid>
+              <Mui.Grid item xs={12}>
+                <Mui.TextField
                   required
                   fullWidth
                   name='password'
@@ -129,22 +120,22 @@ export default function Register() {
                   id='password'
                   autoComplete='new-password'
                 />
-              </Grid>
-            </Grid>
-            <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
+              </Mui.Grid>
+            </Mui.Grid>
+            <Mui.Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
               Sign Up
-            </Button>
-            <Grid container justifyContent='flex-end'>
-              <Grid item>
+            </Mui.Button>
+            <Mui.Grid container justifyContent='flex-end'>
+              <Mui.Grid item>
                 <Link href='/login' variant='body2'>
                   Already have an account? Sign in
                 </Link>
-              </Grid>
-            </Grid>
-          </Box>
-        </Box>
+              </Mui.Grid>
+            </Mui.Grid>
+          </Mui.Box>
+        </Mui.Box>
         <Copyright sx={{ mt: 5 }} />
-      </Container>
+      </Mui.Container>
     </ThemeProvider>
   )
 }

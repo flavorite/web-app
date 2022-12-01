@@ -1,14 +1,23 @@
 import { Link } from 'react-router-dom'
 import AddFavorite from '../partials/AddFavorite'
+import * as Mui from '@mui/material';
 
 export default function FavoriteFoods() {
+  // replace with 'favoritefoods' from useUser()
+  const favorites = ['sushi', 'french fries', 'bibimbap']
   const username = 'testUser'
-  const favoriteName = 'sushi'
+
+  const favoritesList = favorites.map((food, idx) => {
+    return <Link to={`/${username}/favorites/${food}`} key={idx}>{food}</Link>
+  })
+
   return (
-    <div>
+    <Mui.Container fixed>
       <AddFavorite />
-      <h1>Mapped List of Favorite Dishes in order for this user</h1>
-      <Link to={`/${username}/favorites/${favoriteName}`}>{favoriteName}</Link>
-    </div>
+      <Mui.Stack spacing={2}>
+        {favoritesList}
+      </Mui.Stack>
+      {/* Make into Ordered list, enable user to switch favorites order */}
+    </Mui.Container>
   )
 }

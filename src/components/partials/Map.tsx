@@ -1,4 +1,5 @@
 import useRestaurants from '../../hooks/useRestaurants'
+import * as Mui from '@mui/material';
 
 export default function Map() {
   const {restaurants, loading, error} = useRestaurants({

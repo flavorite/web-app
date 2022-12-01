@@ -1,10 +1,10 @@
 import Map from '../partials/Map'
+import * as Mui from '@mui/material';
 
 export default function Home() {
   return (
-    <div>
-      <h1>Landing Page</h1>
-      <Map />
-    </div>
+    <Mui.Container fixed>
+    <Map />
+  </Mui.Container>
   )
 }
