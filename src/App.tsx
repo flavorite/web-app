@@ -14,6 +14,7 @@ import FavoriteFood from './components/pages/FavoriteFood'
 import Friends from './components/pages/Friends'
 import UserReviews from './components/pages/UserReviews'
 import NewReview from './components/pages/NewReview'
+import Restaurant from './components/pages/Restaurant';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
           <Route path='/:username/reviews' element={<UserReviews />} />
           <Route path='/:username/favorites' element={<FavoriteFoods />} />
           <Route path='/:username/favorites/:favorite' element={<FavoriteFood />} />
+          <Route path='/restaurants/:restaurantId' element={<Restaurant />} />
           <Route path='/register' element={<Register />} />
           <Route path='/login' element={<Login />} />
           <Route path='/writeareview' element={<NewReview />} />
