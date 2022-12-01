@@ -1,38 +1,36 @@
-import { useMutation, useQueryClient } from 'react-query';
-import  Api from '../client/flavorite'
-import { CreateUserRequest } from '../client/flavorite/apis';
-import { CreateUser} from '../client/flavorite/models'
+import { useMutation, useQueryClient } from 'react-query'
+import Api from '../client/flavorite'
+import { AddReviewRequest } from '../client/flavorite/apis'
+import { CreateReview } from '../client/flavorite/models'
 
-export default function useCreateUser(newUserData: CreateUserRequest) {
+export default function useCreateReview() {
+  const queryClient = useQueryClient()
 
-    const queryClient = useQueryClient();
-
-    const newUser = useMutation((newUserData: CreateUserRequest) => Api.Users.createUser(newUserData), {
-        onSuccess: () => {
-            queryClient.invalidateQueries('user')
-          },
-    })
-
-
-    const user: CreateUser =
+  const newReview = useMutation(
+    (newReviewData: AddReviewRequest) => Api.Reviews.addReview(newReviewData),
     {
-        username: 'kitty',
-        email: 'v@b.com',
-        firstName: 'valerie',
-        lastName: 'yang',
-        password: 'testpw',
+      onSuccess: () => {
+        queryClient.invalidateQueries('review')
+      },
+    },
+  )
 
-    }
+  const review: CreateReview = {
+    userId: 1,
+    restaurantId: 2,
+    rating: 5,
+    content: 'good'
+  }
 
-    return {
-        // mutate: newUser.mutate,
-        // loading: newUser.isLoading,
-        // error: newUser.isError,
-        // success: newUser.isSuccess,
-        // user: newUser.data
-        loading: false,
-        error: null,
-        success: true,
-        user: user
-    }
+  return {
+    mutate: newReview.mutate,
+    // loading: newUser.isLoading,
+    // error: newUser.isError,
+    // success: newUser.isSuccess,
+    // user: newUser.data
+    loading: false,
+    error: null,
+    success: true,
+    review: review,
+  }
 }

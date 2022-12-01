@@ -1,10 +1,8 @@
 import MenuIcon from '@mui/icons-material/Menu'
-import * as Mui from '@mui/material';
-
+import * as Mui from '@mui/material'
 
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
-
 
 const settings = ['Profile', 'Find Friends', 'Logout']
 
@@ -24,7 +22,11 @@ export default function Navbar() {
 
   useEffect(() => {
     // set currentUser's username here
-    if (username) {setPages(['Write a Review'])} else {setPages(['Login', 'Register'])}
+    if (username) {
+      setPages(['Write a Review'])
+    } else {
+      setPages(['Login', 'Register'])
+    }
   }, [username])
 
   const handleCloseNavMenu = (e: any) => {
@@ -140,7 +142,7 @@ export default function Navbar() {
             ))}
           </Mui.Box>
 
-          <Mui.Box style={{display: username ? 'block' : 'none'}} sx={{ flexGrow: 0 }}>
+          <Mui.Box style={{ display: username ? 'block' : 'none' }} sx={{ flexGrow: 0 }}>
             <Mui.Tooltip title='Open settings'>
               <Mui.IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Mui.Avatar alt='Remy Sharp' src='/static/images/avatar/2.jpg' />

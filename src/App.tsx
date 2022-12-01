@@ -1,8 +1,7 @@
 import './App.css'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
-import { QueryClient, QueryClientProvider } from 'react-query';
-const queryClient = new QueryClient();
-
+import { QueryClient, QueryClientProvider } from 'react-query'
+const queryClient = new QueryClient()
 
 import Navbar from './components/partials/NavBar'
 import Home from './components/pages/Home'
@@ -14,31 +13,32 @@ import FavoriteFood from './components/pages/FavoriteFood'
 import Friends from './components/pages/Friends'
 import UserReviews from './components/pages/UserReviews'
 import NewReview from './components/pages/NewReview'
-import Restaurant from './components/pages/Restaurant';
+import Restaurant from './components/pages/Restaurant'
+import NewReviewForm from './components/pages/NewReviewForm'
 
 function App() {
   return (
     <div className='App'>
-    <QueryClientProvider client={queryClient}>
-      <Router>
-        <header>
-          <Navbar />
-        </header>
-        <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/:username' element={<Profile />} />
-          <Route path='/:username/friends' element={<Friends />} />
-          <Route path='/:username/reviews' element={<UserReviews />} />
-          <Route path='/:username/favorites' element={<FavoriteFoods />} />
-          <Route path='/:username/favorites/:favorite' element={<FavoriteFood />} />
-          <Route path='/restaurants/:restaurantId' element={<Restaurant />} />
-          <Route path='/register' element={<Register />} />
-          <Route path='/login' element={<Login />} />
-          <Route path='/writeareview' element={<NewReview />} />
-        </Routes>
-      </Router>
-            
-    </QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+        <Router>
+          <header>
+            <Navbar />
+          </header>
+          <Routes>
+            <Route path='/' element={<Home />} />
+            <Route path='/:username' element={<Profile />} />
+            <Route path='/:username/friends' element={<Friends />} />
+            <Route path='/:username/reviews' element={<UserReviews />} />
+            <Route path='/:username/favorites' element={<FavoriteFoods />} />
+            <Route path='/:username/favorites/:favorite' element={<FavoriteFood />} />
+            <Route path='/restaurants/:restaurantId' element={<Restaurant />} />
+            <Route path='/register' element={<Register />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/writeareview' element={<NewReview />} />
+            <Route path='/writeareview/:restaurantName' element={<NewReviewForm />} />
+          </Routes>
+        </Router>
+      </QueryClientProvider>
     </div>
   )
 }

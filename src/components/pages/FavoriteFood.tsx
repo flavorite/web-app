@@ -1,7 +1,7 @@
-import * as Mui from '@mui/material';
+import * as Mui from '@mui/material'
 
 export default function FavoriteFood() {
-  // replace with favoritefoods from useUser 
+  // replace with favoritefoods from useUser
   const favorites = ['sushi', 'french fries', 'Bibimbap']
   return (
     <Mui.Container fixed>
@@ -10,9 +10,9 @@ export default function FavoriteFood() {
         disablePortal
         options={favorites}
         sx={{ width: 300 }}
-        renderInput={(params) => <Mui.TextField {...params} label="Favorite Dishes" />}
+        renderInput={(params) => <Mui.TextField {...params} label='Favorite Dishes' />}
       />
-    {/* List of Reviews selected Favorite Food and enable user to list them in favorite order */}
+      {/* List of Reviews selected Favorite Food and enable user to list them in favorite order */}
     </Mui.Container>
   )
 }

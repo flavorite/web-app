@@ -1,7 +1,7 @@
 import Link from '@mui/material/Link'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
-import * as Mui from '@mui/material';
+import * as Mui from '@mui/material'
 
 function Copyright(props: any) {
   return (
