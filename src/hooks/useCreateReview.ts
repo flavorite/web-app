@@ -1,13 +1,13 @@
 import { useMutation, useQueryClient } from 'react-query'
-import Api from '../client/flavorite'
-import { AddReviewRequest } from '../client/flavorite/apis'
+import { AddReviewRequest, ReviewsApi } from '../client/flavorite/apis'
 import { CreateReview } from '../client/flavorite/models'
 
 export default function useCreateReview() {
   const queryClient = useQueryClient()
+  const Reviews = new ReviewsApi()
 
   const newReview = useMutation(
-    (newReviewData: AddReviewRequest) => Api.Reviews.addReview(newReviewData),
+    (newReviewData: AddReviewRequest) => Reviews.addReview(newReviewData),
     {
       onSuccess: () => {
         queryClient.invalidateQueries('review')
@@ -19,7 +19,7 @@ export default function useCreateReview() {
     userId: 1,
     restaurantId: 2,
     rating: 5,
-    content: 'good'
+    content: 'good',
   }
 
   return {

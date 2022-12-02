@@ -1,19 +1,16 @@
 import { useMutation, useQueryClient } from 'react-query'
-import Api from '../client/flavorite'
-import { CreateUserRequest } from '../client/flavorite/apis'
+import { CreateUserRequest, UsersApi } from '../client/flavorite/apis'
 import { CreateUser } from '../client/flavorite/models'
 
 export default function useCreateUser() {
   const queryClient = useQueryClient()
+  const Users = new UsersApi()
 
-  const newUser = useMutation(
-    (newUserData: CreateUserRequest) => Api.Users.createUser(newUserData),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries('user')
-      },
+  const newUser = useMutation((newUserData: CreateUserRequest) => Users.createUser(newUserData), {
+    onSuccess: () => {
+      queryClient.invalidateQueries('user')
     },
-  )
+  })
 
   const user: CreateUser = {
     username: 'kitty',

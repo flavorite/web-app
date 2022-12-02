@@ -8,7 +8,10 @@
       "v3.0": { 
         "generatorName": "typescript-fetch",
         "output": "#{cwd}/src/client/#{name}",
-        "glob": "src/flavorite.yaml"
+        "glob": "src/flavorite.yaml",
+        "additionalProperties": {
+          "typescriptThreePlus": true
+        }
       }
     }
   }

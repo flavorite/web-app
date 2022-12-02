@@ -1,11 +1,11 @@
 import { ListReviews } from '../client/flavorite/models'
-import Api from '../client/flavorite'
 import { useQuery } from 'react-query'
-import { GetUserByNameRequest } from '../client/flavorite/apis'
+import { GetUserByNameRequest, UsersApi } from '../client/flavorite/apis'
 
 export default function useReviewsByUser(username: GetUserByNameRequest) {
-  // const fetchUserReviews = Api.Users.getReviewsByUsername(username)
-  // const Reviews = useQuery(['reviewsByUser', username], () => fetchUserReviews);
+  const Users = new UsersApi()
+  const fetchUserReviews = Users.getReviewsByUsername(username)
+  const Reviews = useQuery(['reviewsByUser', username], () => fetchUserReviews)
 
   const reviewsList: ListReviews = {
     reviews: [

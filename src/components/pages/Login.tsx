@@ -1,18 +1,27 @@
 import Link from '@mui/material/Link'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
-import * as Mui from '@mui/material'
+import Container from '@mui/material/Container'
+import Typography from '@mui/material/Typography'
+import Box from '@mui/material/Box'
+import Avatar from '@mui/material/Avatar'
+import CssBaseline from '@mui/material/CssBaseline'
+import TextField from '@mui/material/TextField'
+import Grid from '@mui/material/Grid'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import Checkbox from '@mui/material/Checkbox'
+import Button from '@mui/material/Button'
 
 function Copyright(props: any) {
   return (
-    <Mui.Typography variant='body2' color='text.secondary' align='center' {...props}>
+    <Typography variant='body2' color='text.secondary' align='center' {...props}>
       {'Copyright © '}
       <Link color='inherit' href='https://mui.com/'>
         Flavorite
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
-    </Mui.Typography>
+    </Typography>
   )
 }
 
@@ -30,9 +39,9 @@ export default function Login() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Mui.Container component='main' maxWidth='xs'>
-        <Mui.CssBaseline />
-        <Mui.Box
+      <Container component='main' maxWidth='xs'>
+        <CssBaseline />
+        <Box
           sx={{
             marginTop: 8,
             display: 'flex',
@@ -40,14 +49,14 @@ export default function Login() {
             alignItems: 'center',
           }}
         >
-          <Mui.Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <LockOutlinedIcon />
-          </Mui.Avatar>
-          <Mui.Typography component='h1' variant='h5'>
+          </Avatar>
+          <Typography component='h1' variant='h5'>
             Sign in
-          </Mui.Typography>
-          <Mui.Box component='form' onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-            <Mui.TextField
+          </Typography>
+          <Box component='form' onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+            <TextField
               margin='normal'
               required
               fullWidth
@@ -57,7 +66,7 @@ export default function Login() {
               autoComplete='emailOrUsername'
               autoFocus
             />
-            <Mui.TextField
+            <TextField
               margin='normal'
               required
               fullWidth
@@ -67,29 +76,29 @@ export default function Login() {
               id='password'
               autoComplete='current-password'
             />
-            <Mui.FormControlLabel
-              control={<Mui.Checkbox value='remember' color='primary' />}
+            <FormControlLabel
+              control={<Checkbox value='remember' color='primary' />}
               label='Remember me'
             />
-            <Mui.Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
+            <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
               Sign In
-            </Mui.Button>
-            <Mui.Grid container>
-              <Mui.Grid item xs>
+            </Button>
+            <Grid container>
+              <Grid item xs>
                 <Link href='#' variant='body2'>
                   Forgot password?
                 </Link>
-              </Mui.Grid>
-              <Mui.Grid item>
+              </Grid>
+              <Grid item>
                 <Link href='/register' variant='body2'>
-                  {'Don\'t have an account? Sign Up'}
+                  {"Don't have an account? Sign Up"}
                 </Link>
-              </Mui.Grid>
-            </Mui.Grid>
-          </Mui.Box>
-        </Mui.Box>
+              </Grid>
+            </Grid>
+          </Box>
+        </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
-      </Mui.Container>
+      </Container>
     </ThemeProvider>
   )
 }

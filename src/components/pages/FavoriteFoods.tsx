@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import AddFavorite from '../partials/AddFavorite'
-import * as Mui from '@mui/material'
+import Container from '@mui/material/Container'
+import Stack from '@mui/material/Stack'
 
 export default function FavoriteFoods() {
   // replace with 'favoritefoods' from useUser()
@@ -16,10 +17,10 @@ export default function FavoriteFoods() {
   })
 
   return (
-    <Mui.Container fixed>
+    <Container fixed>
       <AddFavorite />
-      <Mui.Stack spacing={2}>{favoritesList}</Mui.Stack>
+      <Stack spacing={2}>{favoritesList}</Stack>
       {/* Make into Ordered list, enable user to switch favorites order */}
-    </Mui.Container>
+    </Container>
   )
 }

@@ -1,5 +1,7 @@
 import useRestaurants from '../../hooks/useRestaurants'
-import * as Mui from '@mui/material'
+import Container from '@mui/material/Container'
+import Stack from '@mui/material/Stack'
+import Box from '@mui/material/Box'
 import { useState, useEffect } from 'react'
 import {
   GoogleMap,
@@ -76,11 +78,11 @@ export default function LandingMap() {
   }
 
   const restaurantsData = restaurants.map((restaurant, id) => {
-    return <Mui.Stack key={id}>{restaurant.name}</Mui.Stack>
+    return <Stack key={id}>{restaurant.name}</Stack>
   })
 
   return (
-    <Mui.Container>
+    <Container>
       <LoadScript googleMapsApiKey={`${API_KEY}`} libraries={lib}>
         <GoogleMap
           onLoad={(map) => setMap(map)}
@@ -122,10 +124,10 @@ export default function LandingMap() {
         </GoogleMap>
       </LoadScript>
 
-      <Mui.Box>
+      <Box>
         {/* use 'restaurantsData' to display custom markers on the map & display list below map*/}
         {restaurantsData}
-      </Mui.Box>
-    </Mui.Container>
+      </Box>
+    </Container>
   )
 }

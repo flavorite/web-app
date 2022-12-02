@@ -1,12 +1,20 @@
 import MenuIcon from '@mui/icons-material/Menu'
-import * as Mui from '@mui/material'
-
+import AppBar from '@mui/material/AppBar'
+import Container from '@mui/material/Container'
+import Typography from '@mui/material/Typography'
+import Toolbar from '@mui/material/Toolbar'
+import Box from '@mui/material/Box'
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
+import Button from '@mui/material/Button'
+import Avatar from '@mui/material/Avatar'
+import IconButton from '@mui/material/IconButton'
+import Tooltip from '@mui/material/Tooltip'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 
-const settings = ['Profile', 'Find Friends', 'Logout']
-
 export default function Navbar() {
+  const settings = ['Profile', 'Find Friends', 'Logout']
   const navigate = useNavigate()
   // test user
   const [username, setUsername] = useState<null | string>('testUser')
@@ -22,9 +30,7 @@ export default function Navbar() {
 
   useEffect(() => {
     // set currentUser's username here
-    if (username) {
-      setPages(['Write a Review'])
-    } else {
+    if (!username) {
       setPages(['Login', 'Register'])
     }
   }, [username])
@@ -52,10 +58,10 @@ export default function Navbar() {
   }
 
   return (
-    <Mui.AppBar position='static'>
-      <Mui.Container maxWidth='xl'>
-        <Mui.Toolbar disableGutters>
-          <Mui.Typography
+    <AppBar position='static'>
+      <Container maxWidth='xl'>
+        <Toolbar disableGutters>
+          <Typography
             onClick={() => navigate('/')}
             variant='h6'
             noWrap
@@ -72,10 +78,10 @@ export default function Navbar() {
             }}
           >
             Flavorite
-          </Mui.Typography>
+          </Typography>
 
-          <Mui.Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            <Mui.IconButton
+          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+            <IconButton
               size='large'
               aria-label='account of current user'
               aria-controls='menu-appbar'
@@ -84,8 +90,8 @@ export default function Navbar() {
               color='inherit'
             >
               <MenuIcon />
-            </Mui.IconButton>
-            <Mui.Menu
+            </IconButton>
+            <Menu
               id='menu-appbar'
               anchorEl={anchorElNav}
               anchorOrigin={{
@@ -104,14 +110,14 @@ export default function Navbar() {
               }}
             >
               {pages.map((page) => (
-                <Mui.MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Mui.Typography textAlign='center'>{page}</Mui.Typography>
-                </Mui.MenuItem>
+                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                  <Typography textAlign='center'>{page}</Typography>
+                </MenuItem>
               ))}
-            </Mui.Menu>
-          </Mui.Box>
+            </Menu>
+          </Box>
 
-          <Mui.Typography
+          <Typography
             onClick={() => navigate('/')}
             variant='h5'
             noWrap
@@ -129,26 +135,26 @@ export default function Navbar() {
             }}
           >
             Flavorite
-          </Mui.Typography>
-          <Mui.Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+          </Typography>
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
-              <Mui.Button
+              <Button
                 key={page}
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 {page}
-              </Mui.Button>
+              </Button>
             ))}
-          </Mui.Box>
+          </Box>
 
-          <Mui.Box style={{ display: username ? 'block' : 'none' }} sx={{ flexGrow: 0 }}>
-            <Mui.Tooltip title='Open settings'>
-              <Mui.IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Mui.Avatar alt='Remy Sharp' src='/static/images/avatar/2.jpg' />
-              </Mui.IconButton>
-            </Mui.Tooltip>
-            <Mui.Menu
+          <Box style={{ display: username ? 'block' : 'none' }} sx={{ flexGrow: 0 }}>
+            <Tooltip title='Open settings'>
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <Avatar alt='Remy Sharp' src='/static/images/avatar/2.jpg' />
+              </IconButton>
+            </Tooltip>
+            <Menu
               sx={{ mt: '45px' }}
               id='menu-appbar'
               anchorEl={anchorElUser}
@@ -165,14 +171,14 @@ export default function Navbar() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <Mui.MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Mui.Typography textAlign='center'>{setting}</Mui.Typography>
-                </Mui.MenuItem>
+                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                  <Typography textAlign='center'>{setting}</Typography>
+                </MenuItem>
               ))}
-            </Mui.Menu>
-          </Mui.Box>
-        </Mui.Toolbar>
-      </Mui.Container>
-    </Mui.AppBar>
+            </Menu>
+          </Box>
+        </Toolbar>
+      </Container>
+    </AppBar>
   )
 }

@@ -1,11 +1,11 @@
 import { ListRestaurants } from '../client/flavorite/models'
-import Api from '../client/flavorite'
 import { useQuery } from 'react-query'
-import { GetRestaurantsRequest } from '../client/flavorite/apis'
+import { GetRestaurantsRequest, RestaurantsApi } from '../client/flavorite/apis'
 
 export default function useRestaurants(location: GetRestaurantsRequest) {
-  // const fetchRestaurants = Api.Restaurants.getRestaurants(location)
-  // const restaurants = useQuery(['restaurants', location], () => fetchRestaurants);
+  const Restaurants = new RestaurantsApi()
+  const fetchRestaurants = Restaurants.getRestaurants(location)
+  const restaurants = useQuery(['restaurants', location], () => fetchRestaurants)
 
   const restaurantsList: ListRestaurants = {
     restaurants: [

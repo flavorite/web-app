@@ -12,7 +12,6 @@ import FavoriteFoods from './components/pages/FavoriteFoods'
 import FavoriteFood from './components/pages/FavoriteFood'
 import Friends from './components/pages/Friends'
 import UserReviews from './components/pages/UserReviews'
-import NewReview from './components/pages/NewReview'
 import Restaurant from './components/pages/Restaurant'
 import NewReviewForm from './components/pages/NewReviewForm'
 
@@ -34,7 +33,6 @@ function App() {
             <Route path='/restaurants/:restaurantId' element={<Restaurant />} />
             <Route path='/register' element={<Register />} />
             <Route path='/login' element={<Login />} />
-            <Route path='/writeareview' element={<NewReview />} />
             <Route path='/writeareview/:restaurantName' element={<NewReviewForm />} />
           </Routes>
         </Router>

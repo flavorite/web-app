@@ -1,10 +1,10 @@
 import LandingMap from '../partials/LandingMap'
-import * as Mui from '@mui/material'
+import Container from '@mui/material/Container'
 
 export default function Home() {
   return (
-    <Mui.Container fixed>
+    <Container fixed>
       <LandingMap />
-    </Mui.Container>
+    </Container>
   )
 }

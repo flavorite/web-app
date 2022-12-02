@@ -1,4 +1,5 @@
-import * as Mui from '@mui/material'
+import Container from '@mui/material/Container'
+import Stack from '@mui/material/Stack'
 import { Link } from 'react-router-dom'
 
 export default function Friends() {
@@ -14,9 +15,9 @@ export default function Friends() {
   })
 
   return (
-    <Mui.Container fixed>
+    <Container fixed>
       {/* Enable user to connect to FB friends if not done yet */}
-      <Mui.Stack spacing={2}>{friendsList}</Mui.Stack>
-    </Mui.Container>
+      <Stack spacing={2}>{friendsList}</Stack>
+    </Container>
   )
 }

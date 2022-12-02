@@ -1,19 +1,18 @@
 import useReviewsByUser from '../../hooks/useReviewsByUser'
-import * as Mui from '@mui/material'
+import Container from '@mui/material/Container'
+import Box from '@mui/material/Box'
+import Stack from '@mui/material/Stack'
 
 export default function UserReviews() {
   const username = 'kitty'
   const { reviews, loading, error } = useReviewsByUser({ username })
 
   const reviewsData = reviews.map((review, id) => {
-    return <Mui.Stack key={id}>{review.content}</Mui.Stack>
+    return <Stack key={id}>{review.content}</Stack>
   })
   return (
-  <Mui.Container>
-    <Mui.Box>
-    {reviewsData}
-
-    </Mui.Box>
-    </Mui.Container>
+    <Container>
+      <Box>{reviewsData}</Box>
+    </Container>
   )
 }

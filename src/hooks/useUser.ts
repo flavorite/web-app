@@ -1,11 +1,11 @@
 import { User } from '../client/flavorite/models'
-import Api from '../client/flavorite'
 import { useQuery } from 'react-query'
-import { GetUserByNameRequest } from '../client/flavorite/apis'
+import { GetUserByNameRequest, UsersApi } from '../client/flavorite/apis'
 
 export default function useUser(username: GetUserByNameRequest) {
-  // const fetchUser = Api.Users.getUserByName(username)
-  // const userData = useQuery(['user', username], () => fetchUser);
+  const Users = new UsersApi()
+  const fetchUser = Users.getUserByName(username)
+  const userData = useQuery(['user', username], () => fetchUser)
 
   const user: User = {
     id: 1,

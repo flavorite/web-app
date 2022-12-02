@@ -1,5 +1,6 @@
 import useRestaurantReviews from '../../hooks/useRestaurantReviews'
-import * as Mui from '@mui/material'
+import Container from '@mui/material/Container'
+import Box from '@mui/material/Box'
 
 export default function Restaurant() {
   const restaurantId = 1
@@ -9,8 +10,8 @@ export default function Restaurant() {
     return <div key={id}>{review.content}</div>
   })
   return (
-    <Mui.Container fixed>
-      <Mui.Box>{reviewsData}</Mui.Box>
-    </Mui.Container>
+    <Container fixed>
+      <Box>{reviewsData}</Box>
+    </Container>
   )
 }

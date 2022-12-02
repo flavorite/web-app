@@ -1,11 +1,11 @@
 import { ListReviews } from '../client/flavorite/models'
-import Api from '../client/flavorite'
 import { useQuery } from 'react-query'
-import { GetReviewByRestaurantRequest } from '../client/flavorite/apis'
+import { GetReviewByRestaurantRequest, RestaurantsApi } from '../client/flavorite/apis'
 
 export default function useRestaurantReviews(restaurantId: GetReviewByRestaurantRequest) {
-  // const fetchRestaurantReviews = Api.Restaurants.getReviewByRestaurant(restaurantId)
-  // const Reviews = useQuery(['reviewsByRestaurant', restaurantId], () => fetchRestaurantReviews);
+  const Restaurants = new RestaurantsApi()
+  const fetchRestaurantReviews = Restaurants.getReviewByRestaurant(restaurantId)
+  const Reviews = useQuery(['reviewsByRestaurant', restaurantId], () => fetchRestaurantReviews)
 
   const reviewsList: ListReviews = {
     reviews: [

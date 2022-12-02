@@ -1,18 +1,20 @@
-import * as Mui from '@mui/material'
+import Container from '@mui/material/Container'
+import TextField from '@mui/material/TextField'
+import Autocomplete from '@mui/material/Autocomplete'
 
 export default function FavoriteFood() {
   // replace with favoritefoods from useUser
   const favorites = ['sushi', 'french fries', 'Bibimbap']
   return (
-    <Mui.Container fixed>
+    <Container fixed>
       {/* user can switch views for different favorite by selecting from this autocomplete field */}
-      <Mui.Autocomplete
+      <Autocomplete
         disablePortal
         options={favorites}
         sx={{ width: 300 }}
-        renderInput={(params) => <Mui.TextField {...params} label='Favorite Dishes' />}
+        renderInput={(params) => <TextField {...params} label='Favorite Dishes' />}
       />
       {/* List of Reviews selected Favorite Food and enable user to list them in favorite order */}
-    </Mui.Container>
+    </Container>
   )
 }
