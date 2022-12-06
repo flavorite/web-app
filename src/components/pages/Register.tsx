@@ -2,7 +2,6 @@ import Link from '@mui/material/Link'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import useCreateUser from '../../hooks/useCreateUser'
-import { useState } from 'react'
 import { CreateUser } from '../../client/flavorite/models'
 import { useNavigate } from 'react-router'
 import Container from '@mui/material/Container'
@@ -31,28 +30,19 @@ const theme = createTheme()
 
 export default function Register() {
   const navigate = useNavigate()
-  const [form, setForm] = useState<CreateUser>({
-    username: '',
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-  })
   const mutation = useCreateUser()
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
-    const formDataObj: any = {}
-    formData.forEach((value, key) => (formDataObj[key] = value))
-    setForm({
-      username: formDataObj.username,
-      firstName: formDataObj.firstName,
-      lastName: formDataObj.lastName,
-      email: formDataObj.email,
-      password: formDataObj.password,
-    })
-    const createUser = () => mutation.mutate({ createUser: form })
+    const formDataObj: CreateUser = {      
+      username: formData.get('username') as string,
+      firstName: formData.get('firstName') as string,
+      lastName: formData.get('lastName') as string,
+      email: formData.get('email') as string,
+      password: formData.get('password') as string
+    }
+    const createUser = () => mutation.mutate({ createUser: formDataObj})
     navigate('/')
   }
 

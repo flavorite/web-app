@@ -2,6 +2,7 @@ import './App.css'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from 'react-query'
 const queryClient = new QueryClient()
+import { createTheme, ThemeProvider } from '@mui/material/styles'
 
 import Navbar from './components/partials/NavBar'
 import Home from './components/pages/Home'
@@ -16,8 +17,11 @@ import Restaurant from './components/pages/Restaurant'
 import NewReviewForm from './components/pages/NewReviewForm'
 
 function App() {
+  const theme = createTheme()
+
   return (
     <div className='App'>
+      <ThemeProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
         <Router>
           <header>
@@ -37,6 +41,7 @@ function App() {
           </Routes>
         </Router>
       </QueryClientProvider>
+      </ThemeProvider>
     </div>
   )
 }

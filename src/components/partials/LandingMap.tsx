@@ -2,6 +2,7 @@ import useRestaurants from '../../hooks/useRestaurants'
 import Container from '@mui/material/Container'
 import Stack from '@mui/material/Stack'
 import Box from '@mui/material/Box'
+import TextField from '@mui/material/TextField'
 import { useState, useEffect } from 'react'
 import {
   GoogleMap,
@@ -14,6 +15,7 @@ import {
 
 // declared library for 'places' here to avoid react warning for LoadScript performance
 const lib: LoadScriptProps['libraries'] = ['places']
+
 
 export default function LandingMap() {
   const API_KEY = process.env.REACT_APP_API_KEY
@@ -31,7 +33,6 @@ export default function LandingMap() {
   const [search, setSearch] = useState<any>('')
   const [map, setMap] = useState<any>(null)
 
-  // how do I make this hook call each time center changes based on user's search?
   const { restaurants, loading, error } = useRestaurants({
     longitude: center.lng,
     latitude: center.lat,
@@ -90,42 +91,28 @@ export default function LandingMap() {
           center={center}
           zoom={15}
         >
-          <InfoWindow onLoad={onLoadInfo} position={position}>
-            <div style={divStyle}>
-              <h1>InfoWindow</h1>
-            </div>
-          </InfoWindow>
-          {/* Need to get 'Places' from backend and display with custom Marker */}
+          {/* TODO: Need to get 'Places' from backend and display with custom Marker */}
           {/* <Marker
           icon={svgMarker}
           position={center}
         /> */}
+        {/* TODO: Change InfoWindow to onClick event (user clicking on each restaurant Marker to open InfoWindow with our data display) */}
+          <InfoWindow onLoad={onLoadInfo} position={position}>
+            <Box style={divStyle}>
+              <Stack>InfoWindow</Stack>
+            </Box>
+          </InfoWindow>
           <Autocomplete onLoad={onLoadSearch} onPlaceChanged={onPlaceChanged}>
-            <input
-              type='text'
-              placeholder='Search for location...'
-              style={{
-                boxSizing: 'border-box',
-                border: '1px solid transparent',
-                width: '240px',
-                height: '32px',
-                padding: '0 12px',
-                borderRadius: '3px',
-                boxShadow: '0 2px 6px rgba(0, 0, 0, 0.3)',
-                fontSize: '14px',
-                outline: 'none',
-                textOverflow: 'ellipses',
-                position: 'absolute',
-                left: '50%',
-                marginLeft: '-120px',
-              }}
+            <TextField
+              inputProps={{ style: { backgroundColor: 'white'}}}
+              label='Search for location...'
             />
           </Autocomplete>
         </GoogleMap>
       </LoadScript>
 
       <Box>
-        {/* use 'restaurantsData' to display custom markers on the map & display list below map*/}
+        {/* TODO: use 'restaurantsData' to display custom markers on the map & display list below map*/}
         {restaurantsData}
       </Box>
     </Container>

@@ -4,7 +4,7 @@ import Container from '@mui/material/Container'
 import Stack from '@mui/material/Stack'
 
 export default function FavoriteFoods() {
-  // replace with 'favoritefoods' from useUser()
+  // TODO: replace with 'favoritefoods' from useUser()
   const favorites = ['sushi', 'french fries', 'bibimbap']
   const username = 'testUser'
 
@@ -20,7 +20,7 @@ export default function FavoriteFoods() {
     <Container fixed>
       <AddFavorite />
       <Stack spacing={2}>{favoritesList}</Stack>
-      {/* Make into Ordered list, enable user to switch favorites order */}
+      {/* TODO: Make into Ordered list, enable user to switch favorites order */}
     </Container>
   )
 }

@@ -4,8 +4,8 @@ import { GetRestaurantsRequest, RestaurantsApi } from '../client/flavorite/apis'
 
 export default function useRestaurants(location: GetRestaurantsRequest) {
   const Restaurants = new RestaurantsApi()
-  const fetchRestaurants = Restaurants.getRestaurants(location)
-  const restaurants = useQuery(['restaurants', location], () => fetchRestaurants)
+//   const fetchRestaurants = () => Restaurants.getRestaurants(location)
+//   const restaurants = useQuery(['restaurants', location],fetchRestaurants)
 
   const restaurantsList: ListRestaurants = {
     restaurants: [

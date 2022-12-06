@@ -3,33 +3,28 @@ import Rating from '@mui/material/Rating'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import FormGroup from '@mui/material/FormGroup'
-import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import useCreateReview from '../../hooks/useCreateReview'
+import { CreateReview } from '../../client/flavorite/models'
 
 export default function NewReview() {
-  // need to send form using useCreateReview hook
   const navigate = useNavigate()
   const mutation = useCreateReview()
-  const [form, setForm] = useState<any>({
-    userId: 0,
-    restaurantId: 0,
-    rating: 0,
-    content: '',
-  })
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
-    const formDataObj: any = {}
-    formData.forEach((value, key) => (formDataObj[key] = value))
-    setForm({
-      userId: formDataObj.userId,
-      restaurantId: formDataObj.restaurantId,
-      rating: formDataObj.rating,
-      content: formDataObj.content,
-    })
-    const createReview = () => mutation.mutate({ createReview: form })
+    const formDataObj: CreateReview = {
+        // TODO: get UserID from currentUser logged in
+        userId: 1,
+        // TODO: get restaurantID as props or params
+        restaurantId: 1,
+        // TODO: need to finish creating review form and link FormData here
+        rating: 5,
+        content: 'very good',
+        photoUrl: ''
+    }
+    const createReview = () => mutation.mutate({ createReview: formDataObj })
     navigate('/')
   }
 

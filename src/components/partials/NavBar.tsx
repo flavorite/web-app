@@ -29,7 +29,7 @@ export default function Navbar() {
   }
 
   useEffect(() => {
-    // set currentUser's username here
+    // TODO: set currentUser's username here
     if (!username) {
       setPages(['Login', 'Register'])
     }
@@ -50,7 +50,7 @@ export default function Navbar() {
     if (e.target.textContent === 'Profile') {
       navigate(`/${username}`)
     } else if (e.target.textContent === 'Logout') {
-      // handleLogout function (prop) here
+      // TODO: handleLogout function (prop) here
       navigate('/login')
     } else if (e.target.textContent === 'Find Friends') {
       navigate(`/${username}/friends`)

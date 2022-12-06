@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 
 export default function Profile() {
-  // only for route testing
+  // TODO: Need to obtain username from user login
   const username = 'kitty'
   const { user, loading, error } = useUser({ username })
   return (
@@ -22,7 +22,7 @@ export default function Profile() {
       <Button variant='contained'>
         <Link to={`/${username}/reviews`}>View all Reviews</Link>
       </Button>
-      {/* Need to add Edit Profile , and User's recent reviews below Profile options */}
+      {/* TODO: Need to add Edit Profile , and User's recent reviews below Profile options */}
     </Container>
   )
 }

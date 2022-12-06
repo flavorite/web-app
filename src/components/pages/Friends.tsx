@@ -3,7 +3,7 @@ import Stack from '@mui/material/Stack'
 import { Link } from 'react-router-dom'
 
 export default function Friends() {
-  // replace with 'Friends' objects from useUser()
+  // TODO: replace with 'Friends' objects from useUser()
   const friends = ['Jake', 'Jason', 'Jamie']
 
   const friendsList = friends.map((friend, id) => {
@@ -16,7 +16,7 @@ export default function Friends() {
 
   return (
     <Container fixed>
-      {/* Enable user to connect to FB friends if not done yet */}
+      {/* TODO: Enable user to connect to FB friends if not done yet */}
       <Stack spacing={2}>{friendsList}</Stack>
     </Container>
   )

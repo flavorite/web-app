@@ -1,6 +1,5 @@
 import Link from '@mui/material/Link'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
-import { createTheme, ThemeProvider } from '@mui/material/styles'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
@@ -25,7 +24,6 @@ function Copyright(props: any) {
   )
 }
 
-const theme = createTheme()
 
 export default function Login() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -38,7 +36,6 @@ export default function Login() {
   }
 
   return (
-    <ThemeProvider theme={theme}>
       <Container component='main' maxWidth='xs'>
         <CssBaseline />
         <Box
@@ -91,7 +88,7 @@ export default function Login() {
               </Grid>
               <Grid item>
                 <Link href='/register' variant='body2'>
-                  {"Don't have an account? Sign Up"}
+                  {'Don\'t have an account? Sign Up'}
                 </Link>
               </Grid>
             </Grid>
@@ -99,6 +96,5 @@ export default function Login() {
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
-    </ThemeProvider>
   )
 }
