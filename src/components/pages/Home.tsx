@@ -1,10 +1,10 @@
-import Map from '../partials/Map'
+import LandingMap from '../partials/LandingMap'
+import Container from '@mui/material/Container'
 
 export default function Home() {
   return (
-    <div>
-      <h1>Landing Page</h1>
-      <Map />
-    </div>
+    <Container fixed>
+      <LandingMap />
+    </Container>
   )
 }

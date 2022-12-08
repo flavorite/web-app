@@ -1,22 +1,11 @@
 openapi: 3.0.3
 info:
   title: Flavorite - OpenAPI 3.0
-  version: 3.0
   description: >-
     This is a Flavorite Server based on the OpenAPI 3.0 specification. 
-# Should we delete the below commented out?
-
-#   contact:
-#     email: apiteam@swagger.io
-#   license:
-#     name: Apache 2.0
-#     url: http://www.apache.org/licenses/LICENSE-2.0.html
-#   version: 1.0.11
-# externalDocs:
-#   description: Find out more about Swagger
-#   url: http://swagger.io
+  version: 1.0.0
 servers:
-  - url: https://localhost:8000/api/v1
+  - url: https://localhost:8080
 tags:
   - name: reviews
     description: User's post of reviews for restaurants that serve one or more of their favorite dishes
@@ -26,32 +15,6 @@ tags:
     description: Operations about users
 paths:
   /reviews:
-    put:
-      tags:
-        - reviews
-      summary: Update an existing review
-      description: Update an existing review by Id
-      operationId: updateReview
-      requestBody:
-        description: Update an existent review on a restaurant
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateReview'
-        required: true
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Review'
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Review not found
-        '405':
-          description: Validation exception
     post:
       tags:
         - reviews
@@ -59,12 +22,7 @@ paths:
       description: Add a new review about a restaurant
       operationId: addReview
       requestBody:
-        description: Create a new review about a restaurant
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateReview'
-        required: true
+        $ref: '#/components/requestBodies/CreateReview'
       responses:
         '200':
           description: Successful operation
@@ -101,6 +59,35 @@ paths:
           description: Invalid ID supplied
         '404':
           description: Review not found
+    put:
+      tags:
+        - reviews
+      summary: Update an existing review
+      description: Update an existing review by Id
+      operationId: updateReviewbyId
+      parameters:
+        - name: reviewId
+          in: path
+          description: ID of review to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateReview'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Review not found
+        '405':
+          description: Validation exception
     delete:
       tags:
         - reviews
@@ -168,12 +155,6 @@ paths:
           schema:
             type: integer
             format: int64
-        - name: additionalMetadata
-          in: query
-          description: Additional Metadata
-          required: false
-          schema:
-            type: string
       responses:
         '204':
           description: Successful operation
@@ -216,9 +197,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Restaurant'
+                $ref: '#/components/schemas/ListRestaurants'
         '400':
           description: Invalid query supplied
   /restaurants/{restaurantId}/reviews:
@@ -242,9 +221,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Review'
+                $ref: '#/components/schemas/ListReviews'
         '400':
           description: Invalid ID supplied
   /users:
@@ -255,41 +232,14 @@ paths:
       description: This can only be done by the logged in user.
       operationId: createUser
       requestBody:
-        description: Created user object
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateUser'
-      responses:
-        default:
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-  /users/createWithList:
-    post:
-      tags:
-        - users
-      summary: Creates list of users with given input array
-      description: Creates list of users with given input array
-      operationId: createUsersWithListInput
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/CreateUser'
+        $ref: '#/components/requestBodies/CreateUser'
       responses:
         '200':
-          description: Successful operation
+          description: successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-        default:
-          description: successful operation
   /users/login:
     post:
       tags:
@@ -298,11 +248,7 @@ paths:
       description: ''
       operationId: loginUser
       requestBody:
-        description: Login information
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/LoginUser'
+        $ref: '#/components/requestBodies/LoginUser'
       responses:
         '200':
           description: successful operation
@@ -357,16 +303,12 @@ paths:
       parameters:
         - name: username
           in: path
-          description: name that need to be deleted
+          description: Name of user that need to be updated
           required: true
           schema:
             type: string
       requestBody:
-        description: Update an existent user in the store
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateUser'
+        $ref: '#/components/requestBodies/UpdateUser'
       responses:
         default:
           description: successful operation
@@ -379,7 +321,7 @@ paths:
       parameters:
         - name: username
           in: path
-          description: The name that needs to be deleted
+          description: Name of user that needs to be deleted
           required: true
           schema:
             type: string
@@ -410,19 +352,17 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Review'
+                $ref: '#/components/schemas/ListReviews'
         '400':
           description: Invalid username supplied
 components:
   schemas:
     Review:
       required:
+        - id
         - userId
         - restaurantId
         - rating
-        - content
       type: object
       properties:
         id:
@@ -447,12 +387,23 @@ components:
         photoUrl:
           type: string
           example: www.photouploaded.com
+    ListReviews:
+      required:
+        - reviews
+      type: object
+      properties:
+        reviews: 
+          type: array
+          items: 
+            $ref: '#/components/schemas/Review'
+        # nextUri: string
+        # prevUri: string
+        # total: integer
     CreateReview:
       required:
         - userId
         - restaurantId
         - rating
-        - content
       type: object
       properties:
         userId:
@@ -474,9 +425,6 @@ components:
           type: string
           example: www.photouploaded.com
     UpdateReview:
-      required:
-        - rating
-        - content
       type: object
       properties:
         rating:
@@ -491,11 +439,14 @@ components:
           example: www.photouploaded.com
     User:
       required:
+        - id
         - username
         - firstName
         - lastName
         - email
         - password
+        - favoriteFoods
+        - friends
       type: object
       properties:
         id:
@@ -525,12 +476,6 @@ components:
           type: array
           items: 
             $ref: '#/components/schemas/User'
-        # I'm not sure what this was.... should we remove?
-        # userStatus:
-        #   type: integer
-        #   description: User Status
-        #   format: int32
-        #   example: 1
     CreateUser:
       required:
         - username
@@ -556,14 +501,6 @@ components:
           type: string
           example: '12345'
     UpdateUser:
-    # I'm not sure about this one.. thinking all should be required whether the update is made on them or not..?
-      required:
-        - username
-        - firstName
-        - lastName
-        - email
-        - password
-        - favoriteFoods
       type: object
       properties:
         username:
@@ -589,29 +526,21 @@ components:
           type: array
           items: 
             $ref: '#/components/schemas/User'
-        # userStatus:
-        #   type: integer
-        #   description: User Status
-        #   format: int32
-        #   example: 1
     LoginUser:
       required:
-        - username
+        - usernameOrEmail
         - password
       type: object
       properties:
-        username:
+        usernameOrEmail:
           type: string
-          example: theUser
-        # Maybe should be one or the other of username/email?
-        # email:
-        #   type: string
-        #   example: john@email.com
+          example: theUser/john@email.com
         password:
           type: string
           example: '12345'
     Restaurant:
       required:
+        - id
         - name
         - longitude
         - latitude
@@ -636,9 +565,23 @@ components:
         address:
           type: string
           example: '120 Detroit Ave, CA 94520'
+    ListRestaurants:
+      required:
+        - restaurants
+      type: object
+      properties:
+        restaurants: 
+          type: array
+          items: 
+            $ref: '#/components/schemas/Restaurant'
+        # nextUri: string
+        # prevUri: string
+        # total: integer
     FavoriteFood:
       required:
+        - id
         - name
+        - reviews
       type: object
       properties:
         id:
@@ -663,23 +606,38 @@ components:
         message:
           type: string
   requestBodies:
-    Review:
-      description: Review object that needs to be added to the Reviews
+    CreateReview:
+      description: Create a new review about a restaurant
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Review'
-    User:
-      description: User object that needs to be added to the Users
+            $ref: '#/components/schemas/CreateReview'
+      required: true
+    UpdateReview:
+      description: Update an existent review on a restaurant
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/User'
-    UserArray:
-      description: List of user object
+            $ref: '#/components/schemas/UpdateReview'
+      required: true
+    CreateUser:
+      description: Created user object
       content:
         application/json:
           schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/User'
+            $ref: '#/components/schemas/CreateUser'
+      required: true
+    LoginUser:
+      description: Login information
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LoginUser'
+      required: true
+    UpdateUser:
+      description: Update an existent user in the store
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateUser'
+      required: true
