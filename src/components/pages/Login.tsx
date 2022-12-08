@@ -29,6 +29,7 @@ export default function Login() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
+    // TODO - handle login by posting to backend and setting currentUser as logged in user, or display error message if error
     console.log({
       email: data.get('email'),
       password: data.get('password'),
@@ -52,16 +53,17 @@ export default function Login() {
           <Typography component='h1' variant='h5'>
             Sign in
           </Typography>
-          <Box component='form' onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <Box component='form' onSubmit={handleSubmit} sx={{ mt: 1 }}>
             <TextField
               margin='normal'
               required
               fullWidth
-              id='emailOrUsername'
-              label='Email or Username'
-              name='emailOrUsername'
-              autoComplete='emailOrUsername'
+              id='usernameOrEmail'
+              label='Username or Email'
+              name='usernameOrEmail'
+              autoComplete='usernameOrEmail'
               autoFocus
+              inputProps={{ 'data-testid': 'required-usernameOrEmail' }}
             />
             <TextField
               margin='normal'
@@ -72,6 +74,7 @@ export default function Login() {
               type='password'
               id='password'
               autoComplete='current-password'
+              inputProps={{ 'data-testid': 'required-password' }}
             />
             <FormControlLabel
               control={<Checkbox value='remember' color='primary' />}
