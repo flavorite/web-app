@@ -4,7 +4,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles'
 import useCreateUser from '../../hooks/useCreateUser'
 import { CreateUser } from '../../client/flavorite/models'
 import { useNavigate } from 'react-router'
-import { useState} from 'react'
+import { useState } from 'react'
 import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
@@ -33,23 +33,20 @@ export default function Register() {
   const navigate = useNavigate()
   const mutation = useCreateUser()
 
-
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
 
-    const formDataObj: CreateUser = {      
+    const formDataObj: CreateUser = {
       username: formData.get('username') as string,
       firstName: formData.get('firstName') as string,
       lastName: formData.get('lastName') as string,
       email: formData.get('email') as string,
-      password: formData.get('password') as string
+      password: formData.get('password') as string,
     }
 
-
-    const createUser = () => mutation.mutate({ createUser: formDataObj})
+    const createUser = () => mutation.mutate({ createUser: formDataObj })
     navigate('/')
-
   }
 
   return (
@@ -82,7 +79,6 @@ export default function Register() {
                   label='First Name'
                   autoFocus
                   inputProps={{ 'data-testid': 'required-firstName' }}
-
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -105,7 +101,6 @@ export default function Register() {
                   name='email'
                   autoComplete='email'
                   inputProps={{ 'data-testid': 'required-email' }}
-                 
                 />
               </Grid>
               <Grid item xs={12}>

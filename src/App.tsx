@@ -22,25 +22,25 @@ function App() {
   return (
     <div className='App'>
       <ThemeProvider theme={theme}>
-      <QueryClientProvider client={queryClient}>
-        <Router>
-          <header>
-            <Navbar />
-          </header>
-          <Routes>
-            <Route path='/' element={<Home />} />
-            <Route path='/:username' element={<Profile />} />
-            <Route path='/:username/friends' element={<Friends />} />
-            <Route path='/:username/reviews' element={<UserReviews />} />
-            <Route path='/:username/favorites' element={<FavoriteFoods />} />
-            <Route path='/:username/favorites/:favorite' element={<FavoriteFood />} />
-            <Route path='/restaurants/:restaurantId' element={<Restaurant />} />
-            <Route path='/register' element={<Register />} />
-            <Route path='/login' element={<Login />} />
-            <Route path='/writeareview/:restaurantName' element={<NewReviewForm />} />
-          </Routes>
-        </Router>
-      </QueryClientProvider>
+        <QueryClientProvider client={queryClient}>
+          <Router>
+            <header>
+              <Navbar />
+            </header>
+            <Routes>
+              <Route path='/' element={<Home />} />
+              <Route path='/:username' element={<Profile />} />
+              <Route path='/:username/friends' element={<Friends />} />
+              <Route path='/:username/reviews' element={<UserReviews />} />
+              <Route path='/:username/favorites' element={<FavoriteFoods />} />
+              <Route path='/:username/favorites/:favorite' element={<FavoriteFood />} />
+              <Route path='/restaurants/:restaurantId' element={<Restaurant />} />
+              <Route path='/register' element={<Register />} />
+              <Route path='/login' element={<Login />} />
+              <Route path='/writeareview/:restaurantName' element={<NewReviewForm />} />
+            </Routes>
+          </Router>
+        </QueryClientProvider>
       </ThemeProvider>
     </div>
   )

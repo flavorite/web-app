@@ -12,10 +12,10 @@ import {
   Autocomplete,
   InfoWindow,
 } from '@react-google-maps/api'
+import { useGeolocated } from 'react-geolocated';
 
 // declared library for 'places' here to avoid react warning for LoadScript performance
 const lib: LoadScriptProps['libraries'] = ['places']
-
 
 export default function LandingMap() {
   const API_KEY = process.env.REACT_APP_API_KEY
@@ -24,14 +24,24 @@ export default function LandingMap() {
     width: '100%',
     height: '60vh',
   }
+  const { coords, isGeolocationAvailable, isGeolocationEnabled } =
+  useGeolocated({
+      positionOptions: {
+          enableHighAccuracy: false,
+      },
+      userDecisionTimeout: 5000,
+  });
 
   const [center, setCenter] = useState({
-    lat: -3.745,
-    lng: -38.523,
+    lat: 3,
+    lng: 5
   })
 
+  const [locationMsg, setLocationMsg] = useState<string | null>(null)
+
+
   const [search, setSearch] = useState<any>('')
-  const [map, setMap] = useState<any>(null)
+
 
   const { restaurants, loading, error } = useRestaurants({
     longitude: center.lng,
@@ -39,7 +49,7 @@ export default function LandingMap() {
     radius: 500,
   })
 
-  const position = { lat: 33.772, lng: -117.214 }
+  const position = center
 
   const divStyle = {
     background: 'white',
@@ -47,6 +57,18 @@ export default function LandingMap() {
     padding: 15,
   }
 
+  const onLoadMap = () => {
+    if (coords) {
+      setCenter({
+        lat: coords.latitude,
+        lng: coords.longitude
+      })
+    } else if (!isGeolocationAvailable) {
+      setLocationMsg('Your browser does not support Geolocation. Use Search bar to ')
+    } else if (!isGeolocationEnabled) {
+      setLocationMsg('Geolocation is not enabled')
+    }
+  }
   const onLoadInfo = (infoWindow: any) => {
     console.log('infoWindow: ', infoWindow)
   }
@@ -86,7 +108,7 @@ export default function LandingMap() {
     <Container>
       <LoadScript googleMapsApiKey={`${API_KEY}`} libraries={lib}>
         <GoogleMap
-          onLoad={(map) => setMap(map)}
+          onLoad={onLoadMap}
           mapContainerStyle={containerStyle}
           center={center}
           zoom={15}
@@ -96,7 +118,7 @@ export default function LandingMap() {
           icon={svgMarker}
           position={center}
         /> */}
-        {/* TODO: Change InfoWindow to onClick event (user clicking on each restaurant Marker to open InfoWindow with our data display) */}
+          {/* TODO: Change InfoWindow to onClick event (user clicking on each restaurant Marker to open InfoWindow with our data display) */}
           <InfoWindow onLoad={onLoadInfo} position={position}>
             <Box style={divStyle}>
               <Stack>InfoWindow</Stack>
@@ -104,7 +126,7 @@ export default function LandingMap() {
           </InfoWindow>
           <Autocomplete onLoad={onLoadSearch} onPlaceChanged={onPlaceChanged}>
             <TextField
-              inputProps={{ style: { backgroundColor: 'white'}}}
+              inputProps={{ style: { backgroundColor: 'white' } }}
               label='Search for location...'
             />
           </Autocomplete>

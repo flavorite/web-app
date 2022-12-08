@@ -4,8 +4,8 @@ import { GetReviewByRestaurantRequest, RestaurantsApi } from '../client/flavorit
 
 export default function useRestaurantReviews(restaurantId: GetReviewByRestaurantRequest) {
   const Restaurants = new RestaurantsApi()
-//   const fetchRestaurantReviews = () => Restaurants.getReviewByRestaurant(restaurantId)
-//   const Reviews = useQuery(['reviewsByRestaurant', restaurantId], fetchRestaurantReviews)
+  //   const fetchRestaurantReviews = () => Restaurants.getReviewByRestaurant(restaurantId)
+  //   const Reviews = useQuery(['reviewsByRestaurant', restaurantId], fetchRestaurantReviews)
 
   const reviewsList: ListReviews = {
     reviews: [
