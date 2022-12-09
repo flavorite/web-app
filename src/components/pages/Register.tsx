@@ -33,7 +33,7 @@ export default function Register() {
   const navigate = useNavigate()
   const mutation = useCreateUser()
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
 
@@ -45,7 +45,8 @@ export default function Register() {
       password: formData.get('password') as string,
     }
 
-    const createUser = () => mutation.mutate({ createUser: formDataObj })
+    await mutation.mutate({ createUser: formDataObj })
+  
     navigate('/')
   }
 
@@ -67,7 +68,7 @@ export default function Register() {
           <Typography component='h1' variant='h5'>
             Sign up
           </Typography>
-          <Box component='form' onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Box component='form' data-testid="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -127,7 +128,7 @@ export default function Register() {
                 />
               </Grid>
             </Grid>
-            <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
+            <Button role='button' type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
               Sign Up
             </Button>
             <Grid container justifyContent='flex-end'>

@@ -1,8 +1,24 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import Register from './Register'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import userEvent from '@testing-library/user-event'
+
+
+
+const mockCreateUser = jest.fn()
+
+jest.mock('../../hooks/useCreateUser', () => {
+    return () => {
+        return {
+            mutate: mockCreateUser,
+            loading: false,
+            error: null,
+            success: true,
+        };
+      }
+
+})
 
 describe('Register component', () => {
   // test the page renders login form without crashing
@@ -19,7 +35,7 @@ describe('Register component', () => {
   })
 
   // Test input validation on form (all fields should be required)
-  test('all fields are required in form', async () => {
+  test('all fields should be required and user can type', async () => {
     render(
       <QueryClientProvider client={new QueryClient()}>
         <Router>
@@ -27,16 +43,74 @@ describe('Register component', () => {
         </Router>
       </QueryClientProvider>,
     )
-    expect(screen.getByTestId('required-firstName')).toBeRequired()
-    expect(screen.getByTestId('required-lastName')).toBeRequired()
-    expect(screen.getByTestId('required-email')).toBeRequired()
-    expect(screen.getByTestId('required-username')).toBeRequired()
-    expect(screen.getByTestId('required-password')).toBeRequired()
+    const firstNameBox = screen.getByLabelText(/First Name/i)
+    const lastNameBox = screen.getByLabelText(/Last Name/i)
+    const usernameBox = screen.getByLabelText(/Username/i)
+    const emailBox = screen.getByLabelText(/Email Address/i)
+    const passwordBox = screen.getByLabelText(/Password/i)
+
+    //all fields required
+    expect(firstNameBox).toBeRequired()
+    expect(lastNameBox).toBeRequired()
+    expect(usernameBox).toBeRequired()
+    expect(emailBox).toBeRequired()
+    expect(passwordBox).toBeRequired()
+
+    //user can type and change value of Form Textfields
+    await userEvent.type(firstNameBox, 'Amy')
+    await userEvent.type(lastNameBox, 'Do')
+    await userEvent.type(usernameBox, 'aDo')
+    await userEvent.type(emailBox, 'ado@g.com')
+    await userEvent.type(passwordBox, '12345')
+    
+    expect(firstNameBox).toHaveValue('Amy')
+    expect(lastNameBox).toHaveValue('Do')
+    expect(usernameBox).toHaveValue('aDo')
+    expect(emailBox).toHaveValue('ado@g.com')
+    expect(passwordBox).toHaveValue('12345')
   })
 
-  // TODO Test Loading State on submission with React-Query
+  // TODO Test onSubmit to call useCreateUser hook
+  test('onClick submit button, should post form data', async () => {
+    render(
+        <QueryClientProvider client={new QueryClient()}>
+          <Router>
+            <Register />
+          </Router>
+        </QueryClientProvider>,
+      )
 
-  // TODO Test success case with React-Query
+    // input form
+    const firstNameBox = screen.getByLabelText(/First Name/i) as HTMLInputElement;
+    const lastNameBox = screen.getByLabelText(/Last Name/i)as HTMLInputElement;
+    const usernameBox = screen.getByLabelText(/Username/i)as HTMLInputElement;
+    const emailBox = screen.getByLabelText(/Email Address/i)as HTMLInputElement;
+    const passwordBox = screen.getByLabelText(/Password/i)as HTMLInputElement;
 
-  // TODO Test error case with React-Query
+    
+    fireEvent.change(firstNameBox, {target:{value: 'Amy'}})
+    fireEvent.change(lastNameBox, {target:{value: 'Do'}})
+    fireEvent.change(usernameBox, {target:{value: 'aDo'}})
+    fireEvent.change(emailBox, {target:{value: 'aDo@g.com'}})
+    fireEvent.change(passwordBox, {target:{value: '12345'}})
+
+
+    // when button clicked:
+    const submitBtn = screen.getByRole('button')
+    await userEvent.click(submitBtn)
+
+
+    expect(mockCreateUser).toBeCalledWith({createUser: {
+        username: usernameBox.value,
+        firstName: firstNameBox.value,
+        lastName: lastNameBox.value,
+        email: emailBox.value,
+        password: passwordBox.value
+    }})
+  })
+  // TODO Test success case 
+
+  // TODO Test loading case 
+
+  // TODO Test error case 
 })
