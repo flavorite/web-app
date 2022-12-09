@@ -76,7 +76,9 @@ export default function Register() {
   return (
     <Container component='main' maxWidth='xs'>
       <CssBaseline />
-      {isLoading ? <Spinner loading={isLoading} /> : null}
+      <Box role='spinner'>
+        {isLoading ? <Spinner loading={isLoading} /> : null}
+      </Box>
       <Box
         sx={{
           marginTop: 8,
@@ -91,7 +93,7 @@ export default function Register() {
         <Typography component='h1' variant='h5'>
           Sign up
         </Typography>
-        <Typography>
+        <Typography role='error-message'>
           {/* TODO Style Typography */}
           {errorMsg ? `${errorMsg}` : ''}
         </Typography>

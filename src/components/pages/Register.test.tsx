@@ -10,12 +10,27 @@ jest.mock('../../hooks/useCreateUser', () => {
   return () => {
     return {
       mutate: mockCreateUser,
-      loading: false,
-      error: null,
+      loading: true,
+      error: 'There is an error',
       success: true,
     }
   }
 })
+
+
+jest.mock('../partials/Spinner', () => {
+  return () => {
+    return 'Spinner is displayed'
+  }
+})
+
+
+const mockedUseNavigate = jest.fn();
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom') as any,
+  // the success test fails because of this function. But if I get rid of () => I get the same error as before 'cannot initialize' and the ()=> was the solution I found from many places but it doesn't get called (console log doesn't log) Adding an empty function will cause other errors..
+ useNavigate: () => mockedUseNavigate,
+}));
 
 describe('Register component', () => {
   // test the page renders login form without crashing
@@ -40,6 +55,7 @@ describe('Register component', () => {
         </Router>
       </QueryClientProvider>,
     )
+    
     const firstNameBox = screen.getByLabelText(/First Name/i)
     const lastNameBox = screen.getByLabelText(/Last Name/i)
     const usernameBox = screen.getByLabelText(/Username/i)
@@ -92,7 +108,7 @@ describe('Register component', () => {
     fireEvent.change(passwordBox, { target: { value: '12345' } })
 
     // when button clicked:
-    const submitBtn = screen.getByRole('button')
+    const submitBtn = screen.getByRole('button', {name: /Sign Up/i} )
     await userEvent.click(submitBtn)
 
     expect(mockCreateUser).toBeCalledWith({
@@ -106,8 +122,50 @@ describe('Register component', () => {
     })
   })
   // TODO Test success case
+  test('on userCreate success, reroute to /login', () => {
+    render(
+      <QueryClientProvider client={new QueryClient()}>
+        <Router>
+          <Register />
+        </Router>
+      </QueryClientProvider>,
+    )
+
+    expect(mockedUseNavigate).toHaveBeenCalled()
+
+  })
+
 
   // TODO Test loading case
+  test('when userCreate is loading, display Spinner component', async () => {
+    render(
+      <QueryClientProvider client={new QueryClient()}>
+        <Router>
+          <Register />
+        </Router>
+      </QueryClientProvider>,
+    )
+    const spinner = screen.getByRole('spinner')
+    expect(spinner).toHaveTextContent('Spinner is displayed')
+
+  })
 
   // TODO Test error case
+  test('if userCreater has error, display error message on Register Form', async () => {
+    render(
+      <QueryClientProvider client={new QueryClient()}>
+        <Router>
+          <Register />
+        </Router>
+      </QueryClientProvider>,
+    )
+
+
+    
+    const errorMsg = screen.getByRole('error-message')
+    expect(errorMsg).toHaveTextContent('There is an error')
+
+
+
+  })
 })
