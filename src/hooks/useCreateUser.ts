@@ -28,7 +28,7 @@ export default function useCreateUser() {
     // user: newUser.data
     loading: false,
     error: null,
-    success: false,
-    user: user
+    success: true,
+    user: user,
   }
 }

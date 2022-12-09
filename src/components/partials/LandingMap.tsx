@@ -12,7 +12,7 @@ import {
   Autocomplete,
   InfoWindow,
 } from '@react-google-maps/api'
-import { useGeolocated } from 'react-geolocated';
+import { useGeolocated } from 'react-geolocated'
 
 // declared library for 'places' here to avoid react warning for LoadScript performance
 const lib: LoadScriptProps['libraries'] = ['places']
@@ -24,24 +24,21 @@ export default function LandingMap() {
     width: '100%',
     height: '60vh',
   }
-  const { coords, isGeolocationAvailable, isGeolocationEnabled } =
-  useGeolocated({
-      positionOptions: {
-          enableHighAccuracy: false,
-      },
-      userDecisionTimeout: 5000,
-  });
+  const { coords, isGeolocationAvailable, isGeolocationEnabled } = useGeolocated({
+    positionOptions: {
+      enableHighAccuracy: false,
+    },
+    userDecisionTimeout: 5000,
+  })
 
   const [center, setCenter] = useState({
     lat: 3,
-    lng: 5
+    lng: 5,
   })
 
   const [locationMsg, setLocationMsg] = useState<string | null>(null)
 
-
   const [search, setSearch] = useState<any>('')
-
 
   const { restaurants, loading, error } = useRestaurants({
     longitude: center.lng,
@@ -61,7 +58,7 @@ export default function LandingMap() {
     if (coords) {
       setCenter({
         lat: coords.latitude,
-        lng: coords.longitude
+        lng: coords.longitude,
       })
     } else if (!isGeolocationAvailable) {
       setLocationMsg('Your browser does not support Geolocation. Use Search bar to ')
@@ -107,12 +104,7 @@ export default function LandingMap() {
   return (
     <Container>
       <LoadScript googleMapsApiKey={`${API_KEY}`} libraries={lib}>
-        <GoogleMap
-          onLoad={onLoadMap}
-          mapContainerStyle={containerStyle}
-          center={center}
-          zoom={15}
-        >
+        <GoogleMap onLoad={onLoadMap} mapContainerStyle={containerStyle} center={center} zoom={15}>
           {/* TODO: Need to get 'Places' from backend and display with custom Marker */}
           {/* <Marker
           icon={svgMarker}

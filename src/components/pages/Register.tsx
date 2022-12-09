@@ -27,14 +27,14 @@ function Copyright(props: any) {
   )
 }
 
-
 export default function Register() {
   const navigate = useNavigate()
   const mutation = useCreateUser()
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  useEffect(() => {
+
+  useEffect (() => {
     if (mutation.success) {
       navigate('/login')
     }
@@ -42,13 +42,18 @@ export default function Register() {
     if (mutation.error) {
       // TODO need to refactor to display error message from mutation.error
       setErrorMsg(mutation.error)
-    } else { setErrorMsg(null) }
+    } else {
+      setErrorMsg(null)
+    }
 
     if (mutation.loading) {
       setIsLoading(true)
-    } else { setIsLoading(false) }
+    } else {
+      setIsLoading(false)
+    }
 
-  }, [mutation])
+  },[mutation.success, mutation.loading, mutation.error]) 
+
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -62,12 +67,11 @@ export default function Register() {
       password: formData.get('password') as string,
     }
 
-    // TODO revive with API is connected
-    // await mutation.mutate({ createUser: formDataObj })
+    // TODO revive when API is connected
+    await mutation.mutate({ createUser: formDataObj })
+
 
   }
-
-
 
   return (
     <Container component='main' maxWidth='xs'>
@@ -91,7 +95,7 @@ export default function Register() {
           {/* TODO Style Typography */}
           {errorMsg ? `${errorMsg}` : ''}
         </Typography>
-        <Box component='form' data-testid="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
+        <Box component='form' data-testid='form' onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
