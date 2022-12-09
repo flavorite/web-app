@@ -93,8 +93,8 @@ describe('Register component', () => {
     fireEvent.change(usernameBox, {target:{value: 'aDo'}})
     fireEvent.change(emailBox, {target:{value: 'aDo@g.com'}})
     fireEvent.change(passwordBox, {target:{value: '12345'}})
-
-
+    
+    
     // when button clicked:
     const submitBtn = screen.getByRole('button')
     await userEvent.click(submitBtn)
