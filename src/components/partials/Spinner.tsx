@@ -1,23 +1,25 @@
-import { CircularProgress, Backdrop } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { Backdrop, CircularProgress } from '@mui/material';
 
-interface SpinnerProps {
-  loading: boolean
+type SpinnerProps = {
+  loading: boolean;
+  children: React.ReactElement
 }
 
-export default function Spinner(props: SpinnerProps) {
-  const [isLoading, setIsLoading] = useState(false)
-
-  useEffect(() => {
-    setIsLoading(props.loading)
-  }, [isLoading])
-
+const Spinner: React.FC<SpinnerProps> = ({
+  loading,
+  children,
+}) => {
   return (
-    <Backdrop
-      sx={{ color: '#fff', zIndex: (theme: any) => theme.zIndex.drawer + 1 }}
-      open={isLoading}
-    >
-      <CircularProgress color='secondary' />
-    </Backdrop>
-  )
+    <>{
+      loading ?
+        (<Backdrop
+          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={loading}
+        >
+          <CircularProgress color='secondary' />
+        </Backdrop>) : (<>{children}</>)
+    }
+    </>)
 }
+
+export default Spinner;

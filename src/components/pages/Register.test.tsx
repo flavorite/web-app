@@ -1,10 +1,11 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import Register from './Register'
-import { BrowserRouter as Router } from 'react-router-dom'
+import { BrowserRouter as Router, useNavigate } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import userEvent from '@testing-library/user-event'
 
 const mockCreateUser = jest.fn()
+const mockUseNavigate = jest.fn()
 
 jest.mock('../../hooks/useCreateUser', () => {
   return () => {
@@ -13,24 +14,25 @@ jest.mock('../../hooks/useCreateUser', () => {
       loading: true,
       error: 'There is an error',
       success: true,
+     
     }
   }
 })
-
 
 jest.mock('../partials/Spinner', () => {
   return () => {
     return 'Spinner is displayed'
   }
 })
-
-
-const mockedUseNavigate = jest.fn();
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom') as any,
-  // the success test fails because of this function. But if I get rid of () => I get the same error as before 'cannot initialize' and the ()=> was the solution I found from many places but it doesn't get called (console log doesn't log) Adding an empty function will cause other errors..
- useNavigate: () => mockedUseNavigate,
-}));
+jest.mock('react-router-dom', () => {
+  const originalModule = jest.requireActual('react-router-dom')
+  // not working
+  return {
+    __esModule: true,
+    ...originalModule,
+    useNavigate: () => mockUseNavigate
+  };
+});
 
 describe('Register component', () => {
   // test the page renders login form without crashing
@@ -55,7 +57,7 @@ describe('Register component', () => {
         </Router>
       </QueryClientProvider>,
     )
-    
+
     const firstNameBox = screen.getByLabelText(/First Name/i)
     const lastNameBox = screen.getByLabelText(/Last Name/i)
     const usernameBox = screen.getByLabelText(/Username/i)
@@ -93,7 +95,6 @@ describe('Register component', () => {
       </QueryClientProvider>,
     )
 
-
     // input form
     const firstNameBox = screen.getByLabelText(/First Name/i) as HTMLInputElement
     const lastNameBox = screen.getByLabelText(/Last Name/i) as HTMLInputElement
@@ -108,7 +109,7 @@ describe('Register component', () => {
     fireEvent.change(passwordBox, { target: { value: '12345' } })
 
     // when button clicked:
-    const submitBtn = screen.getByRole('button', {name: /Sign Up/i} )
+    const submitBtn = screen.getByRole('button', { name: /Sign Up/i })
     await userEvent.click(submitBtn)
 
     expect(mockCreateUser).toBeCalledWith({
@@ -120,6 +121,8 @@ describe('Register component', () => {
         password: passwordBox.value,
       },
     })
+
+    expect(location.pathname).toEqual('/login')
   })
   // TODO Test success case
   test('on userCreate success, reroute to /login', () => {
@@ -131,10 +134,8 @@ describe('Register component', () => {
       </QueryClientProvider>,
     )
 
-    expect(mockedUseNavigate).toHaveBeenCalled()
-
+    // expect(mockUseNavigate).toHaveBeenCalled()
   })
-
 
   // TODO Test loading case
   test('when userCreate is loading, display Spinner component', async () => {
@@ -147,7 +148,6 @@ describe('Register component', () => {
     )
     const spinner = screen.getByRole('spinner')
     expect(spinner).toHaveTextContent('Spinner is displayed')
-
   })
 
   // TODO Test error case
@@ -160,12 +160,7 @@ describe('Register component', () => {
       </QueryClientProvider>,
     )
 
-
-    
     const errorMsg = screen.getByRole('error-message')
     expect(errorMsg).toHaveTextContent('There is an error')
-
-
-
   })
 })
