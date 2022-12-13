@@ -61,6 +61,7 @@ export default function LandingMap() {
     userDecisionTimeout: 5000,
   })
 
+  // TODO figure out why geolocation doesn't work initially
   const onLoadMap = () => {
     if (coords) {
       setCenter({
