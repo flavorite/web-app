@@ -46,8 +46,7 @@ export default function Login() {
       password: formData.get('password') as string,
     }
 
-    // TODO revive when API is connected
-    await loginUser({ loginUser: formDataObj })
+    // await loginUser({ loginUser: formDataObj })
 
     navigate(`/${loggedInUser.username}`)
   }

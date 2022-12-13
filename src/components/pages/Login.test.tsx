@@ -53,7 +53,7 @@ describe('Login', () => {
     await userEvent.type(passwordBox, '12345')
   })
 
-  // TODO Test onSubmit to call useLoginUser hook
+  // Test onSubmit
   test('onClick submit button, should post form data', async () => {
     render(
       <QueryClientProvider client={new QueryClient()}>
@@ -84,7 +84,7 @@ describe('Login', () => {
     expect(location.pathname).toEqual('/kitty')
   })
 
-  // TODO Test error case
+  // Test error case
   test('if loginUser has error, display error message on Login Form', async () => {
     render(
       <QueryClientProvider client={new QueryClient()}>

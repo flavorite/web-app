@@ -26,7 +26,6 @@ function Copyright(props: any) {
   )
 }
 
-
 export default function Register() {
   const navigate = useNavigate()
   const { loading: loadingCreateUser, error: errorCreateUser, mutate: createUser } = useCreateUser()
@@ -43,8 +42,7 @@ export default function Register() {
       password: formData.get('password') as string,
     }
 
-    // TODO revive when API is connected
-    await createUser({ createUser: formDataObj })
+    // await createUser({ createUser: formDataObj })
     navigate('/login')
   }
 

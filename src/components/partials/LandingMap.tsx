@@ -2,6 +2,7 @@ import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
+import Typography from '@mui/material/Typography'
 import {
   Autocomplete,
   GoogleMap,
@@ -12,6 +13,7 @@ import {
 import { useState } from 'react'
 import { useGeolocated } from 'react-geolocated'
 import useRestaurants from '../../hooks/useRestaurants'
+import Spinner from './Spinner'
 
 // declared library for 'places' here to avoid react warning for LoadScript performance
 const lib: LoadScriptProps['libraries'] = ['places']
@@ -23,15 +25,9 @@ export default function LandingMap() {
     width: '100%',
     height: '60vh',
   }
-  const { coords, isGeolocationAvailable, isGeolocationEnabled } = useGeolocated({
-    positionOptions: {
-      enableHighAccuracy: false,
-    },
-    userDecisionTimeout: 5000,
-  })
 
   const [center, setCenter] = useState({
-    lat: 3,
+    lat: 5,
     lng: 5,
   })
 
@@ -39,12 +35,17 @@ export default function LandingMap() {
 
   const [search, setSearch] = useState<any>('')
 
-  const { restaurants, loading, error } = useRestaurants({
+  const {
+    restaurants: restaurantsList,
+    loading: loadingRestaurants,
+    error: errorLoadingRestaurants,
+  } = useRestaurants({
     longitude: center.lng,
     latitude: center.lat,
     radius: 500,
   })
 
+  // TODO position will be changed to restaurantsList coordinates to display custom markers
   const position = center
 
   const divStyle = {
@@ -53,6 +54,13 @@ export default function LandingMap() {
     padding: 15,
   }
 
+  const { coords, isGeolocationAvailable, isGeolocationEnabled } = useGeolocated({
+    positionOptions: {
+      enableHighAccuracy: false,
+    },
+    userDecisionTimeout: 5000,
+  })
+
   const onLoadMap = () => {
     if (coords) {
       setCenter({
@@ -60,11 +68,14 @@ export default function LandingMap() {
         lng: coords.longitude,
       })
     } else if (!isGeolocationAvailable) {
-      setLocationMsg('Your browser does not support Geolocation. Use Search bar to ')
+      setLocationMsg(
+        'Your browser does not support Geolocation. Use Search bar to find nearby restaurants',
+      )
     } else if (!isGeolocationEnabled) {
-      setLocationMsg('Geolocation is not enabled')
+      setLocationMsg('Geolocation is not enabled. Use Search bar to find nearby restaurants')
     }
   }
+
   const onLoadInfo = (infoWindow: any) => {
     console.log('infoWindow: ', infoWindow)
   }
@@ -96,38 +107,53 @@ export default function LandingMap() {
     }
   }
 
-  const restaurantsData = restaurants.map((restaurant, id) => {
+  const restaurantsData = restaurantsList.map((restaurant, id) => {
     return <Stack key={id}>{restaurant.name}</Stack>
   })
 
   return (
-    <Container>
-      <LoadScript googleMapsApiKey={`${API_KEY}`} libraries={lib}>
-        <GoogleMap onLoad={onLoadMap} mapContainerStyle={containerStyle} center={center} zoom={15}>
-          {/* TODO: Need to get 'Places' from backend and display with custom Marker */}
-          {/* <Marker
+    <Spinner loading={loadingRestaurants}>
+      <Container>
+        <Typography role='geolocation-error-message'>
+          {/* TODO Style Typography */}
+          {locationMsg ? `${locationMsg}` : ''}
+        </Typography>
+        <LoadScript googleMapsApiKey={`${API_KEY}`} libraries={lib}>
+          <GoogleMap
+            onLoad={onLoadMap}
+            mapContainerStyle={containerStyle}
+            center={center}
+            zoom={15}
+          >
+            {/* TODO: Need to get 'Places' from backend and display with custom Marker */}
+            {/* <Marker
           icon={svgMarker}
           position={center}
         /> */}
-          {/* TODO: Change InfoWindow to onClick event (user clicking on each restaurant Marker to open InfoWindow with our data display) */}
-          <InfoWindow onLoad={onLoadInfo} position={position}>
-            <Box style={divStyle}>
-              <Stack>InfoWindow</Stack>
-            </Box>
-          </InfoWindow>
-          <Autocomplete onLoad={onLoadSearch} onPlaceChanged={onPlaceChanged}>
-            <TextField
-              inputProps={{ style: { backgroundColor: 'white' } }}
-              label='Search for location...'
-            />
-          </Autocomplete>
-        </GoogleMap>
-      </LoadScript>
+            {/* TODO: Change InfoWindow to onClick event (user clicking on each restaurant Marker to open InfoWindow with our data display) */}
+            <InfoWindow onLoad={onLoadInfo} position={position}>
+              <Box style={divStyle}>
+                <Stack>InfoWindow</Stack>
+              </Box>
+            </InfoWindow>
+            <Autocomplete onLoad={onLoadSearch} onPlaceChanged={onPlaceChanged}>
+              <TextField
+                inputProps={{ style: { backgroundColor: 'white' } }}
+                label='Search for location...'
+              />
+            </Autocomplete>
+          </GoogleMap>
+        </LoadScript>
 
-      <Box>
-        {/* TODO: use 'restaurantsData' to display custom markers on the map & display list below map*/}
-        {restaurantsData}
-      </Box>
-    </Container>
+        <Box>
+          {/* TODO: use 'restaurantsData' to display custom markers on the map & display list below map*/}
+          {restaurantsData}
+        </Box>
+        <Typography role='error-message'>
+          {/* TODO Style Typography */}
+          {errorLoadingRestaurants ? `${errorLoadingRestaurants}` : ''}
+        </Typography>
+      </Container>
+    </Spinner>
   )
 }

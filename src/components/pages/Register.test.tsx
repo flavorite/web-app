@@ -68,6 +68,7 @@ describe('Register component', () => {
     expect(passwordBox).toHaveValue('12345')
   })
 
+  // Test onSubmit
   test('onClick submit button, should post form data', async () => {
     render(
       <QueryClientProvider client={new QueryClient()}>
@@ -107,6 +108,7 @@ describe('Register component', () => {
     expect(location.pathname).toEqual('/login')
   })
 
+  // Test error case
   test('if createUser has error, display error message on Register Form', async () => {
     render(
       <QueryClientProvider client={new QueryClient()}>
