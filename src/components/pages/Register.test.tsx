@@ -1,8 +1,8 @@
-import { render, screen, fireEvent } from '@testing-library/react'
-import Register from './Register'
-import { BrowserRouter as Router, useNavigate } from 'react-router-dom'
-import { QueryClient, QueryClientProvider } from 'react-query'
+import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { QueryClient, QueryClientProvider } from 'react-query'
+import { BrowserRouter as Router } from 'react-router-dom'
+import Register from './Register'
 
 const mockCreateUser = jest.fn()
 const mockUseNavigate = jest.fn()
@@ -64,14 +64,14 @@ describe('Register component', () => {
     const emailBox = screen.getByLabelText(/Email Address/i)
     const passwordBox = screen.getByLabelText(/Password/i)
 
-    //all fields required
+    // all fields required
     expect(firstNameBox).toBeRequired()
     expect(lastNameBox).toBeRequired()
     expect(usernameBox).toBeRequired()
     expect(emailBox).toBeRequired()
     expect(passwordBox).toBeRequired()
 
-    //user can type and change value of Form Textfields
+    // user can type and change value of Form Textfields
     await userEvent.type(firstNameBox, 'Amy')
     await userEvent.type(lastNameBox, 'Do')
     await userEvent.type(usernameBox, 'aDo')

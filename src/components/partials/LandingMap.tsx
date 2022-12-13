@@ -1,18 +1,17 @@
-import useRestaurants from '../../hooks/useRestaurants'
+import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Stack from '@mui/material/Stack'
-import Box from '@mui/material/Box'
 import TextField from '@mui/material/TextField'
-import { useState, useEffect } from 'react'
 import {
+  Autocomplete,
   GoogleMap,
-  Marker,
+  InfoWindow,
   LoadScript,
   LoadScriptProps,
-  Autocomplete,
-  InfoWindow,
 } from '@react-google-maps/api'
+import { useState } from 'react'
 import { useGeolocated } from 'react-geolocated'
+import useRestaurants from '../../hooks/useRestaurants'
 
 // declared library for 'places' here to avoid react warning for LoadScript performance
 const lib: LoadScriptProps['libraries'] = ['places']
