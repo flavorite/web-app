@@ -1,25 +1,100 @@
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { QueryClient, QueryClientProvider } from 'react-query'
+import { BrowserRouter as Router } from 'react-router-dom'
 import Login from './Login'
 
+const mockLoginUser = jest.fn()
+
+jest.mock('../../hooks/useLoginUser', () => {
+  return () => {
+    return {
+      mutate: mockLoginUser,
+      loading: false,
+      error: 'There is an error in login',
+      success: true,
+      user: {
+        username: 'kitty',
+        token: 'tokenString',
+      },
+    }
+  }
+})
+
 describe('Login', () => {
-  // test the page renders login form without crashing
-  test('renders login form', () => {
-    render(<Login />)
+  test('renders login form without crashing', () => {
+    render(
+      <QueryClientProvider client={new QueryClient()}>
+        <Router>
+          <Login />
+        </Router>
+      </QueryClientProvider>,
+    )
     const heading = screen.getByRole('heading')
     expect(heading).toBeInTheDocument()
   })
 
-  // Test input validation on form (all fields should be required)
-  test('all fields are required in form', () => {
-    render(<Login />)
-    expect(screen.getByTestId('required-usernameOrEmail')).toBeRequired()
-    expect(screen.getByTestId('required-password')).toBeRequired()
+  test('all fields are required in form and user can type', async () => {
+    render(
+      <QueryClientProvider client={new QueryClient()}>
+        <Router>
+          <Login />
+        </Router>
+      </QueryClientProvider>,
+    )
+
+    const emailBox = screen.getByLabelText(/Email/i)
+    const passwordBox = screen.getByLabelText(/Password/i)
+
+    expect(emailBox).toBeRequired()
+    expect(passwordBox).toBeRequired()
+
+    await userEvent.type(emailBox, 'ado@g.com')
+    await userEvent.type(passwordBox, '12345')
   })
 
-  // TODO need to figure out handling login with backend
-  // TODO Loading state on form submission from React-query
+  // TODO Test onSubmit to call useLoginUser hook
+  test('onClick submit button, should post form data', async () => {
+    render(
+      <QueryClientProvider client={new QueryClient()}>
+        <Router>
+          <Login />
+        </Router>
+      </QueryClientProvider>,
+    )
 
-  // TODO Test success case from React-query
+    // input form
+    const emailBox = screen.getByLabelText(/Email/i) as HTMLInputElement
+    const passwordBox = screen.getByLabelText(/Password/i) as HTMLInputElement
 
-  // TODO Test error case from React-query
+    fireEvent.change(emailBox, { target: { value: 'aDo@g.com' } })
+    fireEvent.change(passwordBox, { target: { value: '12345' } })
+
+    // when button clicked:
+    const submitBtn = screen.getByRole('button', { name: /Sign In/i })
+    await userEvent.click(submitBtn)
+
+    expect(mockLoginUser).toBeCalledWith({
+      loginUser: {
+        email: emailBox.value,
+        password: passwordBox.value,
+      },
+    })
+    // on success, reroute to profile page of logged in user
+    expect(location.pathname).toEqual('/kitty')
+  })
+
+  // TODO Test error case
+  test('if loginUser has error, display error message on Login Form', async () => {
+    render(
+      <QueryClientProvider client={new QueryClient()}>
+        <Router>
+          <Login />
+        </Router>
+      </QueryClientProvider>,
+    )
+
+    const errorMsg = screen.getByRole('error-message')
+    expect(errorMsg).toHaveTextContent('There is an error in login')
+  })
 })

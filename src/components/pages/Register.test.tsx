@@ -5,34 +5,17 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import Register from './Register'
 
 const mockCreateUser = jest.fn()
-const mockUseNavigate = jest.fn()
 
 jest.mock('../../hooks/useCreateUser', () => {
   return () => {
     return {
       mutate: mockCreateUser,
-      loading: true,
-      error: 'There is an error',
+      loading: false,
+      error: 'There is an error in creating user',
       success: true,
-     
     }
   }
 })
-
-jest.mock('../partials/Spinner', () => {
-  return () => {
-    return 'Spinner is displayed'
-  }
-})
-jest.mock('react-router-dom', () => {
-  const originalModule = jest.requireActual('react-router-dom')
-  // not working
-  return {
-    __esModule: true,
-    ...originalModule,
-    useNavigate: () => mockUseNavigate
-  };
-});
 
 describe('Register component', () => {
   // test the page renders login form without crashing
@@ -85,7 +68,6 @@ describe('Register component', () => {
     expect(passwordBox).toHaveValue('12345')
   })
 
-  // TODO Test onSubmit to call useCreateUser hook
   test('onClick submit button, should post form data', async () => {
     render(
       <QueryClientProvider client={new QueryClient()}>
@@ -121,37 +103,11 @@ describe('Register component', () => {
         password: passwordBox.value,
       },
     })
-
+    // on success, reroute to login page
     expect(location.pathname).toEqual('/login')
   })
-  // TODO Test success case
-  test('on userCreate success, reroute to /login', () => {
-    render(
-      <QueryClientProvider client={new QueryClient()}>
-        <Router>
-          <Register />
-        </Router>
-      </QueryClientProvider>,
-    )
 
-    // expect(mockUseNavigate).toHaveBeenCalled()
-  })
-
-  // TODO Test loading case
-  test('when userCreate is loading, display Spinner component', async () => {
-    render(
-      <QueryClientProvider client={new QueryClient()}>
-        <Router>
-          <Register />
-        </Router>
-      </QueryClientProvider>,
-    )
-    const spinner = screen.getByRole('spinner')
-    expect(spinner).toHaveTextContent('Spinner is displayed')
-  })
-
-  // TODO Test error case
-  test('if userCreater has error, display error message on Register Form', async () => {
+  test('if createUser has error, display error message on Register Form', async () => {
     render(
       <QueryClientProvider client={new QueryClient()}>
         <Router>
@@ -161,6 +117,6 @@ describe('Register component', () => {
     )
 
     const errorMsg = screen.getByRole('error-message')
-    expect(errorMsg).toHaveTextContent('There is an error')
+    expect(errorMsg).toHaveTextContent('There is an error in creating user')
   })
 })
