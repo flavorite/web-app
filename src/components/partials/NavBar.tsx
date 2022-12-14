@@ -15,26 +15,29 @@ import { useNavigate } from 'react-router'
 
 export default function Navbar() {
   const settings = ['Profile', 'Find Friends', 'Logout']
+  const pages = ['Login', 'Register']
   const navigate = useNavigate()
   const [username, setUsername] = useState<string | null>(null)
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null)
+
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget)
   }
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget)
   }
-  const pages = ['Login', 'Register']
 
   useEffect(() => {
+    localStorage.setItem('token', 'kitty')
     if (localStorage.getItem('token') !== null) {
       // TODO: change this to username from the loginUser data payload once Cognito is set up
       setUsername('kitty')
     }
-  }, [])
+  }, [username])
 
   const handleCloseNavMenu = (e: any) => {
+    setAnchorElNav(null)
     if (e.target.textContent === 'Login') {
       navigate('/login')
     } else if (e.target.textContent === 'Register') {
@@ -86,6 +89,7 @@ export default function Navbar() {
               aria-haspopup='true'
               onClick={handleOpenNavMenu}
               color='inherit'
+              style={{ display: username ? 'none' : 'block' }}
             >
               <MenuIcon />
             </IconButton>
@@ -134,16 +138,13 @@ export default function Navbar() {
           >
             Flavorite
           </Typography>
-          <Box
-            style={{ display: username ? 'none' : 'block' }}
-            sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}
-            aria-label='loggedOutMenu'
-          >
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }} aria-label='loggedOutMenu'>
             {pages.map((page) => (
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
+                style={{ display: username ? 'none' : 'block' }}
               >
                 {page}
               </Button>
