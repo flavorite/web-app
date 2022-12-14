@@ -54,6 +54,9 @@ describe('Login', () => {
 
     await userEvent.type(emailBox, 'ado@g.com')
     await userEvent.type(passwordBox, '12345')
+
+    expect(emailBox).toHaveValue('ado@g.com')
+    expect(passwordBox).toHaveValue('12345')
   })
 
   // Test onSubmit
