@@ -22,6 +22,9 @@ jest.mock('../../hooks/useLoginUser', () => {
 })
 
 describe('Login', () => {
+  jest.spyOn(Object.getPrototypeOf(window.localStorage), 'setItem')
+  Object.setPrototypeOf(window.localStorage.setItem, jest.fn())
+
   test('renders login form without crashing', () => {
     render(
       <QueryClientProvider client={new QueryClient()}>
@@ -80,6 +83,10 @@ describe('Login', () => {
         password: passwordBox.value,
       },
     })
+
+    // on success, localStorage item is set with token received
+    expect(window.localStorage.setItem).toBeCalledWith('token', 'tokenString')
+
     // on success, reroute to profile page of logged in user
     expect(location.pathname).toEqual('/kitty')
   })

@@ -42,7 +42,7 @@ export default function Register() {
       password: formData.get('password') as string,
     }
 
-    // await createUser({ createUser: formDataObj })
+    await createUser({ createUser: formDataObj })
     navigate('/login')
   }
 

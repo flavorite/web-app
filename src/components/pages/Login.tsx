@@ -46,7 +46,9 @@ export default function Login() {
       password: formData.get('password') as string,
     }
 
-    // await loginUser({ loginUser: formDataObj })
+    await loginUser({ loginUser: formDataObj })
+
+    localStorage.setItem('token', loggedInUser.token)
 
     navigate(`/${loggedInUser.username}`)
   }
