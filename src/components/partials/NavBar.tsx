@@ -1,24 +1,22 @@
 import MenuIcon from '@mui/icons-material/Menu'
 import AppBar from '@mui/material/AppBar'
-import Container from '@mui/material/Container'
-import Typography from '@mui/material/Typography'
-import Toolbar from '@mui/material/Toolbar'
+import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import Container from '@mui/material/Container'
+import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import Button from '@mui/material/Button'
-import Avatar from '@mui/material/Avatar'
-import IconButton from '@mui/material/IconButton'
+import Toolbar from '@mui/material/Toolbar'
 import Tooltip from '@mui/material/Tooltip'
+import Typography from '@mui/material/Typography'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 
 export default function Navbar() {
   const settings = ['Profile', 'Find Friends', 'Logout']
   const navigate = useNavigate()
-  // test user
-  const [username, setUsername] = useState<null | string>('testUser')
-  const [pages, setPages] = useState<string[]>([''])
+  const [username, setUsername] = useState<string | null>(null)
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null)
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -27,21 +25,20 @@ export default function Navbar() {
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget)
   }
+  const pages = ['Login', 'Register']
 
   useEffect(() => {
-    // TODO: set currentUser's username here
-    if (!username) {
-      setPages(['Login', 'Register'])
+    if (localStorage.getItem('token') !== null) {
+      // TODO: change this to username from the loginUser data payload once Cognito is set up
+      setUsername('kitty')
     }
-  }, [username])
+  }, [])
 
   const handleCloseNavMenu = (e: any) => {
     if (e.target.textContent === 'Login') {
       navigate('/login')
     } else if (e.target.textContent === 'Register') {
       navigate('/register')
-    } else if (e.target.textContent === 'Write a Review') {
-      navigate('/writeareview')
     }
   }
 
@@ -50,7 +47,8 @@ export default function Navbar() {
     if (e.target.textContent === 'Profile') {
       navigate(`/${username}`)
     } else if (e.target.textContent === 'Logout') {
-      // TODO: handleLogout function (prop) here
+      localStorage.removeItem('token')
+      setUsername(null)
       navigate('/login')
     } else if (e.target.textContent === 'Find Friends') {
       navigate(`/${username}/friends`)
@@ -136,7 +134,11 @@ export default function Navbar() {
           >
             Flavorite
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+          <Box
+            style={{ display: username ? 'none' : 'block' }}
+            sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}
+            aria-label='loggedOutMenu'
+          >
             {pages.map((page) => (
               <Button
                 key={page}
@@ -151,6 +153,7 @@ export default function Navbar() {
           <Box style={{ display: username ? 'block' : 'none' }} sx={{ flexGrow: 0 }}>
             <Tooltip title='Open settings'>
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                {/* TODO change to thumbnail of profile photo or default user image */}
                 <Avatar alt='Remy Sharp' src='/static/images/avatar/2.jpg' />
               </IconButton>
             </Tooltip>
