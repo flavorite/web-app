@@ -10,14 +10,17 @@ import MenuItem from '@mui/material/MenuItem'
 import Toolbar from '@mui/material/Toolbar'
 import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router'
 
-export default function Navbar() {
+type navBarProps = {
+  username: string | null
+}
+
+export default function Navbar({ username }: navBarProps) {
   const settings = ['Profile', 'Find Friends', 'Logout']
   const pages = ['Login', 'Register']
   const navigate = useNavigate()
-  const [username, setUsername] = useState<string | null>(null)
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null)
 
@@ -27,14 +30,6 @@ export default function Navbar() {
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget)
   }
-
-  useEffect(() => {
-    localStorage.setItem('token', 'kitty')
-    if (localStorage.getItem('token') !== null) {
-      // TODO: change this to username from the loginUser data payload once Cognito is set up
-      setUsername('kitty')
-    }
-  }, [username])
 
   const handleCloseNavMenu = (e: any) => {
     setAnchorElNav(null)
@@ -51,7 +46,6 @@ export default function Navbar() {
       navigate(`/${username}`)
     } else if (e.target.textContent === 'Logout') {
       localStorage.removeItem('token')
-      setUsername(null)
       navigate('/login')
     } else if (e.target.textContent === 'Find Friends') {
       navigate(`/${username}/friends`)
@@ -81,15 +75,14 @@ export default function Navbar() {
             Flavorite
           </Typography>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+          <Box sx={{ flexGrow: 1, display: username ? 'none' : { xs: 'flex', md: 'none' } }}>
             <IconButton
               size='large'
-              aria-label='account of current user'
+              aria-label='loggedOutMenu xs'
               aria-controls='menu-appbar'
               aria-haspopup='true'
               onClick={handleOpenNavMenu}
               color='inherit'
-              style={{ display: username ? 'none' : 'block' }}
             >
               <MenuIcon />
             </IconButton>
@@ -108,7 +101,7 @@ export default function Navbar() {
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
               sx={{
-                display: { xs: 'block', md: 'none' },
+                display: username ? 'none' : { xs: 'block', md: 'none' },
               }}
             >
               {pages.map((page) => (
@@ -138,20 +131,25 @@ export default function Navbar() {
           >
             Flavorite
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }} aria-label='loggedOutMenu'>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-                style={{ display: username ? 'none' : 'block' }}
-              >
-                {page}
-              </Button>
-            ))}
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+            <Box aria-label='loggedOutMenu md' style={{ display: username ? 'none' : '' }}>
+              {pages.map((page) => (
+                <Button
+                  key={page}
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: 'white', display: 'inline' }}
+                >
+                  {page}
+                </Button>
+              ))}
+            </Box>
           </Box>
 
-          <Box style={{ display: username ? 'block' : 'none' }} sx={{ flexGrow: 0 }}>
+          <Box
+            sx={{ flexGrow: 0 }}
+            style={{ display: username ? 'flex' : 'none' }}
+            aria-label='user options'
+          >
             <Tooltip title='Open settings'>
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 {/* TODO change to thumbnail of profile photo or default user image */}
