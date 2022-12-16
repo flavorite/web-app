@@ -14,9 +14,6 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import useUserAuth from '../../hooks/useUserAuth'
 
-// type navProps = {
-//   username: string | null
-// }
 export default function Navbar() {
   const { username } = useUserAuth()
   const settings = ['Profile', 'Find Friends', 'Logout']
