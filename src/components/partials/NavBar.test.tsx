@@ -8,7 +8,7 @@ describe('NavBar', () => {
     render(
       <QueryClientProvider client={new QueryClient()}>
         <Router>
-          <NavBar username={''} />
+          <NavBar />
         </Router>
       </QueryClientProvider>,
     )
@@ -20,7 +20,7 @@ describe('NavBar', () => {
     render(
       <QueryClientProvider client={new QueryClient()}>
         <Router>
-          <NavBar username={'kitty'} />
+          <NavBar />
         </Router>
       </QueryClientProvider>,
     )
@@ -41,7 +41,7 @@ describe('NavBar', () => {
     render(
       <QueryClientProvider client={new QueryClient()}>
         <Router>
-          <NavBar username={null} />
+          <NavBar />
         </Router>
       </QueryClientProvider>,
     )
