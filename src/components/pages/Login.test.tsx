@@ -1,7 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { QueryClient, QueryClientProvider } from 'react-query'
-import { BrowserRouter as Router } from 'react-router-dom'
+import TestProvider from '../partials/TestProvider'
 import Login from './Login'
 
 const mockLoginUser = jest.fn()
@@ -27,11 +26,9 @@ describe('Login', () => {
 
   test('renders login form without crashing', () => {
     render(
-      <QueryClientProvider client={new QueryClient()}>
-        <Router>
-          <Login />
-        </Router>
-      </QueryClientProvider>,
+      <TestProvider>
+        <Login />
+      </TestProvider>,
     )
     const heading = screen.getByRole('heading')
     expect(heading).toBeInTheDocument()
@@ -39,11 +36,9 @@ describe('Login', () => {
 
   test('all fields are required in form and user can type', async () => {
     render(
-      <QueryClientProvider client={new QueryClient()}>
-        <Router>
-          <Login />
-        </Router>
-      </QueryClientProvider>,
+      <TestProvider>
+        <Login />
+      </TestProvider>,
     )
 
     const emailBox = screen.getByLabelText(/Email/i)
@@ -62,11 +57,9 @@ describe('Login', () => {
   // Test onSubmit
   test('onClick submit button, should post form data', async () => {
     render(
-      <QueryClientProvider client={new QueryClient()}>
-        <Router>
-          <Login />
-        </Router>
-      </QueryClientProvider>,
+      <TestProvider>
+        <Login />
+      </TestProvider>,
     )
 
     // input form
@@ -97,11 +90,9 @@ describe('Login', () => {
   // Test error case
   test('if loginUser has error, display error message on Login Form', async () => {
     render(
-      <QueryClientProvider client={new QueryClient()}>
-        <Router>
-          <Login />
-        </Router>
-      </QueryClientProvider>,
+      <TestProvider>
+        <Login />
+      </TestProvider>,
     )
 
     const errorMsg = screen.getByRole('error-message')

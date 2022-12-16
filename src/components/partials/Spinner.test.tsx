@@ -1,18 +1,15 @@
 import { render, screen } from '@testing-library/react'
-import { QueryClient, QueryClientProvider } from 'react-query'
-import { BrowserRouter as Router } from 'react-router-dom'
 import Spinner from './Spinner'
+import TestProvider from './TestProvider'
 
 describe('Spinner', () => {
   test('renders Spinner component when loading is True', () => {
     render(
-      <QueryClientProvider client={new QueryClient()}>
-        <Router>
-          <Spinner loading={true}>
-            <>Children</>
-          </Spinner>
-        </Router>
-      </QueryClientProvider>,
+      <TestProvider>
+        <Spinner loading={true}>
+          <>Children</>
+        </Spinner>
+      </TestProvider>,
     )
     const circularProgress = screen.getByRole('progressbar', { hidden: true })
     expect(circularProgress).toBeInTheDocument()
@@ -21,13 +18,11 @@ describe('Spinner', () => {
 
   test('renders Children when loading is False', async () => {
     render(
-      <QueryClientProvider client={new QueryClient()}>
-        <Router>
-          <Spinner loading={false}>
-            <>Children</>
-          </Spinner>
-        </Router>
-      </QueryClientProvider>,
+      <TestProvider>
+        <Spinner loading={false}>
+          <>Children</>
+        </Spinner>
+      </TestProvider>,
     )
     const circularProgress = screen.queryByRole('progressbar', { hidden: true })
     expect(circularProgress).not.toBeInTheDocument()

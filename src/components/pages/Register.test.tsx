@@ -1,7 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { QueryClient, QueryClientProvider } from 'react-query'
-import { BrowserRouter as Router } from 'react-router-dom'
+import TestProvider from '../partials/TestProvider'
 import Register from './Register'
 
 const mockCreateUser = jest.fn()
@@ -21,11 +20,9 @@ describe('Register component', () => {
   // test the page renders login form without crashing
   test('renders register form', () => {
     render(
-      <QueryClientProvider client={new QueryClient()}>
-        <Router>
-          <Register />
-        </Router>
-      </QueryClientProvider>,
+      <TestProvider>
+        <Register />
+      </TestProvider>,
     )
     const heading = screen.getByRole('heading')
     expect(heading).toBeInTheDocument()
@@ -34,11 +31,9 @@ describe('Register component', () => {
   // Test input validation on form (all fields should be required)
   test('all fields should be required and user can type', async () => {
     render(
-      <QueryClientProvider client={new QueryClient()}>
-        <Router>
-          <Register />
-        </Router>
-      </QueryClientProvider>,
+      <TestProvider>
+        <Register />
+      </TestProvider>,
     )
 
     const firstNameBox = screen.getByLabelText(/First Name/i)
@@ -71,11 +66,9 @@ describe('Register component', () => {
   // Test onSubmit
   test('onClick submit button, should post form data', async () => {
     render(
-      <QueryClientProvider client={new QueryClient()}>
-        <Router>
-          <Register />
-        </Router>
-      </QueryClientProvider>,
+      <TestProvider>
+        <Register />
+      </TestProvider>,
     )
 
     // input form
@@ -111,11 +104,9 @@ describe('Register component', () => {
   // Test error case
   test('if createUser has error, display error message on Register Form', async () => {
     render(
-      <QueryClientProvider client={new QueryClient()}>
-        <Router>
-          <Register />
-        </Router>
-      </QueryClientProvider>,
+      <TestProvider>
+        <Register />
+      </TestProvider>,
     )
 
     const errorMsg = screen.getByRole('error-message')
