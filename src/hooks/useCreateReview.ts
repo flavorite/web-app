@@ -20,6 +20,7 @@ export default function useCreateReview() {
     restaurantId: 2,
     rating: 5,
     content: 'good',
+    favoriteFood: 'sushi',
   }
 
   return {
