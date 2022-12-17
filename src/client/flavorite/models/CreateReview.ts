@@ -49,6 +49,18 @@ export interface CreateReview {
      * @memberof CreateReview
      */
     photoUrl?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateReview
+     */
+    favoriteFood: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateReview
+     */
+    topThree?: number;
 }
 
 export function CreateReviewFromJSON(json: any): CreateReview {
@@ -66,6 +78,8 @@ export function CreateReviewFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'rating': json['rating'],
         'content': !exists(json, 'content') ? undefined : json['content'],
         'photoUrl': !exists(json, 'photoUrl') ? undefined : json['photoUrl'],
+        'favoriteFood': json['favoriteFood'],
+        'topThree': !exists(json, 'topThree') ? undefined : json['topThree'],
     };
 }
 
@@ -83,6 +97,8 @@ export function CreateReviewToJSON(value?: CreateReview | null): any {
         'rating': value.rating,
         'content': value.content,
         'photoUrl': value.photoUrl,
+        'favoriteFood': value.favoriteFood,
+        'topThree': value.topThree,
     };
 }
 

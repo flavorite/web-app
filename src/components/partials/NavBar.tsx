@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router'
 import useUserAuth from '../../hooks/useUserAuth'
 
 export default function Navbar() {
-  const { username } = useUserAuth()
+  const { username, logOut } = useUserAuth()
   const settings = ['Profile', 'Find Friends', 'Logout']
   const pages = ['Login', 'Register']
   const navigate = useNavigate()
@@ -43,8 +43,7 @@ export default function Navbar() {
     if (e.target.textContent === 'Profile') {
       navigate(`/${username}`)
     } else if (e.target.textContent === 'Logout') {
-      localStorage.removeItem('token')
-      navigate('/login')
+      logOut()
     } else if (e.target.textContent === 'Find Friends') {
       navigate(`/${username}/friends`)
     }

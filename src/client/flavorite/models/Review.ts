@@ -55,6 +55,18 @@ export interface Review {
      * @memberof Review
      */
     photoUrl?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Review
+     */
+    favoriteFood?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Review
+     */
+    topThree?: number;
 }
 
 export function ReviewFromJSON(json: any): Review {
@@ -73,6 +85,8 @@ export function ReviewFromJSONTyped(json: any, ignoreDiscriminator: boolean): Re
         'rating': json['rating'],
         'content': !exists(json, 'content') ? undefined : json['content'],
         'photoUrl': !exists(json, 'photoUrl') ? undefined : json['photoUrl'],
+        'favoriteFood': !exists(json, 'favoriteFood') ? undefined : json['favoriteFood'],
+        'topThree': !exists(json, 'topThree') ? undefined : json['topThree'],
     };
 }
 
@@ -91,6 +105,8 @@ export function ReviewToJSON(value?: Review | null): any {
         'rating': value.rating,
         'content': value.content,
         'photoUrl': value.photoUrl,
+        'favoriteFood': value.favoriteFood,
+        'topThree': value.topThree,
     };
 }
 

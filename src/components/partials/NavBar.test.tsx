@@ -1,16 +1,23 @@
 import { render, screen } from '@testing-library/react'
-import { QueryClient, QueryClientProvider } from 'react-query'
-import { BrowserRouter as Router } from 'react-router-dom'
 import NavBar from './NavBar'
+import TestProvider from './TestProvider'
+
+// const mockGetUsername = jest.fn()
+
+jest.mock('../../hooks/useUserAuth', () => {
+  return () => {
+    return {
+      username: null,
+    }
+  }
+})
 
 describe('NavBar', () => {
   test('renders navbar without crashing', () => {
     render(
-      <QueryClientProvider client={new QueryClient()}>
-        <Router>
-          <NavBar />
-        </Router>
-      </QueryClientProvider>,
+      <TestProvider>
+        <NavBar />
+      </TestProvider>,
     )
     const navBar = screen.getByRole('banner')
     expect(navBar).toBeInTheDocument()
@@ -18,12 +25,14 @@ describe('NavBar', () => {
 
   test('if user, hide Login & Register options, and display User options', async () => {
     render(
-      <QueryClientProvider client={new QueryClient()}>
-        <Router>
-          <NavBar />
-        </Router>
-      </QueryClientProvider>,
+      <TestProvider>
+        <NavBar />
+      </TestProvider>,
     )
+
+    // mockGetUsername.mockImplementation(() => {
+    //   'kitty'
+    // })
 
     // user options menu button displayed
     const userOptionsBtn = screen.getByLabelText('user options')
@@ -39,12 +48,14 @@ describe('NavBar', () => {
 
   test('if no user, display Login & Register options, and hide User options', async () => {
     render(
-      <QueryClientProvider client={new QueryClient()}>
-        <Router>
-          <NavBar />
-        </Router>
-      </QueryClientProvider>,
+      <TestProvider>
+        <NavBar />
+      </TestProvider>,
     )
+
+    // mockGetUsername.mockImplementation(() => {
+    //   null
+    // })
 
     // user options menu button hidden
     const userOptionsBtn = screen.getByLabelText('user options')

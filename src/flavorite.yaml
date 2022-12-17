@@ -357,6 +357,33 @@ paths:
       summary: Update user
       tags:
         - users
+  /users/{username}/favoritefoods:
+    put:
+      description: This can only be done by the logged in user.
+      operationId: Add or Update user's favorite foods list
+      parameters:
+        - description: Array of favorite foods in order
+          explode: false
+          in: path
+          name: username
+          required: true
+          schema:
+            type: string
+          style: simple
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateFoods'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FavoriteFood'
+          description: successful operation
+        '400':
+          description: Invalid username supplied
+      summary: Update user's favorite foods
+      tags:
+        - users
   /users/{username}/reviews:
     get:
       description: Returns all reviews by a single user
@@ -419,6 +446,13 @@ components:
             $ref: '#/components/schemas/UpdateUser'
       description: Update an existent user in the store
       required: true
+    UpdateFoods:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/FavoriteFood'
+      description: Update user's list of favorite foods
+      required: true
   schemas:
     Review:
       example:
@@ -428,6 +462,8 @@ components:
         restaurantId: 19877
         userId: 198772
         content: Awesome
+        favoriteFood: Pizza
+        topThree: 1
       properties:
         id:
           example: 10
@@ -457,11 +493,20 @@ components:
           example: www.photouploaded.com
           title: photoUrl
           type: string
+        favoriteFood:
+          example: pizza
+          title: favoriteFood
+          type: string
+        topThree:
+          example: 1
+          title: topThree
+          type: integer
       required:
         - id
         - rating
         - restaurantId
         - userId
+        - FavoriteFood
       title: Review
       type: object
     ListReviews:
@@ -473,12 +518,16 @@ components:
             restaurantId: 19877
             userId: 198772
             content: Awesome
+            favoriteFood: Pizza
+            topThree: 1
           - photoUrl: www.photouploaded.com
             rating: 5
             id: 10
             restaurantId: 19877
             userId: 198772
             content: Awesome
+            favoriteFood: Pizza
+            topThree: 1
       properties:
         reviews:
           items:
@@ -493,9 +542,12 @@ components:
       example:
         photoUrl: www.photouploaded.com
         rating: 5
+        id: 10
         restaurantId: 19877
         userId: 198772
         content: Awesome
+        favoriteFood: Pizza
+        topThree: 1
       properties:
         userId:
           example: 198772
@@ -520,10 +572,19 @@ components:
           example: www.photouploaded.com
           title: photoUrl
           type: string
+        favoriteFood:
+          example: pizza
+          title: favoriteFood
+          type: string
+        topThree:
+          example: 1
+          title: topThree
+          type: integer
       required:
         - rating
         - restaurantId
         - userId
+        - favoriteFood
       title: CreateReview
       type: object
     UpdateReview:
@@ -545,6 +606,14 @@ components:
           example: www.photouploaded.com
           title: photoUrl
           type: string
+        favoriteFood:
+          example: pizza
+          title: favoriteFood
+          type: string
+        topThree:
+          example: 1
+          title: topThree
+          type: integer
       title: UpdateReview
       type: object
     User:
