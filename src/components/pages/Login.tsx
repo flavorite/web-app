@@ -1,15 +1,19 @@
-import Link from '@mui/material/Link'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
-import Container from '@mui/material/Container'
-import Typography from '@mui/material/Typography'
-import Box from '@mui/material/Box'
 import Avatar from '@mui/material/Avatar'
-import CssBaseline from '@mui/material/CssBaseline'
-import TextField from '@mui/material/TextField'
-import Grid from '@mui/material/Grid'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import Checkbox from '@mui/material/Checkbox'
+import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
+import Checkbox from '@mui/material/Checkbox'
+import Container from '@mui/material/Container'
+import CssBaseline from '@mui/material/CssBaseline'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import Grid from '@mui/material/Grid'
+import Link from '@mui/material/Link'
+import TextField from '@mui/material/TextField'
+import Typography from '@mui/material/Typography'
+import { useNavigate } from 'react-router'
+import { LoginUser } from '../../client/flavorite/models'
+import useLoginUser from '../../hooks/useLoginUser'
+import Spinner from '../partials/Spinner'
 
 function Copyright(props: any) {
   return (
@@ -24,18 +28,33 @@ function Copyright(props: any) {
   )
 }
 
-
 export default function Login() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const navigate = useNavigate()
+  const {
+    loading: loadingLoginUser,
+    error: errorLoginUser,
+    mutate: loginUser,
+    user: loggedInUser,
+  } = useLoginUser()
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const data = new FormData(event.currentTarget)
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    })
+    const formData = new FormData(event.currentTarget)
+
+    const formDataObj: LoginUser = {
+      email: formData.get('email') as string,
+      password: formData.get('password') as string,
+    }
+
+    await loginUser({ loginUser: formDataObj })
+
+    localStorage.setItem('token', loggedInUser.token)
+
+    navigate(`/${loggedInUser.username}`)
   }
 
   return (
+    <Spinner loading={loadingLoginUser}>
       <Container component='main' maxWidth='xs'>
         <CssBaseline />
         <Box
@@ -52,16 +71,21 @@ export default function Login() {
           <Typography component='h1' variant='h5'>
             Sign in
           </Typography>
-          <Box component='form' onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <Typography role='error-message'>
+            {/* TODO Style Typography */}
+            {errorLoginUser ? `${errorLoginUser}` : ''}
+          </Typography>
+          <Box component='form' onSubmit={handleSubmit} sx={{ mt: 1 }}>
             <TextField
               margin='normal'
               required
               fullWidth
-              id='emailOrUsername'
-              label='Email or Username'
-              name='emailOrUsername'
-              autoComplete='emailOrUsername'
+              id='email'
+              label='Email'
+              name='email'
+              autoComplete='email'
               autoFocus
+              inputProps={{ 'data-testid': 'required-email' }}
             />
             <TextField
               margin='normal'
@@ -72,12 +96,13 @@ export default function Login() {
               type='password'
               id='password'
               autoComplete='current-password'
+              inputProps={{ 'data-testid': 'required-password' }}
             />
             <FormControlLabel
               control={<Checkbox value='remember' color='primary' />}
               label='Remember me'
             />
-            <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
+            <Button role='button' type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
               Sign In
             </Button>
             <Grid container>
@@ -96,5 +121,6 @@ export default function Login() {
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
+    </Spinner>
   )
 }

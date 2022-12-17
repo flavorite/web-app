@@ -16,39 +16,39 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface LoginUser
+ * @interface LoginPayload
  */
-export interface LoginUser {
+export interface LoginPayload {
     /**
      * 
      * @type {string}
-     * @memberof LoginUser
+     * @memberof LoginPayload
      */
-    email: string;
+    token: string;
     /**
      * 
      * @type {string}
-     * @memberof LoginUser
+     * @memberof LoginPayload
      */
-    password: string;
+    username: string;
 }
 
-export function LoginUserFromJSON(json: any): LoginUser {
-    return LoginUserFromJSONTyped(json, false);
+export function LoginPayloadFromJSON(json: any): LoginPayload {
+    return LoginPayloadFromJSONTyped(json, false);
 }
 
-export function LoginUserFromJSONTyped(json: any, ignoreDiscriminator: boolean): LoginUser {
+export function LoginPayloadFromJSONTyped(json: any, ignoreDiscriminator: boolean): LoginPayload {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'email': json['email'],
-        'password': json['password'],
+        'token': json['token'],
+        'username': json['username'],
     };
 }
 
-export function LoginUserToJSON(value?: LoginUser | null): any {
+export function LoginPayloadToJSON(value?: LoginPayload | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -57,8 +57,8 @@ export function LoginUserToJSON(value?: LoginUser | null): any {
     }
     return {
         
-        'email': value.email,
-        'password': value.password,
+        'token': value.token,
+        'username': value.username,
     };
 }
 

@@ -4,8 +4,8 @@ import { GetUserByNameRequest, UsersApi } from '../client/flavorite/apis'
 
 export default function useReviewsByUser(username: GetUserByNameRequest) {
   const Users = new UsersApi()
-//   const fetchUserReviews = () => Users.getReviewsByUsername(username)
-//   const Reviews = useQuery(['reviewsByUser', username], fetchUserReviews)
+  //   const fetchUserReviews = () => Users.getReviewsByUsername(username)
+  //   const Reviews = useQuery(['reviewsByUser', username], fetchUserReviews)
 
   const reviewsList: ListReviews = {
     reviews: [

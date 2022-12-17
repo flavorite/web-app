@@ -1,17 +1,17 @@
-import Link from '@mui/material/Link'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
-import { createTheme, ThemeProvider } from '@mui/material/styles'
-import useCreateUser from '../../hooks/useCreateUser'
-import { CreateUser } from '../../client/flavorite/models'
-import { useNavigate } from 'react-router'
-import Container from '@mui/material/Container'
-import Grid from '@mui/material/Grid'
-import Button from '@mui/material/Button'
-import Typography from '@mui/material/Typography'
 import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import Container from '@mui/material/Container'
 import CssBaseline from '@mui/material/CssBaseline'
+import Grid from '@mui/material/Grid'
+import Link from '@mui/material/Link'
 import TextField from '@mui/material/TextField'
+import Typography from '@mui/material/Typography'
+import { useNavigate } from 'react-router'
+import { CreateUser } from '../../client/flavorite/models'
+import useCreateUser from '../../hooks/useCreateUser'
+import Spinner from '../partials/Spinner'
 
 function Copyright(props: any) {
   return (
@@ -26,28 +26,28 @@ function Copyright(props: any) {
   )
 }
 
-const theme = createTheme()
-
 export default function Register() {
   const navigate = useNavigate()
-  const mutation = useCreateUser()
+  const { loading: loadingCreateUser, error: errorCreateUser, mutate: createUser } = useCreateUser()
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
-    const formDataObj: CreateUser = {      
+
+    const formDataObj: CreateUser = {
       username: formData.get('username') as string,
       firstName: formData.get('firstName') as string,
       lastName: formData.get('lastName') as string,
       email: formData.get('email') as string,
-      password: formData.get('password') as string
+      password: formData.get('password') as string,
     }
-    const createUser = () => mutation.mutate({ createUser: formDataObj})
-    navigate('/')
+
+    await createUser({ createUser: formDataObj })
+    navigate('/login')
   }
 
   return (
-    <ThemeProvider theme={theme}>
+    <Spinner loading={loadingCreateUser}>
       <Container component='main' maxWidth='xs'>
         <CssBaseline />
         <Box
@@ -64,7 +64,11 @@ export default function Register() {
           <Typography component='h1' variant='h5'>
             Sign up
           </Typography>
-          <Box component='form' noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Typography role='error-message'>
+            {/* TODO Style Typography */}
+            {errorCreateUser ? `${errorCreateUser}` : ''}
+          </Typography>
+          <Box component='form' data-testid='form' onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -75,6 +79,7 @@ export default function Register() {
                   id='firstName'
                   label='First Name'
                   autoFocus
+                  inputProps={{ 'data-testid': 'required-firstName' }}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -85,6 +90,7 @@ export default function Register() {
                   label='Last Name'
                   name='lastName'
                   autoComplete='family-name'
+                  inputProps={{ 'data-testid': 'required-lastName' }}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -95,6 +101,7 @@ export default function Register() {
                   label='Email Address'
                   name='email'
                   autoComplete='email'
+                  inputProps={{ 'data-testid': 'required-email' }}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -105,6 +112,7 @@ export default function Register() {
                   label='Username'
                   name='username'
                   autoComplete='username'
+                  inputProps={{ 'data-testid': 'required-username' }}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -116,10 +124,11 @@ export default function Register() {
                   type='password'
                   id='password'
                   autoComplete='new-password'
+                  inputProps={{ 'data-testid': 'required-password' }}
                 />
               </Grid>
             </Grid>
-            <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
+            <Button role='button' type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
               Sign Up
             </Button>
             <Grid container justifyContent='flex-end'>
@@ -133,6 +142,6 @@ export default function Register() {
         </Box>
         <Copyright sx={{ mt: 5 }} />
       </Container>
-    </ThemeProvider>
+    </Spinner>
   )
 }
