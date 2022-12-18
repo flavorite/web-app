@@ -1,11 +1,11 @@
+import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
+import FormGroup from '@mui/material/FormGroup'
 import Rating from '@mui/material/Rating'
 import Typography from '@mui/material/Typography'
-import Button from '@mui/material/Button'
-import FormGroup from '@mui/material/FormGroup'
 import { useNavigate } from 'react-router'
-import useCreateReview from '../../hooks/useCreateReview'
 import { CreateReview } from '../../client/flavorite/models'
+import useCreateReview from '../../hooks/useCreateReview'
 
 export default function NewReview() {
   const navigate = useNavigate()
@@ -23,6 +23,7 @@ export default function NewReview() {
       rating: 5,
       content: 'very good',
       photoUrl: '',
+      favoriteFood: 'sushi',
     }
     const createReview = () => mutation.mutate({ createReview: formDataObj })
     navigate('/')
