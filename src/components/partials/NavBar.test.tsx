@@ -1,7 +1,10 @@
 import { render, screen } from '@testing-library/react'
-import { useUserAuth } from '../../hooks/useUserAuth'
 import NavBar from './NavBar'
 import TestProvider from './TestProvider'
+
+const mockUseUserAuth = require('../../hooks/useUserAuth')
+
+jest.mock('../../hooks/useUserAuth')
 
 // const mockedUseUserAuth = jest
 //   .fn<typeof useUserAuth, []>(() => {
@@ -23,15 +26,11 @@ import TestProvider from './TestProvider'
 //   .mockImplementationOnce(() => {
 //     return () => {
 //       return {
-//         username: null,
+//         username: 'kitty',
 //         logOut: jest.fn(),
 //       }
 //     }
 //   })
-
-jest.mock('../../hooks/useUserAuth', () => {
-  jest.fn()
-})
 
 describe('NavBar', () => {
   test('renders navbar without crashing', () => {
@@ -51,7 +50,7 @@ describe('NavBar', () => {
       </TestProvider>,
     )
 
-    ;(useUserAuth as jest.Mock).mockImplementationOnce(() => {
+    useUserAuth.userAuth.mockImplementation(() => {
       return () => {
         return {
           username: null,
@@ -79,12 +78,7 @@ describe('NavBar', () => {
       </TestProvider>,
     )
 
-    // mockedUseUserAuth.mockImplementationOnce(() => {
-    //   return {
-    //     username: 'kitty',
-    //     logOut: jest.fn(),
-    //   }
-    // })
+    // mockedUseUserAuth()
 
     // user options menu button displayed
     const userOptionsBtn = screen.getByLabelText('user options')

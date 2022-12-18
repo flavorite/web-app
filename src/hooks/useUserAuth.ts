@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 
-export const useUserAuth = () => {
+export const userAuth = () => {
   const [username, setUsername] = useState<string | null>(null)
   const navigate = useNavigate()
 

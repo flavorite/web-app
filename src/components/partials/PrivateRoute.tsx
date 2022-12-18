@@ -1,9 +1,9 @@
 import { Navigate, useLocation } from 'react-router-dom'
-import { useUserAuth } from '../../hooks/useUserAuth'
+import { userAuth } from '../../hooks/useUserAuth'
 
 const PrivateRoute = ({ children }: { children: React.ReactElement }) => {
   const location = useLocation()
-  const { username } = useUserAuth()
+  const { username } = userAuth()
 
   return (
     <>

@@ -12,10 +12,10 @@ import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
-import { useUserAuth } from '../../hooks/useUserAuth'
+import { userAuth } from '../../hooks/useUserAuth'
 
 export default function Navbar() {
-  const { username, logOut } = useUserAuth()
+  const { username, logOut } = userAuth()
   const settings = ['Profile', 'Find Friends', 'Logout']
   const pages = ['Login', 'Register']
   const navigate = useNavigate()
