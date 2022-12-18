@@ -1,42 +1,21 @@
 import { render, screen } from '@testing-library/react'
 import NavBar from './NavBar'
 import TestProvider from './TestProvider'
-
-const mockUseUserAuth = require('../../hooks/useUserAuth')
-
-jest.mock('../../hooks/useUserAuth')
-
-// const mockedUseUserAuth = jest
-//   .fn<typeof useUserAuth, []>(() => {
-//     return () => {
-//       return {
-//         username: null,
-//         logOut: jest.fn(),
-//       }
-//     }
-//   })
-//   .mockImplementationOnce(() => {
-//     return () => {
-//       return {
-//         username: null,
-//         logOut: jest.fn(),
-//       }
-//     }
-//   })
-//   .mockImplementationOnce(() => {
-//     return () => {
-//       return {
-//         username: 'kitty',
-//         logOut: jest.fn(),
-//       }
-//     }
-//   })
+import { UserContext } from './UserContext'
 
 describe('NavBar', () => {
   test('renders navbar without crashing', () => {
     render(
       <TestProvider>
-        <NavBar />
+        <UserContext.Provider
+          value={{
+            user: { username: '', auth: false },
+            login: jest.fn(),
+            logout: jest.fn(),
+          }}
+        >
+          <NavBar />
+        </UserContext.Provider>
       </TestProvider>,
     )
     const navBar = screen.getByRole('banner')
@@ -46,18 +25,17 @@ describe('NavBar', () => {
   test('if no user, display Login & Register options, and hide User options', async () => {
     render(
       <TestProvider>
-        <NavBar />
+        <UserContext.Provider
+          value={{
+            user: { username: '', auth: false },
+            login: jest.fn(),
+            logout: jest.fn(),
+          }}
+        >
+          <NavBar />
+        </UserContext.Provider>
       </TestProvider>,
     )
-
-    useUserAuth.userAuth.mockImplementation(() => {
-      return () => {
-        return {
-          username: null,
-          logOut: jest.fn(),
-        }
-      }
-    })
 
     // user options menu button hidden
     const userOptionsBtn = screen.getByLabelText('user options')
@@ -74,11 +52,17 @@ describe('NavBar', () => {
   test('if user, hide Login & Register options, and display User options', async () => {
     render(
       <TestProvider>
-        <NavBar />
+        <UserContext.Provider
+          value={{
+            user: { username: '', auth: true },
+            login: jest.fn(),
+            logout: jest.fn(),
+          }}
+        >
+          <NavBar />
+        </UserContext.Provider>
       </TestProvider>,
     )
-
-    // mockedUseUserAuth()
 
     // user options menu button displayed
     const userOptionsBtn = screen.getByLabelText('user options')

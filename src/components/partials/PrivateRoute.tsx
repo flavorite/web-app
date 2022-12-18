@@ -1,13 +1,14 @@
 import { Navigate, useLocation } from 'react-router-dom'
-import { userAuth } from '../../hooks/useUserAuth'
+import { useContext } from 'react'
+import { UserContext, UserContextType } from './UserContext'
 
 const PrivateRoute = ({ children }: { children: React.ReactElement }) => {
   const location = useLocation()
-  const { username } = userAuth()
+  const { user } = useContext(UserContext) as UserContextType
 
   return (
     <>
-      {!username ? (
+      {!user.auth ? (
         <Navigate to='/login' state={{ from: location, message: 'Please login to continue' }} />
       ) : (
         <>{children}</>

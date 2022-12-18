@@ -16,6 +16,7 @@ import Restaurant from './components/pages/Restaurant'
 import UserReviews from './components/pages/UserReviews'
 import Navbar from './components/partials/NavBar'
 import PrivateRoute from './components/partials/PrivateRoute'
+import { UserProvider } from './components/partials/UserContext'
 
 function App() {
   const theme = createTheme()
@@ -24,65 +25,67 @@ function App() {
     <div className='App'>
       <ThemeProvider theme={theme}>
         <QueryClientProvider client={queryClient}>
-          <Router>
-            <header>
-              <Navbar />
-            </header>
-            <Routes>
-              <Route path='/' element={<Home />} />
-              <Route
-                path='/:username'
-                element={
-                  <PrivateRoute>
-                    <Profile />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path='/:username/friends'
-                element={
-                  <PrivateRoute>
-                    <Friends />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path='/:username/reviews'
-                element={
-                  <PrivateRoute>
-                    <UserReviews />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path='/:username/favorites'
-                element={
-                  <PrivateRoute>
-                    <FavoriteFoods />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path='/:username/favorites/:favorite'
-                element={
-                  <PrivateRoute>
-                    <FavoriteFood />
-                  </PrivateRoute>
-                }
-              />
-              <Route path='/restaurants/:restaurantId' element={<Restaurant />} />
-              <Route path='/register' element={<Register />} />
-              <Route path='/login' element={<Login />} />
-              <Route
-                path='/writeareview/:restaurantName'
-                element={
-                  <PrivateRoute>
-                    <NewReviewForm />
-                  </PrivateRoute>
-                }
-              />
-            </Routes>
-          </Router>
+          <UserProvider>
+            <Router>
+              <header>
+                <Navbar />
+              </header>
+              <Routes>
+                <Route path='/' element={<Home />} />
+                <Route
+                  path='/:username'
+                  element={
+                    <PrivateRoute>
+                      <Profile />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path='/:username/friends'
+                  element={
+                    <PrivateRoute>
+                      <Friends />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path='/:username/reviews'
+                  element={
+                    <PrivateRoute>
+                      <UserReviews />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path='/:username/favorites'
+                  element={
+                    <PrivateRoute>
+                      <FavoriteFoods />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path='/:username/favorites/:favorite'
+                  element={
+                    <PrivateRoute>
+                      <FavoriteFood />
+                    </PrivateRoute>
+                  }
+                />
+                <Route path='/restaurants/:restaurantId' element={<Restaurant />} />
+                <Route path='/register' element={<Register />} />
+                <Route path='/login' element={<Login />} />
+                <Route
+                  path='/writeareview/:restaurantName'
+                  element={
+                    <PrivateRoute>
+                      <NewReviewForm />
+                    </PrivateRoute>
+                  }
+                />
+              </Routes>
+            </Router>
+          </UserProvider>
         </QueryClientProvider>
       </ThemeProvider>
     </div>

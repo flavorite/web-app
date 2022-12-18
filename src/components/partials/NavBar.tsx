@@ -10,12 +10,12 @@ import MenuItem from '@mui/material/MenuItem'
 import Toolbar from '@mui/material/Toolbar'
 import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router'
-import { userAuth } from '../../hooks/useUserAuth'
+import { UserContext, UserContextType } from './UserContext'
 
 export default function Navbar() {
-  const { username, logOut } = userAuth()
+  const { user, logout } = useContext(UserContext) as UserContextType
   const settings = ['Profile', 'Find Friends', 'Logout']
   const pages = ['Login', 'Register']
   const navigate = useNavigate()
@@ -41,11 +41,11 @@ export default function Navbar() {
   const handleCloseUserMenu = (e: any) => {
     setAnchorElUser(null)
     if (e.target.textContent === 'Profile') {
-      navigate(`/${username}`)
+      navigate(`/${user.username}`)
     } else if (e.target.textContent === 'Logout') {
-      logOut()
+      logout()
     } else if (e.target.textContent === 'Find Friends') {
-      navigate(`/${username}/friends`)
+      navigate(`/${user.username}/friends`)
     }
   }
 
@@ -72,7 +72,7 @@ export default function Navbar() {
             Flavorite
           </Typography>
 
-          <Box sx={{ flexGrow: 1, display: username ? 'none' : { xs: 'flex', md: 'none' } }}>
+          <Box sx={{ flexGrow: 1, display: user.auth ? 'none' : { xs: 'flex', md: 'none' } }}>
             <IconButton
               size='large'
               aria-label='loggedOutMenu xs'
@@ -98,7 +98,7 @@ export default function Navbar() {
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
               sx={{
-                display: username ? 'none' : { xs: 'block', md: 'none' },
+                display: user.auth ? 'none' : { xs: 'block', md: 'none' },
               }}
             >
               {pages.map((page) => (
@@ -129,7 +129,7 @@ export default function Navbar() {
             Flavorite
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            <Box aria-label='loggedOutMenu md' style={{ display: username ? 'none' : '' }}>
+            <Box aria-label='loggedOutMenu md' style={{ display: user.auth ? 'none' : '' }}>
               {pages.map((page) => (
                 <Button
                   key={page}
@@ -144,7 +144,7 @@ export default function Navbar() {
 
           <Box
             sx={{ flexGrow: 0 }}
-            style={{ display: username ? 'flex' : 'none' }}
+            style={{ display: user.auth ? 'flex' : 'none' }}
             aria-label='user options'
           >
             <Tooltip title='Open settings'>
