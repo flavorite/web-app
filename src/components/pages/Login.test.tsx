@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import TestProvider from '../partials/TestProvider'
+import { UserContext } from '../partials/UserContext'
 import Login from './Login'
 
 const mockLoginUser = jest.fn()
@@ -20,6 +21,18 @@ jest.mock('../../hooks/useLoginUser', () => {
   }
 })
 
+const mockUseLocationValue = {
+  state: true,
+  pathname: '/example/historypath',
+}
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useLocation: jest.fn().mockImplementation(() => {
+    return mockUseLocationValue
+  }),
+}))
+
 describe('Login', () => {
   jest.spyOn(Object.getPrototypeOf(window.localStorage), 'setItem')
   Object.setPrototypeOf(window.localStorage.setItem, jest.fn())
@@ -27,7 +40,15 @@ describe('Login', () => {
   test('renders login form without crashing', () => {
     render(
       <TestProvider>
-        <Login />
+        <UserContext.Provider
+          value={{
+            user: { username: '', auth: false },
+            login: jest.fn(),
+            logout: jest.fn(),
+          }}
+        >
+          <Login />
+        </UserContext.Provider>
       </TestProvider>,
     )
     const heading = screen.getByRole('heading')
@@ -37,7 +58,15 @@ describe('Login', () => {
   test('all fields are required in form and user can type', async () => {
     render(
       <TestProvider>
-        <Login />
+        <UserContext.Provider
+          value={{
+            user: { username: '', auth: false },
+            login: jest.fn(),
+            logout: jest.fn(),
+          }}
+        >
+          <Login />
+        </UserContext.Provider>
       </TestProvider>,
     )
 
@@ -56,9 +85,18 @@ describe('Login', () => {
 
   // Test onSubmit
   test('onClick submit button, should post form data', async () => {
+    const loginCall = jest.fn()
     render(
       <TestProvider>
-        <Login />
+        <UserContext.Provider
+          value={{
+            user: { username: '', auth: false },
+            login: loginCall,
+            logout: jest.fn(),
+          }}
+        >
+          <Login />
+        </UserContext.Provider>
       </TestProvider>,
     )
 
@@ -80,18 +118,58 @@ describe('Login', () => {
       },
     })
 
-    // on success, localStorage item is set with token received
+    // on success, localStorage item is set with token received (TODO finalize when cognito is setup)
     expect(window.localStorage.setItem).toBeCalledWith('token', 'tokenString')
 
+    expect(loginCall).toHaveBeenCalledWith('kitty')
+
     // on success, reroute to profile page of logged in user
+    // expect(location.pathname).toEqual('/kitty')
+  })
+
+  test('on sucess, if no locationState, should redirect to profile', () => {
+    render(
+      <TestProvider>
+        <UserContext.Provider
+          value={{
+            user: { username: '', auth: false },
+            login: jest.fn(),
+            logout: jest.fn(),
+          }}
+        >
+          <Login />
+        </UserContext.Provider>
+      </TestProvider>,
+    )
+
+    mockUseLocationValue.state = false
     expect(location.pathname).toEqual('/kitty')
+  })
+
+  test('on sucess, if locationState, should redirect to history path', () => {
+    render(
+      <TestProvider>
+        <Login />
+      </TestProvider>,
+    )
+
+    mockUseLocationValue.state = true
+    expect(location.pathname).toEqual(mockUseLocationValue.pathname)
   })
 
   // Test error case
   test('if loginUser has error, display error message on Login Form', async () => {
     render(
       <TestProvider>
-        <Login />
+        <UserContext.Provider
+          value={{
+            user: { username: '', auth: false },
+            login: jest.fn(),
+            logout: jest.fn(),
+          }}
+        >
+          <Login />
+        </UserContext.Provider>
       </TestProvider>,
     )
 
