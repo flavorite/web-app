@@ -12,15 +12,10 @@ import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { useContext } from 'react'
 import { useNavigate } from 'react-router'
-import { useLocation } from 'react-router-dom'
 import { LoginUser } from '../../client/flavorite/models'
 import useLoginUser from '../../hooks/useLoginUser'
 import Spinner from '../partials/Spinner'
 import { UserContext, UserContextType } from '../partials/UserContext'
-
-interface propState {
-  redirectTo: string
-}
 
 function Copyright(props: any) {
   return (
@@ -45,7 +40,6 @@ export default function Login() {
   } = useLoginUser()
 
   const { login } = useContext(UserContext) as UserContextType
-  const location = useLocation()
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -61,14 +55,7 @@ export default function Login() {
     // To finalize once Cognito is set up
     localStorage.setItem('token', loggedInUser.token)
     login(loggedInUser.username)
-
-    const { redirectTo } = location.state as propState
-
-    if (redirectTo) {
-      navigate(`${redirectTo}`)
-    } else {
-      navigate(`/${loggedInUser.username}`)
-    }
+    navigate(`/${loggedInUser.username}`)
   }
 
   return (
