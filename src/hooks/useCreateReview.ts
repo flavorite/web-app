@@ -21,6 +21,7 @@ export default function useCreateReview() {
     rating: 5,
     content: 'good',
     favoriteFood: 'sushi',
+    starred: false,
   }
 
   return {

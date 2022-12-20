@@ -14,6 +14,8 @@ export default function useRestaurantReviews(restaurantId: GetReviewByRestaurant
         restaurantId: 1,
         content: 'this is a good restaurant',
         rating: 5,
+        favoriteFood: 'pizza',
+        starred: true,
       },
       {
         id: 2,
@@ -21,6 +23,8 @@ export default function useRestaurantReviews(restaurantId: GetReviewByRestaurant
         restaurantId: 1,
         content: 'pretty good',
         rating: 4,
+        favoriteFood: 'pizza',
+        starred: false,
       },
     ],
   }

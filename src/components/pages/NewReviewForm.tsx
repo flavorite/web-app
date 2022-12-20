@@ -24,6 +24,8 @@ export default function NewReview() {
       content: 'very good',
       photoUrl: '',
       favoriteFood: 'sushi',
+      // default false
+      starred: false,
     }
     const createReview = () => mutation.mutate({ createReview: formDataObj })
     navigate('/')

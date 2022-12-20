@@ -1,6 +1,5 @@
-import { ListReviews } from '../client/flavorite/models'
-import { useQuery } from 'react-query'
 import { GetUserByNameRequest, UsersApi } from '../client/flavorite/apis'
+import { ListReviews } from '../client/flavorite/models'
 
 export default function useReviewsByUser(username: GetUserByNameRequest) {
   const Users = new UsersApi()
@@ -15,6 +14,8 @@ export default function useReviewsByUser(username: GetUserByNameRequest) {
         restaurantId: 1,
         content: 'one of my favs',
         rating: 5,
+        favoriteFood: 'sushi',
+        starred: true,
       },
       {
         id: 2,
@@ -22,6 +23,8 @@ export default function useReviewsByUser(username: GetUserByNameRequest) {
         restaurantId: 2,
         content: 'So So',
         rating: 3,
+        favoriteFood: 'sushi',
+        starred: false,
       },
     ],
   }

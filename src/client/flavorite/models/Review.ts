@@ -60,13 +60,13 @@ export interface Review {
      * @type {string}
      * @memberof Review
      */
-    favoriteFood?: string;
+    favoriteFood: string;
     /**
      * 
-     * @type {number}
+     * @type {boolean}
      * @memberof Review
      */
-    topThree?: number;
+    starred: boolean;
 }
 
 export function ReviewFromJSON(json: any): Review {
@@ -85,8 +85,8 @@ export function ReviewFromJSONTyped(json: any, ignoreDiscriminator: boolean): Re
         'rating': json['rating'],
         'content': !exists(json, 'content') ? undefined : json['content'],
         'photoUrl': !exists(json, 'photoUrl') ? undefined : json['photoUrl'],
-        'favoriteFood': !exists(json, 'favoriteFood') ? undefined : json['favoriteFood'],
-        'topThree': !exists(json, 'topThree') ? undefined : json['topThree'],
+        'favoriteFood': json['favoriteFood'],
+        'starred': json['starred'],
     };
 }
 
@@ -106,7 +106,7 @@ export function ReviewToJSON(value?: Review | null): any {
         'content': value.content,
         'photoUrl': value.photoUrl,
         'favoriteFood': value.favoriteFood,
-        'topThree': value.topThree,
+        'starred': value.starred,
     };
 }
 

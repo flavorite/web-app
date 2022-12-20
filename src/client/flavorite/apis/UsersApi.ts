@@ -38,11 +38,6 @@ import {
     UserToJSON,
 } from '../models';
 
-export interface AddOrUpdateUsersFavoriteFoodsListRequest {
-    username: string;
-    favoriteFood: FavoriteFood;
-}
-
 export interface CreateUserRequest {
     createUser: CreateUser;
 }
@@ -63,6 +58,11 @@ export interface LoginUserRequest {
     loginUser: LoginUser;
 }
 
+export interface UpdateFavoriteFoodsRequest {
+    username: string;
+    favoriteFood: FavoriteFood;
+}
+
 export interface UpdateUserRequest {
     username: string;
     updateUser: UpdateUser;
@@ -72,45 +72,6 @@ export interface UpdateUserRequest {
  * 
  */
 export class UsersApi extends runtime.BaseAPI {
-
-    /**
-     * This can only be done by the logged in user.
-     * Update user\'s favorite foods
-     */
-    async addOrUpdateUsersFavoriteFoodsListRaw(requestParameters: AddOrUpdateUsersFavoriteFoodsListRequest): Promise<runtime.ApiResponse<FavoriteFood>> {
-        if (requestParameters.username === null || requestParameters.username === undefined) {
-            throw new runtime.RequiredError('username','Required parameter requestParameters.username was null or undefined when calling addOrUpdateUsersFavoriteFoodsList.');
-        }
-
-        if (requestParameters.favoriteFood === null || requestParameters.favoriteFood === undefined) {
-            throw new runtime.RequiredError('favoriteFood','Required parameter requestParameters.favoriteFood was null or undefined when calling addOrUpdateUsersFavoriteFoodsList.');
-        }
-
-        const queryParameters: runtime.HTTPQuery = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        const response = await this.request({
-            path: `/users/{username}/favoritefoods`.replace(`{${"username"}}`, encodeURIComponent(String(requestParameters.username))),
-            method: 'PUT',
-            headers: headerParameters,
-            query: queryParameters,
-            body: FavoriteFoodToJSON(requestParameters.favoriteFood),
-        });
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => FavoriteFoodFromJSON(jsonValue));
-    }
-
-    /**
-     * This can only be done by the logged in user.
-     * Update user\'s favorite foods
-     */
-    async addOrUpdateUsersFavoriteFoodsList(requestParameters: AddOrUpdateUsersFavoriteFoodsListRequest): Promise<FavoriteFood> {
-        const response = await this.addOrUpdateUsersFavoriteFoodsListRaw(requestParameters);
-        return await response.value();
-    }
 
     /**
      * This can only be done by the logged in user.
@@ -296,6 +257,45 @@ export class UsersApi extends runtime.BaseAPI {
      */
     async logoutUser(): Promise<void> {
         await this.logoutUserRaw();
+    }
+
+    /**
+     * This can only be done by the logged in user.
+     * Update user\'s favorite foods
+     */
+    async updateFavoriteFoodsRaw(requestParameters: UpdateFavoriteFoodsRequest): Promise<runtime.ApiResponse<FavoriteFood>> {
+        if (requestParameters.username === null || requestParameters.username === undefined) {
+            throw new runtime.RequiredError('username','Required parameter requestParameters.username was null or undefined when calling updateFavoriteFoods.');
+        }
+
+        if (requestParameters.favoriteFood === null || requestParameters.favoriteFood === undefined) {
+            throw new runtime.RequiredError('favoriteFood','Required parameter requestParameters.favoriteFood was null or undefined when calling updateFavoriteFoods.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/users/{username}/favoritefoods`.replace(`{${"username"}}`, encodeURIComponent(String(requestParameters.username))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: FavoriteFoodToJSON(requestParameters.favoriteFood),
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => FavoriteFoodFromJSON(jsonValue));
+    }
+
+    /**
+     * This can only be done by the logged in user.
+     * Update user\'s favorite foods
+     */
+    async updateFavoriteFoods(requestParameters: UpdateFavoriteFoodsRequest): Promise<FavoriteFood> {
+        const response = await this.updateFavoriteFoodsRaw(requestParameters);
+        return await response.value();
     }
 
     /**

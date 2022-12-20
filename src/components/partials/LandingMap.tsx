@@ -10,7 +10,7 @@ import {
   LoadScript,
   LoadScriptProps,
 } from '@react-google-maps/api'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useGeolocated } from 'react-geolocated'
 import useRestaurants from '../../hooks/useRestaurants'
 import Spinner from './Spinner'
@@ -61,8 +61,7 @@ export default function LandingMap() {
     userDecisionTimeout: 5000,
   })
 
-  // TODO figure out why geolocation doesn't work initially
-  const onLoadMap = () => {
+  useEffect(() => {
     if (coords) {
       setCenter({
         lat: coords.latitude,
@@ -75,7 +74,7 @@ export default function LandingMap() {
     } else if (!isGeolocationEnabled) {
       setLocationMsg('Geolocation is not enabled. Use Search bar to find nearby restaurants')
     }
-  }
+  }, [coords])
 
   const onLoadInfo = (infoWindow: any) => {
     console.log('infoWindow: ', infoWindow)
@@ -120,12 +119,7 @@ export default function LandingMap() {
           {locationMsg ? `${locationMsg}` : ''}
         </Typography>
         <LoadScript googleMapsApiKey={`${API_KEY}`} libraries={lib}>
-          <GoogleMap
-            onLoad={onLoadMap}
-            mapContainerStyle={containerStyle}
-            center={center}
-            zoom={15}
-          >
+          <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={15}>
             {/* TODO: Need to get 'Places' from backend and display with custom Marker */}
             {/* <Marker
           icon={svgMarker}

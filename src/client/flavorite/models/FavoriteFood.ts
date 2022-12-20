@@ -13,13 +13,6 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import {
-    Review,
-    ReviewFromJSON,
-    ReviewFromJSONTyped,
-    ReviewToJSON,
-} from './';
-
 /**
  * 
  * @export
@@ -38,12 +31,6 @@ export interface FavoriteFood {
      * @memberof FavoriteFood
      */
     name: string;
-    /**
-     * 
-     * @type {Array<Review>}
-     * @memberof FavoriteFood
-     */
-    reviews: Array<Review>;
 }
 
 export function FavoriteFoodFromJSON(json: any): FavoriteFood {
@@ -58,7 +45,6 @@ export function FavoriteFoodFromJSONTyped(json: any, ignoreDiscriminator: boolea
         
         'id': json['id'],
         'name': json['name'],
-        'reviews': ((json['reviews'] as Array<any>).map(ReviewFromJSON)),
     };
 }
 
@@ -73,7 +59,6 @@ export function FavoriteFoodToJSON(value?: FavoriteFood | null): any {
         
         'id': value.id,
         'name': value.name,
-        'reviews': ((value.reviews as Array<any>).map(ReviewToJSON)),
     };
 }
 

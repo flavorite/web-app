@@ -360,9 +360,9 @@ paths:
   /users/{username}/favoritefoods:
     put:
       description: This can only be done by the logged in user.
-      operationId: Add or Update user's favorite foods list
+      operationId: updateFavoriteFoods
       parameters:
-        - description: Array of favorite foods in order
+        - description: Name of user
           explode: false
           in: path
           name: username
@@ -463,7 +463,7 @@ components:
         userId: 198772
         content: Awesome
         favoriteFood: Pizza
-        topThree: 1
+        starred: true
       properties:
         id:
           example: 10
@@ -497,16 +497,17 @@ components:
           example: pizza
           title: favoriteFood
           type: string
-        topThree:
+        starred:
           example: 1
-          title: topThree
-          type: integer
+          title: starred
+          type: boolean
       required:
         - id
         - rating
         - restaurantId
         - userId
-        - FavoriteFood
+        - favoriteFood
+        - starred
       title: Review
       type: object
     ListReviews:
@@ -519,15 +520,15 @@ components:
             userId: 198772
             content: Awesome
             favoriteFood: Pizza
-            topThree: 1
+            starred: true
           - photoUrl: www.photouploaded.com
             rating: 5
             id: 10
-            restaurantId: 19877
+            restaurantId: 19878
             userId: 198772
             content: Awesome
             favoriteFood: Pizza
-            topThree: 1
+            starred: false
       properties:
         reviews:
           items:
@@ -547,7 +548,7 @@ components:
         userId: 198772
         content: Awesome
         favoriteFood: Pizza
-        topThree: 1
+        starred: false
       properties:
         userId:
           example: 198772
@@ -576,15 +577,16 @@ components:
           example: pizza
           title: favoriteFood
           type: string
-        topThree:
+        starred:
           example: 1
-          title: topThree
-          type: integer
+          title: starred
+          type: boolean
       required:
         - rating
         - restaurantId
         - userId
         - favoriteFood
+        - starred
       title: CreateReview
       type: object
     UpdateReview:
@@ -592,6 +594,7 @@ components:
         photoUrl: www.photouploaded.com
         rating: 5
         content: Awesome
+        starred: true
       properties:
         rating:
           example: 5
@@ -610,10 +613,10 @@ components:
           example: pizza
           title: favoriteFood
           type: string
-        topThree:
+        starred:
           example: 1
-          title: topThree
-          type: integer
+          title: starred
+          type: boolean
       title: UpdateReview
       type: object
     User:
@@ -628,36 +631,8 @@ components:
           - null
         username: theUser
         favoriteFoods:
-          - reviews:
-              - photoUrl: www.photouploaded.com
-                rating: 5
-                id: 10
-                restaurantId: 19877
-                userId: 198772
-                content: Awesome
-              - photoUrl: www.photouploaded.com
-                rating: 5
-                id: 10
-                restaurantId: 19877
-                userId: 198772
-                content: Awesome
-            name: sushi
-            id: 10
-          - reviews:
-              - photoUrl: www.photouploaded.com
-                rating: 5
-                id: 10
-                restaurantId: 19877
-                userId: 198772
-                content: Awesome
-              - photoUrl: www.photouploaded.com
-                rating: 5
-                id: 10
-                restaurantId: 19877
-                userId: 198772
-                content: Awesome
-            name: sushi
-            id: 10
+          name: sushi
+          order: 10
       properties:
         id:
           example: 10
@@ -758,36 +733,8 @@ components:
               - null
             username: theUser
             favoriteFoods:
-              - reviews:
-                  - photoUrl: www.photouploaded.com
-                    rating: 5
-                    id: 10
-                    restaurantId: 19877
-                    userId: 198772
-                    content: Awesome
-                  - photoUrl: www.photouploaded.com
-                    rating: 5
-                    id: 10
-                    restaurantId: 19877
-                    userId: 198772
-                    content: Awesome
-                name: sushi
-                id: 10
-              - reviews:
-                  - photoUrl: www.photouploaded.com
-                    rating: 5
-                    id: 10
-                    restaurantId: 19877
-                    userId: 198772
-                    content: Awesome
-                  - photoUrl: www.photouploaded.com
-                    rating: 5
-                    id: 10
-                    restaurantId: 19877
-                    userId: 198772
-                    content: Awesome
-                name: sushi
-                id: 10
+              name: sushi
+              order: 10
           - firstName: John
             lastName: James
             password: '12345'
@@ -798,68 +745,12 @@ components:
               - null
             username: theUser
             favoriteFoods:
-              - reviews:
-                  - photoUrl: www.photouploaded.com
-                    rating: 5
-                    id: 10
-                    restaurantId: 19877
-                    userId: 198772
-                    content: Awesome
-                  - photoUrl: www.photouploaded.com
-                    rating: 5
-                    id: 10
-                    restaurantId: 19877
-                    userId: 198772
-                    content: Awesome
-                name: sushi
-                id: 10
-              - reviews:
-                  - photoUrl: www.photouploaded.com
-                    rating: 5
-                    id: 10
-                    restaurantId: 19877
-                    userId: 198772
-                    content: Awesome
-                  - photoUrl: www.photouploaded.com
-                    rating: 5
-                    id: 10
-                    restaurantId: 19877
-                    userId: 198772
-                    content: Awesome
-                name: sushi
-                id: 10
+              name: sushi
+              order: 10
         username: theUser
         favoriteFoods:
-          - reviews:
-              - photoUrl: www.photouploaded.com
-                rating: 5
-                id: 10
-                restaurantId: 19877
-                userId: 198772
-                content: Awesome
-              - photoUrl: www.photouploaded.com
-                rating: 5
-                id: 10
-                restaurantId: 19877
-                userId: 198772
-                content: Awesome
-            name: sushi
-            id: 10
-          - reviews:
-              - photoUrl: www.photouploaded.com
-                rating: 5
-                id: 10
-                restaurantId: 19877
-                userId: 198772
-                content: Awesome
-              - photoUrl: www.photouploaded.com
-                rating: 5
-                id: 10
-                restaurantId: 19877
-                userId: 198772
-                content: Awesome
-            name: sushi
-            id: 10
+          name: sushi
+          order: 10
       properties:
         username:
           example: theUser
@@ -993,19 +884,6 @@ components:
       type: object
     FavoriteFood:
       example:
-        reviews:
-          - photoUrl: www.photouploaded.com
-            rating: 5
-            id: 10
-            restaurantId: 19877
-            userId: 198772
-            content: Awesome
-          - photoUrl: www.photouploaded.com
-            rating: 5
-            id: 10
-            restaurantId: 19877
-            userId: 198772
-            content: Awesome
         name: sushi
         id: 10
       properties:
@@ -1018,15 +896,9 @@ components:
           example: sushi
           title: name
           type: string
-        reviews:
-          items:
-            $ref: '#/components/schemas/Review'
-          title: reviews
-          type: array
       required:
         - id
         - name
-        - reviews
       title: FavoriteFood
       type: object
     ApiResponse:
