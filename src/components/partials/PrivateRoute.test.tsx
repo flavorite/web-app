@@ -4,7 +4,7 @@ import PrivateRoute from './PrivateRoute'
 import TestProvider from './TestProvider'
 
 describe('PrivateRoute', () => {
-  test('renders Children component when UserAuth is verified', () => {
+  test('should render Children component when UserAuth is verified', () => {
     render(
       <TestProvider>
         <UserContext.Provider
@@ -24,7 +24,7 @@ describe('PrivateRoute', () => {
     expect(screen.getByText('Children')).toBeInTheDocument()
   })
 
-  test('reroute to Login page if UserAuth is not verified', () => {
+  test('should reroute to Login page if UserAuth is not verified', () => {
     render(
       <TestProvider>
         <UserContext.Provider
@@ -40,7 +40,7 @@ describe('PrivateRoute', () => {
         </UserContext.Provider>
       </TestProvider>,
     )
-    expect(location.pathname).toEqual('/login')
     expect(screen.getByText('Children')).not.toBeInTheDocument()
+    expect(location.pathname).toEqual('/login')
   })
 })

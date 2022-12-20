@@ -1,16 +1,13 @@
 import { render, screen } from '@testing-library/react'
-import { QueryClient, QueryClientProvider } from 'react-query'
-import { BrowserRouter as Router } from 'react-router-dom'
 import AddFavorite from './AddFavorite'
+import TestProvider from './TestProvider'
 
 describe('AddFavorite', () => {
   test('renders AddFavorite textfield without crashing', () => {
     render(
-      <QueryClientProvider client={new QueryClient()}>
-        <Router>
-          <AddFavorite />
-        </Router>
-      </QueryClientProvider>,
+      <TestProvider>
+        <AddFavorite />
+      </TestProvider>,
     )
     const addFavoriteField = screen.getByRole('textbox', { name: /Add a new Favorite Dish/i })
     const addFavoriteBtn = screen.getByRole('button', { name: /add/i })

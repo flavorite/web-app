@@ -6,7 +6,7 @@ type privateProps = {
   children: React.ReactElement
 }
 
-const PrivateRoute: React.FC<privateProps> = ({ children }: { children: React.ReactElement }) => {
+const PrivateRoute: React.FC<privateProps> = ({ children }) => {
   const location = useLocation()
   const { user } = useContext(UserContext) as UserContextType
 
