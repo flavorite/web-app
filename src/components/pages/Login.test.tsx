@@ -28,15 +28,7 @@ describe('Login', () => {
   test('renders login form without crashing', () => {
     render(
       <TestProvider>
-        <UserContext.Provider
-          value={{
-            user: { username: '', auth: false },
-            login: jest.fn(),
-            logout: jest.fn(),
-          }}
-        >
-          <Login />
-        </UserContext.Provider>
+        <Login />
       </TestProvider>,
     )
     const heading = screen.getByRole('heading')
@@ -46,15 +38,7 @@ describe('Login', () => {
   test('all fields are required in form and user can type', async () => {
     render(
       <TestProvider>
-        <UserContext.Provider
-          value={{
-            user: { username: '', auth: false },
-            login: jest.fn(),
-            logout: jest.fn(),
-          }}
-        >
-          <Login />
-        </UserContext.Provider>
+        <Login />
       </TestProvider>,
     )
 
@@ -119,15 +103,7 @@ describe('Login', () => {
   test('if loginUser has error, display error message on Login Form', async () => {
     render(
       <TestProvider>
-        <UserContext.Provider
-          value={{
-            user: { username: '', auth: false },
-            login: jest.fn(),
-            logout: jest.fn(),
-          }}
-        >
-          <Login />
-        </UserContext.Provider>
+        <Login />
       </TestProvider>,
     )
 
