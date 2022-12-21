@@ -15,7 +15,7 @@ const UserContext = createContext<UserContextType | null>(null)
 
 const UserProvider = ({ children }: { children: React.ReactElement }) => {
   // User is the name of the "data" that gets stored in context
-  const [user, setUser] = useState<userType>({ username: 'kitty', auth: false })
+  const [user, setUser] = useState<userType>({ username: 'kitty', auth: true })
 
   // Login updates the user data with a name parameter
   const login = (username: string) => {

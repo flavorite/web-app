@@ -1,27 +1,33 @@
+import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
+import { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import useUser from '../../hooks/useUser'
 import AddFavorite from '../partials/AddFavorite'
 import Spinner from '../partials/Spinner'
+import { UserContext, UserContextType } from '../partials/UserContext'
 
 export default function FavoriteFoods() {
-  const username = 'kitty'
-  const { user, loading: loadingUserData, error: errorUserData } = useUser({ username })
+  const { user: currentUser } = useContext(UserContext) as UserContextType
+  const username = currentUser.username
+  const { user: userData, loading: loadingUserData, error: errorUserData } = useUser({ username })
 
-  const favoritesList = user.favoriteFoods.map((food) => {
+  const favoritesList = userData.favoriteFoods.map((food) => {
     return (
-      <Link to={`/${username}/favorites/${food.name}`} key={food.order}>
-        {food.name}
-      </Link>
+      <Box key={food.order}>
+        <Typography>
+          {food.order}.<Link to={`/${username}/favorites/${food.name}`}>{food.name}</Link>
+        </Typography>
+      </Box>
     )
   })
 
   return (
     <Spinner loading={loadingUserData}>
       <Container fixed>
-        <AddFavorite username={user.username} favorites={user.favoriteFoods} />
+        <AddFavorite username={username} favorites={userData.favoriteFoods} />
         <Typography role='error-message'>
           {/* TODO Style Typography */}
           {errorUserData ? `${errorUserData}` : ''}
