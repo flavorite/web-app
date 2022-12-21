@@ -1,13 +1,14 @@
-import { fireEvent, render, screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+import { render, screen } from '@testing-library/react'
 import TestProvider from '../partials/TestProvider'
 import FavoriteFoods from './FavoriteFoods'
+
+const mockUpdateFoods = jest.fn()
 
 jest.mock('../../hooks/useUser', () => {
   return () => {
     return {
       loading: false,
-      error: null,
+      error: 'there is an error in fetching user data',
       user: {
         id: 1,
         username: 'kitty',
@@ -16,8 +17,8 @@ jest.mock('../../hooks/useUser', () => {
         lastName: 'yang',
         password: 'testpw',
         favoriteFoods: [
-          { order: 1, name: 'sushi' },
-          { order: 2, name: 'pizza' },
+          { id: 1, name: 'sushi' },
+          { id: 2, name: 'pizza' },
         ],
         friends: [],
       },
@@ -25,54 +26,52 @@ jest.mock('../../hooks/useUser', () => {
   }
 })
 
+jest.mock('../../hooks/useUpdateFavorites', () => {
+  return () => {
+    return {
+      mutate: mockUpdateFoods,
+      loading: false,
+      error: 'there is an error in updating favorite foods',
+      success: true,
+      favorites: [
+        { id: 1, name: 'sushi' },
+        { id: 2, name: 'pizza' },
+      ],
+    }
+  }
+})
+
 describe('FavoriteFoods', () => {
-  test('renders AddFavorite textfield without crashing', () => {
+  test('renders without crashing and displays a list of favorite foods from user data', () => {
     render(
       <TestProvider>
         <FavoriteFoods />
       </TestProvider>,
     )
-    const addFavoriteField = screen.getByRole('textbox', { name: /Add a new Favorite Dish/i })
-    const addFavoriteBtn = screen.getByRole('button', { name: /add/i })
-    expect(addFavoriteField).toBeInTheDocument()
-    expect(addFavoriteBtn).toBeInTheDocument()
+    const draggableList = screen.getByLabelText('DraggableList-favorites')
+    expect(draggableList).toBeInTheDocument()
   })
 
-  test('textField should be required, and user can type', async () => {
+  test('drag and drop of list items should update and display a new ordered list', async () => {
     render(
       <TestProvider>
         <FavoriteFoods />
       </TestProvider>,
     )
-    const addFavoriteField = screen.getByRole('textbox', { name: /Add a new Favorite Dish/i })
-    expect(addFavoriteField).toBeRequired()
-    await userEvent.type(addFavoriteField, 'tacos')
-    expect(addFavoriteField).toHaveValue('tacos')
+    screen.debug()
   })
 
-  test('onSubmit, should post form data to update FavoriteFoods', async () => {
-    render(
-      <TestProvider>
-        <FavoriteFoods />
-      </TestProvider>,
-    )
-    const addFavoriteField = screen.getByRole('textbox', {
-      name: /Add a new Favorite Dish/i,
-    }) as HTMLInputElement
-    fireEvent.change(addFavoriteField, { target: { value: 'tacos' } })
-
-    const addFavoriteBtn = screen.getByRole('button', { name: /add/i })
-    await userEvent.click(addFavoriteBtn)
-  })
-
-  test('if updateFavorites has error, should display error message', () => {
+  test('if error in fetching userData or updating favoriteFoods, should display error message', () => {
     render(
       <TestProvider>
         <FavoriteFoods />
       </TestProvider>,
     )
 
-    const errorMsg = screen.getByRole('error-message')
-    expect(errorMsg).toHaveTextContent('There is an error in adding new favorite food')
+    const errorMsgUserData = screen.getByRole('error-message-userData')
+    expect(errorMsgUserData).toHaveTextContent('there is an error in fetching user data')
+
+    const errorMsgUpdateFavs = screen.getByRole('error-message-updateFavs')
+    expect(errorMsgUpdateFavs).toHaveTextContent('there is an error in updating favorite foods')
   })
 })
