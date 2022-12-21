@@ -9,9 +9,9 @@ describe('PrivateRoute', () => {
       <TestProvider>
         <UserContext.Provider
           value={{
-            user: { username: 'kitty', auth: true },
-            login: jest.fn(),
-            logout: jest.fn(),
+            currentUser: { username: 'kitty', token: 'tokenString' },
+            setUser: jest.fn(),
+            clearUser: jest.fn(),
           }}
         >
           <PrivateRoute>
@@ -29,9 +29,9 @@ describe('PrivateRoute', () => {
       <TestProvider>
         <UserContext.Provider
           value={{
-            user: { username: '', auth: false },
-            login: jest.fn(),
-            logout: jest.fn(),
+            currentUser: null,
+            setUser: jest.fn(),
+            clearUser: jest.fn(),
           }}
         >
           <PrivateRoute>

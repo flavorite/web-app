@@ -8,14 +8,14 @@ type privateProps = {
 
 const PrivateRoute: React.FC<privateProps> = ({ children }) => {
   const location = useLocation()
-  const { user } = useContext(UserContext) as UserContextType
+  const { currentUser } = useContext(UserContext) as UserContextType
 
   return (
     <>
-      {!user.auth ? (
-        <Navigate to='/login' state={{ redirectTo: location.pathname }} />
-      ) : (
+      {currentUser ? (
         <>{children}</>
+      ) : (
+        <Navigate to='/login' state={{ redirectTo: location.pathname }} />
       )}
     </>
   )

@@ -9,9 +9,9 @@ describe('NavBar', () => {
       <TestProvider>
         <UserContext.Provider
           value={{
-            user: { username: '', auth: false },
-            login: jest.fn(),
-            logout: jest.fn(),
+            currentUser: null,
+            setUser: jest.fn(),
+            clearUser: jest.fn(),
           }}
         >
           <NavBar />
@@ -27,9 +27,9 @@ describe('NavBar', () => {
       <TestProvider>
         <UserContext.Provider
           value={{
-            user: { username: '', auth: false },
-            login: jest.fn(),
-            logout: jest.fn(),
+            currentUser: null,
+            setUser: jest.fn(),
+            clearUser: jest.fn(),
           }}
         >
           <NavBar />
@@ -54,9 +54,9 @@ describe('NavBar', () => {
       <TestProvider>
         <UserContext.Provider
           value={{
-            user: { username: '', auth: true },
-            login: jest.fn(),
-            logout: jest.fn(),
+            currentUser: { username: 'kitty', token: 'tokenString' },
+            setUser: jest.fn(),
+            clearUser: jest.fn(),
           }}
         >
           <NavBar />

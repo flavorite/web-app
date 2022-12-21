@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router'
 import { UserContext, UserContextType } from './UserContext'
 
 export default function Navbar() {
-  const { user, logout } = useContext(UserContext) as UserContextType
+  const { currentUser, clearUser } = useContext(UserContext) as UserContextType
   const settings = ['Profile', 'Find Friends', 'Logout']
   const pages = ['Login', 'Register']
   const navigate = useNavigate()
@@ -41,11 +41,11 @@ export default function Navbar() {
   const handleCloseUserMenu = (e: any) => {
     setAnchorElUser(null)
     if (e.target.textContent === 'Profile') {
-      navigate(`/${user.username}`)
+      navigate(`/${currentUser ? currentUser.username : ''}`)
     } else if (e.target.textContent === 'Logout') {
-      logout()
+      clearUser()
     } else if (e.target.textContent === 'Find Friends') {
-      navigate(`/${user.username}/friends`)
+      navigate(`/${currentUser ? currentUser.username : ''}/friends`)
     }
   }
 
@@ -72,7 +72,7 @@ export default function Navbar() {
             Flavorite
           </Typography>
 
-          <Box sx={{ flexGrow: 1, display: user.auth ? 'none' : { xs: 'flex', md: 'none' } }}>
+          <Box sx={{ flexGrow: 1, display: currentUser ? 'none' : { xs: 'flex', md: 'none' } }}>
             <IconButton
               size='large'
               aria-label='loggedOutMenu xs'
@@ -98,7 +98,7 @@ export default function Navbar() {
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
               sx={{
-                display: user.auth ? 'none' : { xs: 'block', md: 'none' },
+                display: currentUser ? 'none' : { xs: 'block', md: 'none' },
               }}
             >
               {pages.map((page) => (
@@ -129,7 +129,7 @@ export default function Navbar() {
             Flavorite
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            <Box aria-label='loggedOutMenu md' style={{ display: user.auth ? 'none' : '' }}>
+            <Box aria-label='loggedOutMenu md' style={{ display: currentUser ? 'none' : '' }}>
               {pages.map((page) => (
                 <Button
                   key={page}
@@ -144,7 +144,7 @@ export default function Navbar() {
 
           <Box
             sx={{ flexGrow: 0 }}
-            style={{ display: user.auth ? 'flex' : 'none' }}
+            style={{ display: currentUser ? 'flex' : 'none' }}
             aria-label='user options'
           >
             <Tooltip title='Open settings'>

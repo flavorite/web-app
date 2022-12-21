@@ -39,7 +39,7 @@ export default function Login() {
     user: loggedInUser,
   } = useLoginUser()
 
-  const { login } = useContext(UserContext) as UserContextType
+  const { setUser } = useContext(UserContext) as UserContextType
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -51,10 +51,8 @@ export default function Login() {
     }
 
     await loginUser({ loginUser: formDataObj })
-
-    // To finalize once Cognito is set up
-    localStorage.setItem('token', loggedInUser.token)
-    login(loggedInUser.username)
+    // TODO verify setUser still works after Cognito is set up
+    setUser(loggedInUser)
     navigate(`/${loggedInUser.username}`)
   }
 
