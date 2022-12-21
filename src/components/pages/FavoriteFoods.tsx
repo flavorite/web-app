@@ -3,9 +3,10 @@ import Container from '@mui/material/Container'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { useContext } from 'react'
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
+import { DragDropContext, Draggable } from 'react-beautiful-dnd'
 import { Link } from 'react-router-dom'
 import useUser from '../../hooks/useUser'
+import { StrictModeDroppable } from '../helpers/strictModeDroppable'
 import AddFavorite from '../partials/AddFavorite'
 import Spinner from '../partials/Spinner'
 import { UserContext, UserContextType } from '../partials/UserContext'
@@ -25,7 +26,9 @@ export default function FavoriteFoods() {
             {...provided.draggableProps}
             {...provided.dragHandleProps}
           >
-            {id}.<Link to={`/${username}/favorites/${name}`}>{name}</Link>
+            <Typography>
+              {id}.<Link to={`/${username}/favorites/${name}`}>{name}</Link>
+            </Typography>
           </Stack>
         )}
       </Draggable>
@@ -45,13 +48,14 @@ export default function FavoriteFoods() {
           {errorUserData ? `${errorUserData}` : ''}
         </Typography>
         <DragDropContext onDragEnd={handleOnDragEnd}>
-          <Droppable droppableId='favorites'>
+          <StrictModeDroppable droppableId='favorites'>
             {(provided) => (
               <Box {...provided.droppableProps} ref={provided.innerRef}>
                 {favoritesList}
+                {provided.placeholder}
               </Box>
             )}
-          </Droppable>
+          </StrictModeDroppable>
         </DragDropContext>
         {/* TODO: Make into Ordered list, enable user to switch favorites order */}
       </Container>
