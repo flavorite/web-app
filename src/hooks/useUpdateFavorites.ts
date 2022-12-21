@@ -18,8 +18,8 @@ export default function useUpdateFavorites() {
 
   const updatedFavorites: ListFavoriteFoods = {
     favoriteFoods: [
-      { order: 1, name: 'sushi' },
-      { order: 2, name: 'pizza' },
+      { id: 1, name: 'sushi' },
+      { id: 2, name: 'pizza' },
     ],
   }
 

@@ -23,8 +23,8 @@ describe('AddFavorite', () => {
         <AddFavorite
           username='kitty'
           favorites={[
-            { order: 1, name: 'sushi' },
-            { order: 2, name: 'pizza' },
+            { id: 1, name: 'sushi' },
+            { id: 2, name: 'pizza' },
           ]}
         />
       </TestProvider>,
@@ -41,8 +41,8 @@ describe('AddFavorite', () => {
         <AddFavorite
           username='kitty'
           favorites={[
-            { order: 1, name: 'sushi' },
-            { order: 2, name: 'pizza' },
+            { id: 1, name: 'sushi' },
+            { id: 2, name: 'pizza' },
           ]}
         />
       </TestProvider>,
@@ -59,8 +59,8 @@ describe('AddFavorite', () => {
         <AddFavorite
           username='kitty'
           favorites={[
-            { order: 1, name: 'sushi' },
-            { order: 2, name: 'pizza' },
+            { id: 1, name: 'sushi' },
+            { id: 2, name: 'pizza' },
           ]}
         />
       </TestProvider>,
@@ -77,9 +77,9 @@ describe('AddFavorite', () => {
       username: 'kitty',
       listFavoriteFoods: {
         favoriteFoods: [
-          { order: 1, name: 'sushi' },
-          { order: 2, name: 'pizza' },
-          { order: 3, name: 'tacos' },
+          { id: 1, name: 'sushi' },
+          { id: 2, name: 'pizza' },
+          { id: 3, name: 'tacos' },
         ],
       },
     })
@@ -91,8 +91,8 @@ describe('AddFavorite', () => {
         <AddFavorite
           username='kitty'
           favorites={[
-            { order: 1, name: 'sushi' },
-            { order: 2, name: 'pizza' },
+            { id: 1, name: 'sushi' },
+            { id: 2, name: 'pizza' },
           ]}
         />
       </TestProvider>,

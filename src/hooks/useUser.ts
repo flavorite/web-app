@@ -14,7 +14,7 @@ export default function useUser(username: GetUserByNameRequest) {
     firstName: 'valerie',
     lastName: 'yang',
     password: 'testpw',
-    favoriteFoods: [{order: 1, name: 'sushi'}, {order: 2, name: 'pizza'}],
+    favoriteFoods: [{id: 1, name: 'sushi'}, {id: 2, name: 'pizza'}],
     friends: [],
   }
 

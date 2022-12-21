@@ -8,7 +8,7 @@ import Spinner from './Spinner'
 
 type favProps = {
   username: string
-  favorites: { order: number; name: string }[]
+  favorites: { id: number; name: string }[]
 }
 
 export default function AddFavorite({ username, favorites }: favProps) {
@@ -23,7 +23,7 @@ export default function AddFavorite({ username, favorites }: favProps) {
     const inputForm = new FormData(event.currentTarget)
     const input = inputForm.get('favorite') as string
     const newFavorites = favorites
-    newFavorites.push({ order: favorites.length + 1, name: input })
+    newFavorites.push({ id: favorites.length + 1, name: input })
     await updateFavorites({
       username: username,
       listFavoriteFoods: { favoriteFoods: newFavorites },

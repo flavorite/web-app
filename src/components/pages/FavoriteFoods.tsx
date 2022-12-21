@@ -3,6 +3,7 @@ import Container from '@mui/material/Container'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { useContext } from 'react'
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import { Link } from 'react-router-dom'
 import useUser from '../../hooks/useUser'
 import AddFavorite from '../partials/AddFavorite'
@@ -14,15 +15,26 @@ export default function FavoriteFoods() {
   const username = currentUser.username
   const { user: userData, loading: loadingUserData, error: errorUserData } = useUser({ username })
 
-  const favoritesList = userData.favoriteFoods.map((food) => {
+  const favoritesList = userData.favoriteFoods.map(({ id, name }, idx) => {
     return (
-      <Box key={food.order}>
-        <Typography>
-          {food.order}.<Link to={`/${username}/favorites/${food.name}`}>{food.name}</Link>
-        </Typography>
-      </Box>
+      <Draggable key={id} draggableId={id.toString()} index={idx}>
+        {(provided) => (
+          <Stack
+            spacing={2}
+            ref={provided.innerRef}
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+          >
+            {id}.<Link to={`/${username}/favorites/${name}`}>{name}</Link>
+          </Stack>
+        )}
+      </Draggable>
     )
   })
+
+  const handleOnDragEnd = () => {
+    console.log('dragend')
+  }
 
   return (
     <Spinner loading={loadingUserData}>
@@ -32,7 +44,15 @@ export default function FavoriteFoods() {
           {/* TODO Style Typography */}
           {errorUserData ? `${errorUserData}` : ''}
         </Typography>
-        <Stack spacing={2}>{favoritesList}</Stack>
+        <DragDropContext onDragEnd={handleOnDragEnd}>
+          <Droppable droppableId='favorites'>
+            {(provided) => (
+              <Box {...provided.droppableProps} ref={provided.innerRef}>
+                {favoritesList}
+              </Box>
+            )}
+          </Droppable>
+        </DragDropContext>
         {/* TODO: Make into Ordered list, enable user to switch favorites order */}
       </Container>
     </Spinner>
