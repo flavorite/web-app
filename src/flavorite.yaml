@@ -377,7 +377,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FavoriteFood'
+                $ref: '#/components/schemas/ListFavoriteFoods'
           description: successful operation
         '400':
           description: Invalid username supplied
@@ -450,7 +450,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/FavoriteFood'
+            $ref: '#/components/schemas/ListFavoriteFoods'
       description: Update user's list of favorite foods
       required: true
   schemas:
@@ -885,9 +885,9 @@ components:
     FavoriteFood:
       example:
         name: sushi
-        id: 10
+        order: 10
       properties:
-        id:
+        order:
           example: 10
           format: int64
           title: id
@@ -897,9 +897,26 @@ components:
           title: name
           type: string
       required:
-        - id
+        - order
         - name
       title: FavoriteFood
+      type: object
+    ListFavoriteFoods:
+      example:
+        favoriteFoods:
+          - name: sushi
+            order: 1
+          - name: pizza
+            order: 2
+      properties:
+        favoriteFoods:
+          items:
+            $ref: '#/components/schemas/FavoriteFood'
+          title: favoriteFoods
+          type: array
+      required:
+        - favoriteFoods
+      title: ListFavoriteFoods
       type: object
     ApiResponse:
       example:

@@ -18,9 +18,9 @@ import {
     CreateUser,
     CreateUserFromJSON,
     CreateUserToJSON,
-    FavoriteFood,
-    FavoriteFoodFromJSON,
-    FavoriteFoodToJSON,
+    ListFavoriteFoods,
+    ListFavoriteFoodsFromJSON,
+    ListFavoriteFoodsToJSON,
     ListReviews,
     ListReviewsFromJSON,
     ListReviewsToJSON,
@@ -60,7 +60,7 @@ export interface LoginUserRequest {
 
 export interface UpdateFavoriteFoodsRequest {
     username: string;
-    favoriteFood: FavoriteFood;
+    listFavoriteFoods: ListFavoriteFoods;
 }
 
 export interface UpdateUserRequest {
@@ -263,13 +263,13 @@ export class UsersApi extends runtime.BaseAPI {
      * This can only be done by the logged in user.
      * Update user\'s favorite foods
      */
-    async updateFavoriteFoodsRaw(requestParameters: UpdateFavoriteFoodsRequest): Promise<runtime.ApiResponse<FavoriteFood>> {
+    async updateFavoriteFoodsRaw(requestParameters: UpdateFavoriteFoodsRequest): Promise<runtime.ApiResponse<ListFavoriteFoods>> {
         if (requestParameters.username === null || requestParameters.username === undefined) {
             throw new runtime.RequiredError('username','Required parameter requestParameters.username was null or undefined when calling updateFavoriteFoods.');
         }
 
-        if (requestParameters.favoriteFood === null || requestParameters.favoriteFood === undefined) {
-            throw new runtime.RequiredError('favoriteFood','Required parameter requestParameters.favoriteFood was null or undefined when calling updateFavoriteFoods.');
+        if (requestParameters.listFavoriteFoods === null || requestParameters.listFavoriteFoods === undefined) {
+            throw new runtime.RequiredError('listFavoriteFoods','Required parameter requestParameters.listFavoriteFoods was null or undefined when calling updateFavoriteFoods.');
         }
 
         const queryParameters: runtime.HTTPQuery = {};
@@ -283,17 +283,17 @@ export class UsersApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: FavoriteFoodToJSON(requestParameters.favoriteFood),
+            body: ListFavoriteFoodsToJSON(requestParameters.listFavoriteFoods),
         });
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => FavoriteFoodFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ListFavoriteFoodsFromJSON(jsonValue));
     }
 
     /**
      * This can only be done by the logged in user.
      * Update user\'s favorite foods
      */
-    async updateFavoriteFoods(requestParameters: UpdateFavoriteFoodsRequest): Promise<FavoriteFood> {
+    async updateFavoriteFoods(requestParameters: UpdateFavoriteFoodsRequest): Promise<ListFavoriteFoods> {
         const response = await this.updateFavoriteFoodsRaw(requestParameters);
         return await response.value();
     }

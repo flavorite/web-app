@@ -1,6 +1,7 @@
 export * from './CreateReview';
 export * from './CreateUser';
 export * from './FavoriteFood';
+export * from './ListFavoriteFoods';
 export * from './ListRestaurants';
 export * from './ListReviews';
 export * from './LoginPayload';

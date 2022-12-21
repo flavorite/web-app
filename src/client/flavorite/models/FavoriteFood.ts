@@ -24,7 +24,7 @@ export interface FavoriteFood {
      * @type {number}
      * @memberof FavoriteFood
      */
-    id: number;
+    order: number;
     /**
      * 
      * @type {string}
@@ -43,7 +43,7 @@ export function FavoriteFoodFromJSONTyped(json: any, ignoreDiscriminator: boolea
     }
     return {
         
-        'id': json['id'],
+        'order': json['order'],
         'name': json['name'],
     };
 }
@@ -57,7 +57,7 @@ export function FavoriteFoodToJSON(value?: FavoriteFood | null): any {
     }
     return {
         
-        'id': value.id,
+        'order': value.order,
         'name': value.name,
     };
 }
