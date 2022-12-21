@@ -1,39 +1,36 @@
 import { createContext, useState } from 'react'
-
-type userType = {
-  username: string
-  auth: boolean
-}
+import { LoginPayload } from '../../client/flavorite/models'
 
 export type UserContextType = {
-  user: userType
-  login: (username: string) => void
-  logout: () => void
+  currentUser: LoginPayload | null
+  setUser: (loginData: LoginPayload) => void
+  clearUser: () => void
 }
 
 const UserContext = createContext<UserContextType | null>(null)
 
 const UserProvider = ({ children }: { children: React.ReactElement }) => {
   // User is the name of the "data" that gets stored in context
-  const [user, setUser] = useState<userType>({ username: 'kitty', auth: true })
+  const [currentUser, setCurrentUser] = useState<UserContextType['currentUser']>(null)
 
   // Login updates the user data with a name parameter
-  const login = (username: string) => {
-    setUser({
-      username: username,
-      auth: true,
+  const setUser = (loginData: LoginPayload) => {
+    setCurrentUser({
+      username: loginData.username,
+      token: loginData.token,
     })
   }
 
   // Logout updates the user data to default
-  const logout = () => {
-    setUser({
-      username: '',
-      auth: false,
-    })
+  const clearUser = () => {
+    setCurrentUser(null)
   }
 
-  return <UserContext.Provider value={{ user, login, logout }}>{children}</UserContext.Provider>
+  return (
+    <UserContext.Provider value={{ currentUser, setUser, clearUser }}>
+      {children}
+    </UserContext.Provider>
+  )
 }
 
 export { UserContext, UserProvider }

@@ -22,9 +22,6 @@ jest.mock('../../hooks/useLoginUser', () => {
 })
 
 describe('Login', () => {
-  jest.spyOn(Object.getPrototypeOf(window.localStorage), 'setItem')
-  Object.setPrototypeOf(window.localStorage.setItem, jest.fn())
-
   test('renders login form without crashing', () => {
     render(
       <TestProvider>
@@ -57,14 +54,14 @@ describe('Login', () => {
 
   // Test onSubmit
   test('onClick submit button, should post form data', async () => {
-    const loginCall = jest.fn()
+    const mockSetUser = jest.fn()
     render(
       <TestProvider>
         <UserContext.Provider
           value={{
-            user: { username: '', auth: false },
-            login: loginCall,
-            logout: jest.fn(),
+            currentUser: null,
+            setUser: mockSetUser,
+            clearUser: jest.fn(),
           }}
         >
           <Login />
@@ -90,10 +87,7 @@ describe('Login', () => {
       },
     })
 
-    // on success, localStorage item is set with token received (TODO finalize when cognito is setup)
-    expect(window.localStorage.setItem).toBeCalledWith('token', 'tokenString')
-
-    expect(loginCall).toHaveBeenCalledWith('kitty')
+    expect(mockSetUser).toHaveBeenCalledWith({ token: 'tokenString', username: 'kitty' })
 
     // on success, reroute to profile page of logged in user
     expect(location.pathname).toEqual('/kitty')
