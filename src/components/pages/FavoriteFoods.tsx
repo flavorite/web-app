@@ -2,23 +2,21 @@ import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { useContext } from 'react'
 import { DragDropContext, Draggable } from 'react-beautiful-dnd'
-import { Link } from 'react-router-dom'
+import { Link, useOutletContext } from 'react-router-dom'
+import { LoginPayload } from '../../client/flavorite'
+import useFavorites from '../../hooks/useFavorites'
 import useUpdateFavorites from '../../hooks/useUpdateFavorites'
-import useUser from '../../hooks/useUser'
 import { StrictModeDroppable } from '../helpers/strictModeDroppable'
 import AddFavorite from '../partials/AddFavorite'
 import Spinner from '../partials/Spinner'
-import { UserContext, UserContextType } from '../partials/UserContext'
 
 export default function FavoriteFoods() {
-  const { user: currentUser } = useContext(UserContext) as UserContextType
-  const username = currentUser.username
-  const { user: userData, loading: loadingUserData, error: errorUserData } = useUser({ username })
+  const { username } = useOutletContext<LoginPayload>()
+  const { favorites, loading: loadingFavorites, error: errorFavorites } = useFavorites({ username })
   const { error: errorUpdateFavorites, mutate: updateFavorites } = useUpdateFavorites()
-
-  const favoritesList = userData.favoriteFoods.map(({ id, name }, idx) => {
+  console.log(username)
+  const favoritesList = favorites.map(({ id, name }, idx) => {
     return (
       <Draggable key={id} draggableId={`${id}`} index={idx}>
         {(provided) => (
@@ -38,7 +36,7 @@ export default function FavoriteFoods() {
   })
 
   const handleUpdateFavorites = (result: any) => {
-    const items = Array.from(userData.favoriteFoods)
+    const items = Array.from(favorites)
     const [reorderedItem] = items.splice(result.source.index, 1)
     items.splice(result.destination.index, 0, reorderedItem)
     items.forEach((item, idx) => {
@@ -51,11 +49,11 @@ export default function FavoriteFoods() {
   }
 
   return (
-    <Spinner loading={loadingUserData}>
+    <Spinner loading={loadingFavorites}>
       <Container fixed>
-        <AddFavorite username={username} favorites={userData.favoriteFoods} />
+        <AddFavorite username={username} favorites={favorites} />
         <Typography role='error-message-userData'>
-          {errorUserData ? `${errorUserData}` : ''}
+          {errorFavorites ? `${errorFavorites}` : ''}
         </Typography>
         <Typography role='error-message-updateFavs'>
           {errorUpdateFavorites ? `${errorUpdateFavorites}` : ''}

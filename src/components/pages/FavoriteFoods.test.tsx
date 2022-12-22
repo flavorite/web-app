@@ -4,24 +4,23 @@ import FavoriteFoods from './FavoriteFoods'
 
 const mockUpdateFoods = jest.fn()
 
-jest.mock('../../hooks/useUser', () => {
+const mockContextData = {
+  username: 'kitty',
+}
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useOutletContext: () => mockContextData,
+}))
+
+jest.mock('../../hooks/useFavorites', () => {
   return () => {
     return {
       loading: false,
-      error: 'there is an error in fetching user data',
-      user: {
-        id: 1,
-        username: 'kitty',
-        email: 'v@b.com',
-        firstName: 'valerie',
-        lastName: 'yang',
-        password: 'testpw',
-        favoriteFoods: [
-          { id: 1, name: 'sushi' },
-          { id: 2, name: 'pizza' },
-        ],
-        friends: [],
-      },
+      error: 'there is an error in fetching favorites',
+      favorites: [
+        { id: 1, name: 'sushi' },
+        { id: 2, name: 'pizza' },
+      ],
     }
   }
 })
@@ -58,10 +57,9 @@ describe('FavoriteFoods', () => {
         <FavoriteFoods />
       </TestProvider>,
     )
-    screen.debug()
   })
 
-  test('if error in fetching userData or updating favoriteFoods, should display error message', () => {
+  test('if error in fetching favorites or updating favoriteFoods, should display error message', () => {
     render(
       <TestProvider>
         <FavoriteFoods />
@@ -69,7 +67,7 @@ describe('FavoriteFoods', () => {
     )
 
     const errorMsgUserData = screen.getByRole('error-message-userData')
-    expect(errorMsgUserData).toHaveTextContent('there is an error in fetching user data')
+    expect(errorMsgUserData).toHaveTextContent('there is an error in fetching favorites')
 
     const errorMsgUpdateFavs = screen.getByRole('error-message-updateFavs')
     expect(errorMsgUpdateFavs).toHaveTextContent('there is an error in updating favorite foods')

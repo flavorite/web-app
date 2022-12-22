@@ -13,6 +13,11 @@ const UserProvider = ({ children }: { children: React.ReactElement }) => {
   // User is the name of the "data" that gets stored in context
   const [currentUser, setCurrentUser] = useState<UserContextType['currentUser']>(null)
 
+  // {
+  //   username: 'kitty',
+  //   token: 't',
+  // }
+
   // Login updates the user data with a name parameter
   const setUser = (loginData: LoginPayload) => {
     setCurrentUser({

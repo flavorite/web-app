@@ -1,9 +1,12 @@
 import { render, screen } from '@testing-library/react'
+import { Route, Routes } from 'react-router-dom'
 import { UserContext } from '../partials/UserContext'
 import PrivateRoute from './PrivateRoute'
 import TestProvider from './TestProvider'
 
 describe('PrivateRoute', () => {
+  const MockOutlet = () => <>Mock Outlet Component</>
+
   test('should render Children component when UserAuth is verified', () => {
     render(
       <TestProvider>
@@ -14,14 +17,16 @@ describe('PrivateRoute', () => {
             clearUser: jest.fn(),
           }}
         >
-          <PrivateRoute>
-            <>Children</>
-          </PrivateRoute>
+          <Routes>
+            <Route path='/' element={<PrivateRoute />}>
+              <Route path='/' element={<MockOutlet />} />
+            </Route>
+          </Routes>
         </UserContext.Provider>
       </TestProvider>,
     )
 
-    expect(screen.getByText('Children')).toBeInTheDocument()
+    expect(screen.getByText('Mock Outlet Component')).toBeInTheDocument()
   })
 
   test('should reroute to Login page if UserAuth is not verified', () => {
@@ -34,13 +39,11 @@ describe('PrivateRoute', () => {
             clearUser: jest.fn(),
           }}
         >
-          <PrivateRoute>
-            <>Children</>
-          </PrivateRoute>
+          <PrivateRoute />
         </UserContext.Provider>
       </TestProvider>,
     )
-    expect(screen.getByText('Children')).not.toBeInTheDocument()
+
     expect(location.pathname).toEqual('/login')
   })
 })

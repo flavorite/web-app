@@ -21,8 +21,6 @@ export default function useUpdateUser() {
     firstName: 'valerie',
     lastName: 'yang',
     password: 'testpw',
-    friends: [],
-    favoriteFoods: [],
   }
 
   return {

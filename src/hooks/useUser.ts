@@ -7,18 +7,12 @@ export default function useUser(username: GetUserByNameRequest) {
   //   const userData = useQuery(['user', username], fetchUser);
 
   const user: User = {
-    id: 1,
+    id: '1',
     username: 'kitty',
     email: 'v@b.com',
     firstName: 'valerie',
     lastName: 'yang',
     password: 'testpw',
-    favoriteFoods: [
-      { id: 1, name: 'sushi' },
-      { id: 2, name: 'pizza' },
-      { id: 3, name: 'tacos' },
-    ],
-    friends: [],
   }
 
   return {
