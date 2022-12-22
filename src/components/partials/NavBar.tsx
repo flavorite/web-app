@@ -1,26 +1,27 @@
 import MenuIcon from '@mui/icons-material/Menu'
 import AppBar from '@mui/material/AppBar'
-import Container from '@mui/material/Container'
-import Typography from '@mui/material/Typography'
-import Toolbar from '@mui/material/Toolbar'
+import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import Container from '@mui/material/Container'
+import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import Button from '@mui/material/Button'
-import Avatar from '@mui/material/Avatar'
-import IconButton from '@mui/material/IconButton'
+import Toolbar from '@mui/material/Toolbar'
 import Tooltip from '@mui/material/Tooltip'
-import { useEffect, useState } from 'react'
+import Typography from '@mui/material/Typography'
+import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router'
+import { UserContext, UserContextType } from './UserContext'
 
 export default function Navbar() {
+  const { currentUser, clearUser } = useContext(UserContext) as UserContextType
   const settings = ['Profile', 'Find Friends', 'Logout']
+  const pages = ['Login', 'Register']
   const navigate = useNavigate()
-  // test user
-  const [username, setUsername] = useState<null | string>('testUser')
-  const [pages, setPages] = useState<string[]>([''])
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null)
+
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget)
   }
@@ -28,32 +29,23 @@ export default function Navbar() {
     setAnchorElUser(event.currentTarget)
   }
 
-  useEffect(() => {
-    // TODO: set currentUser's username here
-    if (!username) {
-      setPages(['Login', 'Register'])
-    }
-  }, [username])
-
   const handleCloseNavMenu = (e: any) => {
+    setAnchorElNav(null)
     if (e.target.textContent === 'Login') {
       navigate('/login')
     } else if (e.target.textContent === 'Register') {
       navigate('/register')
-    } else if (e.target.textContent === 'Write a Review') {
-      navigate('/writeareview')
     }
   }
 
   const handleCloseUserMenu = (e: any) => {
     setAnchorElUser(null)
     if (e.target.textContent === 'Profile') {
-      navigate(`/${username}`)
+      navigate(`/${currentUser ? currentUser.username : ''}`)
     } else if (e.target.textContent === 'Logout') {
-      // TODO: handleLogout function (prop) here
-      navigate('/login')
+      clearUser()
     } else if (e.target.textContent === 'Find Friends') {
-      navigate(`/${username}/friends`)
+      navigate(`/${currentUser ? currentUser.username : ''}/friends`)
     }
   }
 
@@ -80,10 +72,10 @@ export default function Navbar() {
             Flavorite
           </Typography>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+          <Box sx={{ flexGrow: 1, display: currentUser ? 'none' : { xs: 'flex', md: 'none' } }}>
             <IconButton
               size='large'
-              aria-label='account of current user'
+              aria-label='loggedOutMenu xs'
               aria-controls='menu-appbar'
               aria-haspopup='true'
               onClick={handleOpenNavMenu}
@@ -106,7 +98,7 @@ export default function Navbar() {
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
               sx={{
-                display: { xs: 'block', md: 'none' },
+                display: currentUser ? 'none' : { xs: 'block', md: 'none' },
               }}
             >
               {pages.map((page) => (
@@ -137,20 +129,27 @@ export default function Navbar() {
             Flavorite
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page}
-              </Button>
-            ))}
+            <Box aria-label='loggedOutMenu md' style={{ display: currentUser ? 'none' : '' }}>
+              {pages.map((page) => (
+                <Button
+                  key={page}
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: 'white', display: 'inline' }}
+                >
+                  {page}
+                </Button>
+              ))}
+            </Box>
           </Box>
 
-          <Box style={{ display: username ? 'block' : 'none' }} sx={{ flexGrow: 0 }}>
+          <Box
+            sx={{ flexGrow: 0 }}
+            style={{ display: currentUser ? 'flex' : 'none' }}
+            aria-label='user options'
+          >
             <Tooltip title='Open settings'>
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                {/* TODO change to thumbnail of profile photo or default user image */}
                 <Avatar alt='Remy Sharp' src='/static/images/avatar/2.jpg' />
               </IconButton>
             </Tooltip>

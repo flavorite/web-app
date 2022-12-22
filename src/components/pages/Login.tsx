@@ -10,10 +10,12 @@ import Grid from '@mui/material/Grid'
 import Link from '@mui/material/Link'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
+import { useContext } from 'react'
 import { useNavigate } from 'react-router'
 import { LoginUser } from '../../client/flavorite/models'
 import useLoginUser from '../../hooks/useLoginUser'
 import Spinner from '../partials/Spinner'
+import { UserContext, UserContextType } from '../partials/UserContext'
 
 function Copyright(props: any) {
   return (
@@ -37,6 +39,8 @@ export default function Login() {
     user: loggedInUser,
   } = useLoginUser()
 
+  const { setUser } = useContext(UserContext) as UserContextType
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
@@ -47,9 +51,8 @@ export default function Login() {
     }
 
     await loginUser({ loginUser: formDataObj })
-
-    localStorage.setItem('token', loggedInUser.token)
-
+    // TODO verify setUser still works after Cognito is set up
+    setUser(loggedInUser)
     navigate(`/${loggedInUser.username}`)
   }
 

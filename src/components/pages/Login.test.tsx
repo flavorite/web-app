@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import TestProvider from '../partials/TestProvider'
+import { UserContext } from '../partials/UserContext'
 import Login from './Login'
 
 const mockLoginUser = jest.fn()
@@ -21,9 +22,6 @@ jest.mock('../../hooks/useLoginUser', () => {
 })
 
 describe('Login', () => {
-  jest.spyOn(Object.getPrototypeOf(window.localStorage), 'setItem')
-  Object.setPrototypeOf(window.localStorage.setItem, jest.fn())
-
   test('renders login form without crashing', () => {
     render(
       <TestProvider>
@@ -56,9 +54,18 @@ describe('Login', () => {
 
   // Test onSubmit
   test('onClick submit button, should post form data', async () => {
+    const mockSetUser = jest.fn()
     render(
       <TestProvider>
-        <Login />
+        <UserContext.Provider
+          value={{
+            currentUser: null,
+            setUser: mockSetUser,
+            clearUser: jest.fn(),
+          }}
+        >
+          <Login />
+        </UserContext.Provider>
       </TestProvider>,
     )
 
@@ -80,8 +87,7 @@ describe('Login', () => {
       },
     })
 
-    // on success, localStorage item is set with token received
-    expect(window.localStorage.setItem).toBeCalledWith('token', 'tokenString')
+    expect(mockSetUser).toHaveBeenCalledWith({ token: 'tokenString', username: 'kitty' })
 
     // on success, reroute to profile page of logged in user
     expect(location.pathname).toEqual('/kitty')

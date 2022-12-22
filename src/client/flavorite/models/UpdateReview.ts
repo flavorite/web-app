@@ -37,6 +37,18 @@ export interface UpdateReview {
      * @memberof UpdateReview
      */
     photoUrl?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateReview
+     */
+    favoriteFood?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UpdateReview
+     */
+    starred?: boolean;
 }
 
 export function UpdateReviewFromJSON(json: any): UpdateReview {
@@ -52,6 +64,8 @@ export function UpdateReviewFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'rating': !exists(json, 'rating') ? undefined : json['rating'],
         'content': !exists(json, 'content') ? undefined : json['content'],
         'photoUrl': !exists(json, 'photoUrl') ? undefined : json['photoUrl'],
+        'favoriteFood': !exists(json, 'favoriteFood') ? undefined : json['favoriteFood'],
+        'starred': !exists(json, 'starred') ? undefined : json['starred'],
     };
 }
 
@@ -67,6 +81,8 @@ export function UpdateReviewToJSON(value?: UpdateReview | null): any {
         'rating': value.rating,
         'content': value.content,
         'photoUrl': value.photoUrl,
+        'favoriteFood': value.favoriteFood,
+        'starred': value.starred,
     };
 }
 

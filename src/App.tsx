@@ -1,20 +1,22 @@
-import './App.css'
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
-import { QueryClient, QueryClientProvider } from 'react-query'
-const queryClient = new QueryClient()
 import { createTheme, ThemeProvider } from '@mui/material/styles'
+import { QueryClient, QueryClientProvider } from 'react-query'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import './App.css'
+const queryClient = new QueryClient()
 
-import Navbar from './components/partials/NavBar'
-import Home from './components/pages/Home'
-import Profile from './components/pages/Profile'
-import Login from './components/pages/Login'
-import Register from './components/pages/Register'
-import FavoriteFoods from './components/pages/FavoriteFoods'
 import FavoriteFood from './components/pages/FavoriteFood'
+import FavoriteFoods from './components/pages/FavoriteFoods'
 import Friends from './components/pages/Friends'
-import UserReviews from './components/pages/UserReviews'
-import Restaurant from './components/pages/Restaurant'
+import Home from './components/pages/Home'
+import Login from './components/pages/Login'
 import NewReviewForm from './components/pages/NewReviewForm'
+import Profile from './components/pages/Profile'
+import Register from './components/pages/Register'
+import Restaurant from './components/pages/Restaurant'
+import UserReviews from './components/pages/UserReviews'
+import Navbar from './components/partials/NavBar'
+import PrivateRoute from './components/partials/PrivateRoute'
+import { UserProvider } from './components/partials/UserContext'
 
 function App() {
   const theme = createTheme()
@@ -23,23 +25,67 @@ function App() {
     <div className='App'>
       <ThemeProvider theme={theme}>
         <QueryClientProvider client={queryClient}>
-          <Router>
-            <header>
-              <Navbar />
-            </header>
-            <Routes>
-              <Route path='/' element={<Home />} />
-              <Route path='/:username' element={<Profile />} />
-              <Route path='/:username/friends' element={<Friends />} />
-              <Route path='/:username/reviews' element={<UserReviews />} />
-              <Route path='/:username/favorites' element={<FavoriteFoods />} />
-              <Route path='/:username/favorites/:favorite' element={<FavoriteFood />} />
-              <Route path='/restaurants/:restaurantId' element={<Restaurant />} />
-              <Route path='/register' element={<Register />} />
-              <Route path='/login' element={<Login />} />
-              <Route path='/writeareview/:restaurantName' element={<NewReviewForm />} />
-            </Routes>
-          </Router>
+          <UserProvider>
+            <Router>
+              <header>
+                <Navbar />
+              </header>
+              <Routes>
+                <Route path='/' element={<Home />} />
+                <Route
+                  path='/:username'
+                  element={
+                    <PrivateRoute>
+                      <Profile />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path='/:username/friends'
+                  element={
+                    <PrivateRoute>
+                      <Friends />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path='/:username/reviews'
+                  element={
+                    <PrivateRoute>
+                      <UserReviews />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path='/:username/favorites'
+                  element={
+                    <PrivateRoute>
+                      <FavoriteFoods />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path='/:username/favorites/:favorite'
+                  element={
+                    <PrivateRoute>
+                      <FavoriteFood />
+                    </PrivateRoute>
+                  }
+                />
+                <Route path='/restaurants/:restaurantId' element={<Restaurant />} />
+                <Route path='/register' element={<Register />} />
+                <Route path='/login' element={<Login />} />
+                <Route
+                  path='/writeareview/:restaurantName'
+                  element={
+                    <PrivateRoute>
+                      <NewReviewForm />
+                    </PrivateRoute>
+                  }
+                />
+              </Routes>
+            </Router>
+          </UserProvider>
         </QueryClientProvider>
       </ThemeProvider>
     </div>
