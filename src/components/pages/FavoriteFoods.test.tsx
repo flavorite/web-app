@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react'
+import { DragDropContext } from 'react-beautiful-dnd'
 import TestProvider from '../partials/TestProvider'
 import FavoriteFoods from './FavoriteFoods'
 
@@ -17,6 +18,7 @@ jest.mock('../../hooks/useFavorites', () => {
     return {
       loading: false,
       error: 'there is an error in fetching favorites',
+      success: true,
       favorites: [
         { id: 1, name: 'sushi' },
         { id: 2, name: 'pizza' },
@@ -40,6 +42,30 @@ jest.mock('../../hooks/useUpdateFavorites', () => {
   }
 })
 
+jest.mock('react-beautiful-dnd', () => ({
+  Droppable: ({ children }: any) =>
+    children(
+      {
+        draggableProps: {
+          style: {},
+        },
+        innerRef: jest.fn(),
+      },
+      {},
+    ),
+  Draggable: ({ children }: any) =>
+    children(
+      {
+        draggableProps: {
+          style: {},
+        },
+        innerRef: jest.fn(),
+      },
+      {},
+    ),
+  DragDropContext: ({ children }: any) => children,
+}))
+
 describe('FavoriteFoods', () => {
   test('renders without crashing and displays a list of favorite foods from user data', () => {
     render(
@@ -57,6 +83,7 @@ describe('FavoriteFoods', () => {
         <FavoriteFoods />
       </TestProvider>,
     )
+    screen.debug()
   })
 
   test('if error in fetching favorites or updating favoriteFoods, should display error message', () => {

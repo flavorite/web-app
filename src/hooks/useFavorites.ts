@@ -19,6 +19,7 @@ export default function useFavorites(username: GetFavoriteFoodsRequest) {
     // user: userData.data
     loading: false,
     error: null,
+    success: true,
     favorites: favorites.favoriteFoods,
   }
 }

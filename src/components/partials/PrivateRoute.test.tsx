@@ -39,7 +39,11 @@ describe('PrivateRoute', () => {
             clearUser: jest.fn(),
           }}
         >
-          <PrivateRoute />
+          <Routes>
+            <Route path='/' element={<PrivateRoute />}>
+              <Route path='/' element={<MockOutlet />} />
+            </Route>
+          </Routes>
         </UserContext.Provider>
       </TestProvider>,
     )

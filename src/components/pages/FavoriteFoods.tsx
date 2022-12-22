@@ -15,7 +15,7 @@ export default function FavoriteFoods() {
   const { username } = useOutletContext<LoginPayload>()
   const { favorites, loading: loadingFavorites, error: errorFavorites } = useFavorites({ username })
   const { error: errorUpdateFavorites, mutate: updateFavorites } = useUpdateFavorites()
-  console.log(username)
+
   const favoritesList = favorites.map(({ id, name }, idx) => {
     return (
       <Draggable key={id} draggableId={`${id}`} index={idx}>
