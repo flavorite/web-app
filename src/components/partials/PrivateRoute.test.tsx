@@ -24,6 +24,7 @@ describe('PrivateRoute', () => {
                 </PrivateRoute>
               }
             />
+            <Route path='/login' element={<>loginpage</>} />
           </Routes>
         </UserContext.Provider>
       </TestProvider>,
@@ -42,7 +43,7 @@ describe('PrivateRoute', () => {
             clearUser: jest.fn(),
           }}
         >
-          {/* <Routes>
+          <Routes>
             <Route
               path='/'
               element={
@@ -51,10 +52,8 @@ describe('PrivateRoute', () => {
                 </PrivateRoute>
               }
             />
-          </Routes> */}
-          <PrivateRoute>
-            <>Children</>
-          </PrivateRoute>
+            <Route path='/login' element={<>loginpage</>} />
+          </Routes>
         </UserContext.Provider>
       </TestProvider>,
     )
