@@ -9,17 +9,12 @@ type privateProps = {
 const PrivateRoute: React.FC<privateProps> = ({ children }) => {
   const location = useLocation()
   const { currentUser } = useContext(UserContext)
-  console.log(currentUser)
 
-  return (
-    <>
-      {currentUser ? (
-        <>{children}</>
-      ) : (
-        <Navigate to='/login' state={{ redirectTo: location.pathname }} />
-      )}
-    </>
-  )
+  if (!currentUser) {
+    return <Navigate to='/login' state={{ redirectTo: location.pathname }} />
+  }
+
+  return <>{<>{children}</>}</>
 }
 
 export default PrivateRoute

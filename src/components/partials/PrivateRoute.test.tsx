@@ -17,7 +17,7 @@ describe('PrivateRoute', () => {
         >
           <Routes>
             <Route
-              path='/test/private'
+              path='/'
               element={
                 <PrivateRoute>
                   <>Children</>
@@ -29,8 +29,7 @@ describe('PrivateRoute', () => {
       </TestProvider>,
     )
 
-    // expect(await screen.findByText('Children')).toBeInTheDocument()
-    expect(screen.findByText('Children')).toBeInTheDocument()
+    expect(screen.getByText('Children')).toBeInTheDocument()
   })
 
   test('should reroute to Login page if UserAuth is not verified', () => {
@@ -43,20 +42,23 @@ describe('PrivateRoute', () => {
             clearUser: jest.fn(),
           }}
         >
-          <Routes>
+          {/* <Routes>
             <Route
-              path='/test/private'
+              path='/'
               element={
                 <PrivateRoute>
                   <>Children</>
                 </PrivateRoute>
               }
             />
-          </Routes>
+          </Routes> */}
+          <PrivateRoute>
+            <>Children</>
+          </PrivateRoute>
         </UserContext.Provider>
       </TestProvider>,
     )
-    // expect(await screen.findByText('Children')).not.toBeInTheDocument()
-    // expect(location.pathname).toEqual('/login')
+
+    expect(location.pathname).toEqual('/login')
   })
 })
