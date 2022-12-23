@@ -32,18 +32,57 @@ function App() {
               </header>
               <Routes>
                 <Route path='/' element={<Home />} />
-                <Route path='/' element={<PrivateRoute />}>
-                  <Route path='/:username' element={<Profile />} />
-                  <Route path='/:username/friends' element={<Friends />} />
-                  <Route path='/:username/reviews' element={<UserReviews />} />
-                  <Route path='/:username/favorites' element={<FavoriteFoods />} />
-                  <Route path='/:username/favorites/:favorite' element={<FavoriteFood />} />
-                  <Route path='/writeareview/:restaurantName' element={<NewReviewForm />} />
-                </Route>
-
+                <Route
+                  path='/:username'
+                  element={
+                    <PrivateRoute>
+                      <Profile />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path='/:username/friends'
+                  element={
+                    <PrivateRoute>
+                      <Friends />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path='/:username/reviews'
+                  element={
+                    <PrivateRoute>
+                      <UserReviews />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path='/:username/favorites'
+                  element={
+                    <PrivateRoute>
+                      <FavoriteFoods />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path='/:username/favorites/:favorite'
+                  element={
+                    <PrivateRoute>
+                      <FavoriteFood />
+                    </PrivateRoute>
+                  }
+                />
                 <Route path='/restaurants/:restaurantId' element={<Restaurant />} />
                 <Route path='/register' element={<Register />} />
                 <Route path='/login' element={<Login />} />
+                <Route
+                  path='/writeareview/:restaurantName'
+                  element={
+                    <PrivateRoute>
+                      <NewReviewForm />
+                    </PrivateRoute>
+                  }
+                />
               </Routes>
             </Router>
           </UserProvider>

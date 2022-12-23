@@ -1,14 +1,20 @@
 import { useContext } from 'react'
-import { Navigate, Outlet } from 'react-router-dom'
-import { UserContext, UserContextType } from './UserContext'
+import { Navigate, useLocation } from 'react-router-dom'
+import { UserContext } from './UserContext'
 
-const PrivateRoute = () => {
-  const { currentUser } = useContext(UserContext) as UserContextType
+type privateProps = {
+  children: React.ReactElement
+}
+
+const PrivateRoute: React.FC<privateProps> = ({ children }) => {
+  const location = useLocation()
+  const { currentUser } = useContext(UserContext)
+  console.log(currentUser)
 
   return (
     <>
       {currentUser ? (
-        <Outlet context={{ username: currentUser.username }} />
+        <>{children}</>
       ) : (
         <Navigate to='/login' state={{ redirectTo: location.pathname }} />
       )}

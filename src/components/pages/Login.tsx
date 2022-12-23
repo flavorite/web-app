@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router'
 import { LoginUser } from '../../client/flavorite/models'
 import useLoginUser from '../../hooks/useLoginUser'
 import Spinner from '../partials/Spinner'
-import { UserContext, UserContextType } from '../partials/UserContext'
+import { UserContext } from '../partials/UserContext'
 
 function Copyright(props: any) {
   return (
@@ -39,7 +39,7 @@ export default function Login() {
     user: loggedInUser,
   } = useLoginUser()
 
-  const { setUser } = useContext(UserContext) as UserContextType
+  const { setUser } = useContext(UserContext)
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()

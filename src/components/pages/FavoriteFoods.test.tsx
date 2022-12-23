@@ -1,17 +1,9 @@
-import { render, screen } from '@testing-library/react'
-import { DragDropContext } from 'react-beautiful-dnd'
+import { fireEvent, render, screen } from '@testing-library/react'
 import TestProvider from '../partials/TestProvider'
+import { UserContext } from '../partials/UserContext'
 import FavoriteFoods from './FavoriteFoods'
 
 const mockUpdateFoods = jest.fn()
-
-const mockContextData = {
-  username: 'kitty',
-}
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useOutletContext: () => mockContextData,
-}))
 
 jest.mock('../../hooks/useFavorites', () => {
   return () => {
@@ -67,23 +59,48 @@ jest.mock('react-beautiful-dnd', () => ({
 }))
 
 describe('FavoriteFoods', () => {
-  test('renders without crashing and displays a list of favorite foods from user data', () => {
+  test('should render without crashing and displays a list of favorite foods from fetched data', async () => {
     render(
       <TestProvider>
         <FavoriteFoods />
       </TestProvider>,
     )
-    const draggableList = screen.getByLabelText('DraggableList-favorites')
-    expect(draggableList).toBeInTheDocument()
+    expect(await screen.findByText('sushi')).toBeInTheDocument()
+    expect(await screen.findByText('pizza')).toBeInTheDocument()
   })
 
   test('drag and drop of list items should update and display a new ordered list', async () => {
     render(
       <TestProvider>
-        <FavoriteFoods />
+        <UserContext.Provider
+          value={{
+            currentUser: { username: 'kitty', token: 'tokenString' },
+            setUser: jest.fn(),
+            clearUser: jest.fn(),
+          }}
+        >
+          <FavoriteFoods />
+        </UserContext.Provider>
       </TestProvider>,
     )
-    screen.debug()
+
+    // TODO test react-beautiful-dnd drag/drop functionality and updateFavorites result
+    const sushi = await screen.findByText('sushi')
+    const SPACE = { keyCode: 40 }
+    const ARROW_DOWN = { keyCode: 32 }
+    fireEvent.keyDown(sushi, SPACE) // Begins the drag
+    fireEvent.keyDown(sushi, ARROW_DOWN) // Moves the element
+    fireEvent.keyDown(sushi, SPACE) // Ends drag and drop
+
+    // expect(mockUpdateFoods).toBeCalledWith({
+    //   username: 'kitty',
+    //   listFavoriteFoods: {
+    //     favoriteFoods: [
+    //       { id: 1, name: 'pizza' },
+    //       { id: 2, name: 'sushi' },
+    //     ],
+    //   },
+    // })
   })
 
   test('if error in fetching favorites or updating favoriteFoods, should display error message', () => {

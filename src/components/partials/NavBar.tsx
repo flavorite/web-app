@@ -12,10 +12,10 @@ import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
 import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router'
-import { UserContext, UserContextType } from './UserContext'
+import { UserContext } from './UserContext'
 
 export default function Navbar() {
-  const { currentUser, clearUser } = useContext(UserContext) as UserContextType
+  const { currentUser, clearUser } = useContext(UserContext)
   const settings = ['Profile', 'Find Friends', 'Logout']
   const pages = ['Login', 'Register']
   const navigate = useNavigate()
@@ -41,11 +41,11 @@ export default function Navbar() {
   const handleCloseUserMenu = (e: any) => {
     setAnchorElUser(null)
     if (e.target.textContent === 'Profile') {
-      navigate(`/${currentUser ? currentUser.username : ''}`)
+      navigate(`/${currentUser!.username}`)
     } else if (e.target.textContent === 'Logout') {
       clearUser()
     } else if (e.target.textContent === 'Find Friends') {
-      navigate(`/${currentUser ? currentUser.username : ''}/friends`)
+      navigate(`/${currentUser!.username}/friends`)
     }
   }
 
