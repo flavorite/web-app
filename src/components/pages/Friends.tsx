@@ -58,7 +58,8 @@ export default function Friends() {
               <Switch
                 checked={enabled}
                 onChange={handleToggle}
-                inputProps={{ 'aria-label': 'controlled' }}
+                inputProps={{ 'aria-label': 'Toggle Friends' }}
+                name='toggleFriends'
               />
             }
             label={enabled ? 'FB friends enabled' : 'Enable FB Friends'}
@@ -72,7 +73,7 @@ export default function Friends() {
           ''
         )}
         <Box>
-          <Typography role='error-message'>
+          <Typography role='error-message-getFriends'>
             {errorFetchingFriends ? `${errorFetchingFriends}` : ''}
           </Typography>
           <Stack spacing={2}>{friendsList}</Stack>
