@@ -22,7 +22,7 @@ export default function FavoriteFoods() {
   } = useFavorites({ username: username })
   const { error: errorUpdateFavorites, mutate: updateFavorites } = useUpdateFavorites()
 
-  const favoritesList = favorites.map(({ id, name }, idx) => {
+  const favoritesList = favorites.map(({ id, name: foodName }, idx) => {
     return (
       <Draggable key={id} draggableId={`${id}`} index={idx}>
         {(provided) => (
@@ -33,7 +33,7 @@ export default function FavoriteFoods() {
             {...provided.dragHandleProps}
           >
             <Typography>
-              {id}.<Link to={`/${username}/favorites/${name}`}>{name}</Link>
+              {id}.<Link to={`/${username}/reviews/${foodName}`}>{foodName}</Link>
             </Typography>
           </Stack>
         )}

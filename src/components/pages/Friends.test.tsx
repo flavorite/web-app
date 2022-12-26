@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'
 import TestProvider from '../partials/TestProvider'
 import Friends from './Friends'
 
-const mockAddFavorites = jest.fn()
+const mockUpdateFriends = jest.fn()
 
 jest.mock('../../hooks/useFriends', () => {
   return () => {

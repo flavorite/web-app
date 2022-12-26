@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import TestProvider from '../partials/TestProvider'
 import { UserContext } from '../partials/UserContext'
 import FavoriteFoods from './FavoriteFoods'
@@ -55,7 +55,7 @@ jest.mock('react-beautiful-dnd', () => ({
       },
       {},
     ),
-  DragDropContext: ({ children }: any) => children,
+  DragDropContext: ({ onDragEnd }: any) => onDragEnd,
 }))
 
 describe('FavoriteFoods', () => {
@@ -85,21 +85,21 @@ describe('FavoriteFoods', () => {
     )
 
     // TODO test react-beautiful-dnd drag/drop functionality and updateFavorites result
-    const sushi = await screen.findByText('sushi')
-    const SPACE = { keyCode: 40 }
-    const ARROW_DOWN = { keyCode: 32 }
-    fireEvent.keyDown(sushi, SPACE) // Begins the drag
-    fireEvent.keyDown(sushi, ARROW_DOWN) // Moves the element
-    fireEvent.keyDown(sushi, SPACE) // Ends drag and drop
+    //   const sushi = await screen.findByText('sushi')
+    //   const SPACE = { keyCode: 40 }
+    //   const ARROW_DOWN = { keyCode: 32 }
+    //   fireEvent.keyDown(sushi, SPACE) // Begins the drag
+    //   fireEvent.keyDown(sushi, ARROW_DOWN) // Moves the element
+    //   fireEvent.keyDown(sushi, SPACE) // Ends drag and drop
 
-    // expect(mockUpdateFoods).toBeCalledWith({
-    //   username: 'kitty',
-    //   listFavoriteFoods: {
-    //     favoriteFoods: [
-    //       { id: 1, name: 'pizza' },
-    //       { id: 2, name: 'sushi' },
-    //     ],
-    //   },
+    //   expect(mockUpdateFoods).toBeCalledWith({
+    //     username: 'kitty',
+    //     listFavoriteFoods: {
+    //       favoriteFoods: [
+    //         { id: 1, name: 'pizza' },
+    //         { id: 2, name: 'sushi' },
+    //       ],
+    //     },
     // })
   })
 

@@ -1,19 +1,21 @@
-import useReviewsByUser from '../../hooks/useReviewsByUser'
+import Autocomplete from '@mui/material/Autocomplete'
 import Container from '@mui/material/Container'
-import Box from '@mui/material/Box'
-import Stack from '@mui/material/Stack'
+import TextField from '@mui/material/TextField'
+import UserReviewsByFood from '../partials/UserReviewsByFood'
 
-export default function UserReviews() {
-  // TODO: Need to obtain username from User login
-  const username = 'kitty'
-  const { reviews, loading, error } = useReviewsByUser({ username })
-
-  const reviewsData = reviews.map((review, id) => {
-    return <Stack key={id}>{review.content}</Stack>
-  })
+export default function FavoriteFood() {
+  // TODO: replace with favoritefoods from useUser
+  const favorites = ['sushi', 'french fries', 'Bibimbap']
   return (
-    <Container>
-      <Box>{reviewsData}</Box>
+    <Container fixed>
+      {/* TODO: enable user to switch views for different favorite by selecting from this autocomplete field */}
+      <Autocomplete
+        disablePortal
+        options={favorites}
+        sx={{ width: 300 }}
+        renderInput={(params) => <TextField {...params} label='Favorite Dishes' />}
+      />
+      <UserReviewsByFood />
     </Container>
   )
 }
