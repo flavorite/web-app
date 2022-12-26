@@ -12,10 +12,10 @@ import NewReviewForm from './components/pages/NewReviewForm'
 import Profile from './components/pages/Profile'
 import Register from './components/pages/Register'
 import Restaurant from './components/pages/Restaurant'
+import UserReviews from './components/pages/UserReviews'
 import Navbar from './components/partials/NavBar'
 import PrivateRoute from './components/partials/PrivateRoute'
 import { UserProvider } from './components/partials/UserContext'
-import UserReviews from './components/partials/UserReviewsByFood'
 
 function App() {
   const theme = createTheme()
