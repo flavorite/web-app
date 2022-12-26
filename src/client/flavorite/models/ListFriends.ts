@@ -13,42 +13,42 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import {
+    User,
+    UserFromJSON,
+    UserFromJSONTyped,
+    UserToJSON,
+} from './';
+
 /**
  * 
  * @export
- * @interface LoginUser
+ * @interface ListFriends
  */
-export interface LoginUser {
+export interface ListFriends {
     /**
      * 
-     * @type {string}
-     * @memberof LoginUser
+     * @type {Array<User>}
+     * @memberof ListFriends
      */
-    email: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof LoginUser
-     */
-    password: string;
+    friends: Array<User>;
 }
 
-export function LoginUserFromJSON(json: any): LoginUser {
-    return LoginUserFromJSONTyped(json, false);
+export function ListFriendsFromJSON(json: any): ListFriends {
+    return ListFriendsFromJSONTyped(json, false);
 }
 
-export function LoginUserFromJSONTyped(json: any, ignoreDiscriminator: boolean): LoginUser {
+export function ListFriendsFromJSONTyped(json: any, ignoreDiscriminator: boolean): ListFriends {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'email': json['email'],
-        'password': json['password'],
+        'friends': ((json['friends'] as Array<any>).map(UserFromJSON)),
     };
 }
 
-export function LoginUserToJSON(value?: LoginUser | null): any {
+export function ListFriendsToJSON(value?: ListFriends | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -57,8 +57,7 @@ export function LoginUserToJSON(value?: LoginUser | null): any {
     }
     return {
         
-        'email': value.email,
-        'password': value.password,
+        'friends': ((value.friends as Array<any>).map(UserToJSON)),
     };
 }
 

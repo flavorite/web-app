@@ -1,131 +1,160 @@
 openapi: 3.0.3
 info:
-  description: 'This is a Flavorite Server based on the OpenAPI 3.0 specification. '
   title: Flavorite - OpenAPI 3.0
-  version: 1.0.1
+  description: >-
+    This is a Flavorite Server based on the OpenAPI 3.0 specification.
+  version: 1.1.0
 servers:
   - url: https://localhost:8080/api/v1
 tags:
-  - description: User's post of reviews for restaurants that serve one or more of their
-      favorite dishes
-    name: reviews
-  - description: All restaurants that have reviews from users
-    name: restaurants
-  - description: Operations about users
-    name: users
+  - name: reviews
+    description: User's post of reviews for restaurants that serve one or more of their favorite dishes
+  - name: restaurants
+    description: All restaurants that have reviews from users
+  - name: users
+    description: Operations about users
 paths:
   /reviews:
     post:
+      tags:
+        - reviews
+      summary: Add a new review about a restaurant
       description: Add a new review about a restaurant
       operationId: addReview
       requestBody:
         $ref: '#/components/requestBodies/CreateReview'
       responses:
         '200':
+          description: Successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Review'
-          description: Successful operation
         '405':
           description: Invalid input
-      summary: Add a new review about a restaurant
-      tags:
-        - reviews
+
   /reviews/{reviewId}:
-    delete:
-      description: delete a review
-      operationId: deleteReview
-      parameters:
-        - description: Review id to delete
-          explode: false
-          in: path
-          name: reviewId
-          required: true
-          schema:
-            format: int64
-            type: integer
-          style: simple
-      responses:
-        '204':
-          description: Successful operation
-        '400':
-          description: Invalid review value
-      summary: Deletes a review
+    get:
       tags:
         - reviews
-    get:
+      summary: Find review by ID
       description: Returns a single review
       operationId: getReviewById
       parameters:
-        - description: ID of review to return
-          explode: false
+        - name: reviewId
           in: path
-          name: reviewId
+          description: ID of review to return
           required: true
           schema:
-            format: int64
             type: integer
-          style: simple
+            format: int64
       responses:
         '200':
+          description: successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Review'
-          description: successful operation
         '400':
           description: Invalid ID supplied
         '404':
           description: Review not found
-      summary: Find review by ID
+    put:
       tags:
         - reviews
-    put:
+      summary: Update an existing review
       description: Update an existing review by Id
       operationId: updateReviewbyId
       parameters:
-        - description: ID of review to return
-          explode: false
+        - name: reviewId
           in: path
-          name: reviewId
+          description: ID of review to return
           required: true
           schema:
-            format: int64
             type: integer
-          style: simple
+            format: int64
       requestBody:
         $ref: '#/components/requestBodies/UpdateReview'
       responses:
         '200':
+          description: Successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Review'
-          description: Successful operation
         '400':
           description: Invalid ID supplied
         '404':
           description: Review not found
         '405':
           description: Validation exception
-      summary: Update an existing review
+    delete:
       tags:
         - reviews
+      summary: Deletes a review
+      description: delete a review
+      operationId: deleteReview
+      parameters:
+        - name: reviewId
+          in: path
+          description: Review id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Successful operation
+        '400':
+          description: Invalid review value
   /reviews/{reviewId}/image:
+    post:
+      tags:
+        - reviews
+      summary: uploads an image
+      description: ''
+      operationId: uploadImage
+      parameters:
+        - name: reviewId
+          in: path
+          description: ID of review to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: additionalMetadata
+          in: query
+          description: Additional Metadata
+          required: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
     delete:
+      tags:
+        - reviews
+      summary: deletes an image
       description: ''
       operationId: deleteImage
       parameters:
-        - description: ID of review to update
-          explode: false
+        - name: reviewId
           in: path
-          name: reviewId
+          description: ID of review to update
           required: true
           schema:
-            format: int64
             type: integer
-          style: simple
+            format: int64
       responses:
         '204':
           description: Successful operation
@@ -133,174 +162,171 @@ paths:
           description: Invalid ID supplied
         '404':
           description: Review or image not found
-      summary: deletes an image
-      tags:
-        - reviews
-    post:
-      description: ''
-      operationId: uploadImage
-      parameters:
-        - description: ID of review to update
-          explode: false
-          in: path
-          name: reviewId
-          required: true
-          schema:
-            format: int64
-            type: integer
-          style: simple
-        - description: Additional Metadata
-          explode: true
-          in: query
-          name: additionalMetadata
-          required: false
-          schema:
-            type: string
-          style: form
-      requestBody:
-        content:
-          application/octet-stream:
-            schema:
-              format: binary
-              type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-          description: successful operation
-      summary: uploads an image
-      tags:
-        - reviews
   /restaurants:
     get:
+      tags:
+        - restaurants
+      summary: Find restaurants in user location given
       description: Returns all restauarants in given location radius
       operationId: getRestaurants
       parameters:
-        - description: longitude of center
-          explode: true
+        - name: longitude
           in: query
-          name: longitude
+          description: longitude of center
           required: true
           schema:
-            format: double
             type: number
-          style: form
-        - description: latitude of center
-          explode: true
-          in: query
-          name: latitude
-          required: true
-          schema:
             format: double
-            type: number
-          style: form
-        - description: radius
-          explode: true
+        - name: latitude
           in: query
-          name: radius
+          description: latitude of center
           required: true
           schema:
-            format: int64
+            type: number
+            format: double
+        - name: radius
+          in: query
+          description: radius
+          required: true
+          schema:
             type: integer
-          style: form
+            format: int64
       responses:
         '200':
+          description: successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ListRestaurants'
-          description: successful operation
         '400':
           description: Invalid query supplied
-      summary: Find restaurants in user location given
-      tags:
-        - restaurants
   /restaurants/{restaurantId}/reviews:
     get:
+      tags:
+        - restaurants
+      summary: Find reviews by restaurant
       description: Returns all reviews for a single restaurant
       operationId: getReviewByRestaurant
       parameters:
-        - description: ID of restaurant to return all reviews for a single restaurant
-          explode: false
+        - name: restaurantId
           in: path
-          name: restaurantId
+          description: ID of restaurant to return all reviews for a single restaurant
           required: true
           schema:
-            format: int64
             type: integer
-          style: simple
+            format: int64
       responses:
         '200':
+          description: Successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ListReviews'
-          description: Successful operation
         '400':
           description: Invalid ID supplied
-      summary: Find reviews by restaurant
-      tags:
-        - restaurants
   /users:
     post:
+      tags:
+        - users
+      summary: Create user
       description: This can only be done by the logged in user.
       operationId: createUser
       requestBody:
         $ref: '#/components/requestBodies/CreateUser'
       responses:
         '200':
+          description: successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-          description: successful operation
-      summary: Create user
-      tags:
-        - users
+        '409':
+          description: Username already exists
   /users/login:
     post:
+      tags:
+        - users
+      summary: Logs user into the system
       description: ''
       operationId: loginUser
       requestBody:
         $ref: '#/components/requestBodies/LoginUser'
       responses:
         '200':
+          description: successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/LoginPayload'
-          description: successful operation
         '400':
           description: Invalid username/password supplied
-      summary: Logs user into the system
-      tags:
-        - users
   /users/logout:
     post:
+      tags:
+        - users
+      summary: Logs out current logged in user session
       description: ''
       operationId: logoutUser
       parameters: []
       responses:
         '204':
           description: successful operation
-      summary: Logs out current logged in user session
+  /users/{username}:
+    get:
       tags:
         - users
-  /users/{username}:
-    delete:
-      description: This can only be done by the logged in user.
-      operationId: deleteUser
+      summary: Get user by user name
+      description: ''
+      operationId: getUserByName
       parameters:
-        - description: Name of user that needs to be deleted
-          explode: false
+        - name: username
           in: path
-          name: username
+          description: 'The name that needs to be fetched. Use user1 for testing. '
           required: true
           schema:
             type: string
-          style: simple
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid username supplied
+        '404':
+          description: User not found
+    put:
+      tags:
+        - users
+      summary: Update user
+      description: This can only be done by the logged in user.
+      operationId: updateUser
+      parameters:
+        - name: username
+          in: path
+          description: Name of user that need to be updated
+          required: true
+          schema:
+            type: string
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateUser'
+      responses:
+        default:
+          description: successful operation
+    delete:
+      tags:
+        - users
+      summary: Delete user
+      description: This can only be done by the logged in user.
+      operationId: deleteUser
+      parameters:
+        - name: username
+          in: path
+          description: Name of user that needs to be deleted
+          required: true
+          schema:
+            type: string
       responses:
         '204':
           description: Successful operation
@@ -308,614 +334,414 @@ paths:
           description: Invalid username supplied
         '404':
           description: User not found
-      summary: Delete user
-      tags:
-        - users
-    get:
-      description: ''
-      operationId: getUserByName
-      parameters:
-        - description: 'The name that needs to be fetched. Use user1 for testing. '
-          explode: false
-          in: path
-          name: username
-          required: true
-          schema:
-            type: string
-          style: simple
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-          description: successful operation
-        '400':
-          description: Invalid username supplied
-        '404':
-          description: User not found
-      summary: Get user by user name
-      tags:
-        - users
-    put:
-      description: This can only be done by the logged in user.
-      operationId: updateUser
-      parameters:
-        - description: Name of user that need to be updated
-          explode: false
-          in: path
-          name: username
-          required: true
-          schema:
-            type: string
-          style: simple
-      requestBody:
-        $ref: '#/components/requestBodies/UpdateUser'
-      responses:
-        default:
-          description: successful operation
-      summary: Update user
-      tags:
-        - users
-  /users/{username}/favoritefoods:
-    put:
-      description: This can only be done by the logged in user.
-      operationId: updateFavoriteFoods
-      parameters:
-        - description: Name of user
-          explode: false
-          in: path
-          name: username
-          required: true
-          schema:
-            type: string
-          style: simple
-      requestBody:
-        $ref: '#/components/requestBodies/UpdateFoods'
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FavoriteFood'
-          description: successful operation
-        '400':
-          description: Invalid username supplied
-      summary: Update user's favorite foods
-      tags:
-        - users
   /users/{username}/reviews:
     get:
+      tags:
+        - users
+      summary: Get reviews by user name
       description: Returns all reviews by a single user
       operationId: getReviewsByUsername
       parameters:
-        - description: The name of user to return user's reviews
-          explode: false
+        - name: username
           in: path
-          name: username
+          description: The name of user to return user's reviews
           required: true
           schema:
             type: string
-          style: simple
       responses:
         '200':
+          description: successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ListReviews'
-          description: successful operation
         '400':
           description: Invalid username supplied
-      summary: Get reviews by user name
+  /users/{username}/favorite-foods:
+    get:
       tags:
         - users
+      summary: Get favorite foods of a user
+      description: ''
+      operationId: getFavoriteFoods
+      parameters:
+        - name: username
+          in: path
+          description: Name of user
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListFavoriteFoods'
+        '404':
+          description: User not found
+    put:
+      tags:
+        - users
+      summary: Update favorite foods of a user
+      description: This can only be done by the logged in user.
+      operationId: updateFavoriteFoods
+      parameters:
+        - name: username
+          in: path
+          description: Name of user
+          required: true
+          schema:
+            type: string
+      requestBody:
+        $ref: '#/components/requestBodies/ListFavoriteFoods'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListFavoriteFoods'
+        '404':
+          description: User not found
+  /users/{username}/friends:
+    get:
+      tags:
+        - users
+      summary: Get friends of a user
+      description: ''
+      operationId: getFriends
+      parameters:
+        - name: username
+          in: path
+          description: Name of user
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListFriends'
+        '404':
+          description: User not found
 components:
+  schemas:
+    Review:
+      required:
+        - id
+        - userId
+        - restaurantId
+        - rating
+        - favoriteFood
+        - starred
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        userId:
+          type: string
+          example: '198772'
+        restaurantId:
+          type: integer
+          format: int64
+          example: 19877
+        rating:
+          type: integer
+          format: int64
+          example: 5
+        content:
+          type: string
+          example: Awesome
+        photoUrl:
+          type: string
+          example: www.photouploaded.com
+        favoriteFood:
+          type: string
+          example: pizza
+        starred:
+          type: boolean
+          example: true
+    ListReviews:
+      required:
+        - reviews
+      type: object
+      properties:
+        reviews:
+          type: array
+          items:
+            $ref: '#/components/schemas/Review'
+        # nextUri: string
+        # prevUri: string
+        # total: integer
+    CreateReview:
+      required:
+        - userId
+        - restaurantId
+        - rating
+        - favoriteFood
+        - starred
+      type: object
+      properties:
+        userId:
+          type: string
+          example: '198772'
+        restaurantId:
+          type: integer
+          format: int64
+          example: 19877
+        rating:
+          type: integer
+          format: int64
+          example: 5
+        content:
+          type: string
+          example: Awesome
+        photoUrl:
+          type: string
+          example: www.photouploaded.com
+        favoriteFood:
+          type: string
+          example: pizza
+        starred:
+          type: boolean
+          example: true
+    UpdateReview:
+      type: object
+      properties:
+        rating:
+          type: integer
+          format: int64
+          example: 5
+        content:
+          type: string
+          example: Awesome
+        photoUrl:
+          type: string
+          example: www.photouploaded.com
+        favoriteFood:
+          type: string
+          example: pizza
+        starred:
+          type: boolean
+          example: true
+    User:
+      required:
+        - id
+        - username
+        - firstName
+        - lastName
+        - email
+        - password
+      type: object
+      properties:
+        id:
+          type: string
+          example: '10'
+        username:
+          type: string
+          example: theUser
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: James
+        email:
+          type: string
+          example: john@email.com
+        password:
+          type: string
+          example: '12345'
+    CreateUser:
+      required:
+        - username
+        - firstName
+        - lastName
+        - email
+        - password
+      type: object
+      properties:
+        username:
+          type: string
+          example: theUser
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: James
+        email:
+          type: string
+          example: john@email.com
+        password:
+          type: string
+          example: '12345'
+    UpdateUser:
+      type: object
+      properties:
+        username:
+          type: string
+          example: theUser
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: James
+        email:
+          type: string
+          example: john@email.com
+        password:
+          type: string
+          example: '12345'
+    LoginUser:
+      required:
+        - email
+        - password
+      type: object
+      properties:
+        email:
+          type: string
+          example: john@email.com
+        password:
+          type: string
+          example: '12345'
+    LoginPayload:
+      required:
+        - token
+        - username
+      type: object
+      properties:
+        token:
+          type: string
+          example: 'XXXXXXXX'
+        username:
+          type: string
+          example: theUser
+    Restaurant:
+      required:
+        - id
+        - name
+        - longitude
+        - latitude
+        - address
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        name:
+          type: string
+          example: Outback
+        longitude:
+          type: number
+          format: double
+          example: 32.6
+        latitude:
+          type: number
+          format: double
+          example: 49.2
+        address:
+          type: string
+          example: '120 Detroit Ave, CA 94520'
+    ListRestaurants:
+      required:
+        - restaurants
+      type: object
+      properties:
+        restaurants:
+          type: array
+          items:
+            $ref: '#/components/schemas/Restaurant'
+        # nextUri: string
+        # prevUri: string
+        # total: integer
+    FavoriteFood:
+      required:
+        - id
+        - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        name:
+          type: string
+          example: sushi
+    ListFavoriteFoods:
+      required:
+        - favoriteFoods
+      type: object
+      properties:
+        favoriteFoods:
+          type: array
+          items:
+            $ref: '#/components/schemas/FavoriteFood'
+    ListFriends:
+      required:
+        - friends
+      type: object
+      properties:
+        friends:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
   requestBodies:
     CreateReview:
+      description: Create a new review about a restaurant
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateReview'
-      description: Create a new review about a restaurant
       required: true
     UpdateReview:
+      description: Update an existent review on a restaurant
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateReview'
-      description: Update an existent review on a restaurant
       required: true
     CreateUser:
+      description: Created user object
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateUser'
-      description: Created user object
       required: true
     LoginUser:
+      description: Login information
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/LoginUser'
-      description: Login information
       required: true
     UpdateUser:
+      description: Update an existent user in the store
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateUser'
-      description: Update an existent user in the store
       required: true
-    UpdateFoods:
+    ListFavoriteFoods:
+      description: Update user's list of favorite foods
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/FavoriteFood'
-      description: Update user's list of favorite foods
-      required: true
-  schemas:
-    Review:
-      example:
-        photoUrl: www.photouploaded.com
-        rating: 5
-        id: 10
-        restaurantId: 19877
-        userId: 198772
-        content: Awesome
-        favoriteFood: Pizza
-        starred: true
-      properties:
-        id:
-          example: 10
-          format: int64
-          title: id
-          type: integer
-        userId:
-          example: 198772
-          format: int64
-          title: userId
-          type: integer
-        restaurantId:
-          example: 19877
-          format: int64
-          title: restaurantId
-          type: integer
-        rating:
-          example: 5
-          format: int64
-          title: rating
-          type: integer
-        content:
-          example: Awesome
-          title: content
-          type: string
-        photoUrl:
-          example: www.photouploaded.com
-          title: photoUrl
-          type: string
-        favoriteFood:
-          example: pizza
-          title: favoriteFood
-          type: string
-        starred:
-          example: 1
-          title: starred
-          type: boolean
-      required:
-        - id
-        - rating
-        - restaurantId
-        - userId
-        - favoriteFood
-        - starred
-      title: Review
-      type: object
-    ListReviews:
-      example:
-        reviews:
-          - photoUrl: www.photouploaded.com
-            rating: 5
-            id: 10
-            restaurantId: 19877
-            userId: 198772
-            content: Awesome
-            favoriteFood: Pizza
-            starred: true
-          - photoUrl: www.photouploaded.com
-            rating: 5
-            id: 10
-            restaurantId: 19878
-            userId: 198772
-            content: Awesome
-            favoriteFood: Pizza
-            starred: false
-      properties:
-        reviews:
-          items:
-            $ref: '#/components/schemas/Review'
-          title: reviews
-          type: array
-      required:
-        - reviews
-      title: ListReviews
-      type: object
-    CreateReview:
-      example:
-        photoUrl: www.photouploaded.com
-        rating: 5
-        id: 10
-        restaurantId: 19877
-        userId: 198772
-        content: Awesome
-        favoriteFood: Pizza
-        starred: false
-      properties:
-        userId:
-          example: 198772
-          format: int64
-          title: userId
-          type: integer
-        restaurantId:
-          example: 19877
-          format: int64
-          title: restaurantId
-          type: integer
-        rating:
-          example: 5
-          format: int64
-          title: rating
-          type: integer
-        content:
-          example: Awesome
-          title: content
-          type: string
-        photoUrl:
-          example: www.photouploaded.com
-          title: photoUrl
-          type: string
-        favoriteFood:
-          example: pizza
-          title: favoriteFood
-          type: string
-        starred:
-          example: 1
-          title: starred
-          type: boolean
-      required:
-        - rating
-        - restaurantId
-        - userId
-        - favoriteFood
-        - starred
-      title: CreateReview
-      type: object
-    UpdateReview:
-      example:
-        photoUrl: www.photouploaded.com
-        rating: 5
-        content: Awesome
-        starred: true
-      properties:
-        rating:
-          example: 5
-          format: int64
-          title: rating
-          type: integer
-        content:
-          example: Awesome
-          title: content
-          type: string
-        photoUrl:
-          example: www.photouploaded.com
-          title: photoUrl
-          type: string
-        favoriteFood:
-          example: pizza
-          title: favoriteFood
-          type: string
-        starred:
-          example: 1
-          title: starred
-          type: boolean
-      title: UpdateReview
-      type: object
-    User:
-      example:
-        firstName: John
-        lastName: James
-        password: '12345'
-        id: 10
-        email: john@email.com
-        friends:
-          - null
-          - null
-        username: theUser
-        favoriteFoods:
-          name: sushi
-          order: 10
-      properties:
-        id:
-          example: 10
-          format: int64
-          title: id
-          type: integer
-        username:
-          example: theUser
-          title: username
-          type: string
-        firstName:
-          example: John
-          title: firstName
-          type: string
-        lastName:
-          example: James
-          title: lastName
-          type: string
-        email:
-          example: john@email.com
-          title: email
-          type: string
-        password:
-          example: '12345'
-          title: password
-          type: string
-        favoriteFoods:
-          items:
-            $ref: '#/components/schemas/FavoriteFood'
-          title: favoriteFoods
-          type: array
-        friends:
-          items:
-            $ref: '#/components/schemas/User'
-          title: friends
-          type: array
-      required:
-        - email
-        - favoriteFoods
-        - firstName
-        - friends
-        - id
-        - lastName
-        - password
-        - username
-      title: User
-      type: object
-    CreateUser:
-      example:
-        firstName: John
-        lastName: James
-        password: '12345'
-        email: john@email.com
-        username: theUser
-      properties:
-        username:
-          example: theUser
-          title: username
-          type: string
-        firstName:
-          example: John
-          title: firstName
-          type: string
-        lastName:
-          example: James
-          title: lastName
-          type: string
-        email:
-          example: john@email.com
-          title: email
-          type: string
-        password:
-          example: '12345'
-          title: password
-          type: string
-      required:
-        - email
-        - firstName
-        - lastName
-        - password
-        - username
-      title: CreateUser
-      type: object
-    UpdateUser:
-      example:
-        firstName: John
-        lastName: James
-        password: '12345'
-        email: john@email.com
-        friends:
-          - firstName: John
-            lastName: James
-            password: '12345'
-            id: 10
-            email: john@email.com
-            friends:
-              - null
-              - null
-            username: theUser
-            favoriteFoods:
-              name: sushi
-              order: 10
-          - firstName: John
-            lastName: James
-            password: '12345'
-            id: 10
-            email: john@email.com
-            friends:
-              - null
-              - null
-            username: theUser
-            favoriteFoods:
-              name: sushi
-              order: 10
-        username: theUser
-        favoriteFoods:
-          name: sushi
-          order: 10
-      properties:
-        username:
-          example: theUser
-          title: username
-          type: string
-        firstName:
-          example: John
-          title: firstName
-          type: string
-        lastName:
-          example: James
-          title: lastName
-          type: string
-        email:
-          example: john@email.com
-          title: email
-          type: string
-        password:
-          example: '12345'
-          title: password
-          type: string
-        favoriteFoods:
-          items:
-            $ref: '#/components/schemas/FavoriteFood'
-          title: favoriteFoods
-          type: array
-        friends:
-          items:
-            $ref: '#/components/schemas/User'
-          title: friends
-          type: array
-      title: UpdateUser
-      type: object
-    LoginUser:
-      example:
-        password: '12345'
-        email: john@email.com
-      properties:
-        email:
-          example: john@email.com
-          title: email
-          type: string
-        password:
-          example: '12345'
-          title: password
-          type: string
-      required:
-        - email
-        - password
-      title: LoginUser
-      type: object
-    LoginPayload:
-      example:
-        token: XXXXXXXX
-        username: theUser
-      properties:
-        token:
-          example: XXXXXXXX
-          title: token
-          type: string
-        username:
-          example: theUser
-          title: username
-          type: string
-      required:
-        - token
-        - username
-      title: LoginPayload
-      type: object
-    Restaurant:
-      example:
-        address: '120 Detroit Ave, CA 94520'
-        latitude: 49.2
-        name: Outback
-        id: 10
-        longitude: 32.6
-      properties:
-        id:
-          example: 10
-          format: int64
-          title: id
-          type: integer
-        name:
-          example: Outback
-          title: name
-          type: string
-        longitude:
-          example: 32.6
-          format: double
-          title: longitude
-          type: number
-        latitude:
-          example: 49.2
-          format: double
-          title: latitude
-          type: number
-        address:
-          example: '120 Detroit Ave, CA 94520'
-          title: address
-          type: string
-      required:
-        - address
-        - id
-        - latitude
-        - longitude
-        - name
-      title: Restaurant
-      type: object
-    ListRestaurants:
-      example:
-        restaurants:
-          - address: '120 Detroit Ave, CA 94520'
-            latitude: 49.2
-            name: Outback
-            id: 10
-            longitude: 32.6
-          - address: '120 Detroit Ave, CA 94520'
-            latitude: 49.2
-            name: Outback
-            id: 10
-            longitude: 32.6
-      properties:
-        restaurants:
-          items:
-            $ref: '#/components/schemas/Restaurant'
-          title: restaurants
-          type: array
-      required:
-        - restaurants
-      title: ListRestaurants
-      type: object
-    FavoriteFood:
-      example:
-        name: sushi
-        id: 10
-      properties:
-        id:
-          example: 10
-          format: int64
-          title: id
-          type: integer
-        name:
-          example: sushi
-          title: name
-          type: string
-      required:
-        - id
-        - name
-      title: FavoriteFood
-      type: object
-    ApiResponse:
-      example:
-        code: 0
-        type: type
-        message: message
-      properties:
-        code:
-          format: int32
-          title: code
-          type: integer
-        type:
-          title: type
-          type: string
-        message:
-          title: message
-          type: string
-      title: ApiResponse
-      type: object
+            $ref: '#/components/schemas/ListFavoriteFoods'

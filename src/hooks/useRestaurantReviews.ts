@@ -10,7 +10,7 @@ export default function useRestaurantReviews(restaurantId: GetReviewByRestaurant
     reviews: [
       {
         id: 1,
-        userId: 2,
+        userId: '2',
         restaurantId: 1,
         content: 'this is a good restaurant',
         rating: 5,
@@ -19,7 +19,7 @@ export default function useRestaurantReviews(restaurantId: GetReviewByRestaurant
       },
       {
         id: 2,
-        userId: 1,
+        userId: '1',
         restaurantId: 1,
         content: 'pretty good',
         rating: 4,

@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react'
+import { Route, Routes } from 'react-router-dom'
 import { UserContext } from '../partials/UserContext'
 import PrivateRoute from './PrivateRoute'
 import TestProvider from './TestProvider'
@@ -14,9 +15,17 @@ describe('PrivateRoute', () => {
             clearUser: jest.fn(),
           }}
         >
-          <PrivateRoute>
-            <>Children</>
-          </PrivateRoute>
+          <Routes>
+            <Route
+              path='/'
+              element={
+                <PrivateRoute>
+                  <>Children</>
+                </PrivateRoute>
+              }
+            />
+            <Route path='/login' element={<>loginpage</>} />
+          </Routes>
         </UserContext.Provider>
       </TestProvider>,
     )
@@ -34,13 +43,21 @@ describe('PrivateRoute', () => {
             clearUser: jest.fn(),
           }}
         >
-          <PrivateRoute>
-            <>Children</>
-          </PrivateRoute>
+          <Routes>
+            <Route
+              path='/'
+              element={
+                <PrivateRoute>
+                  <>Children</>
+                </PrivateRoute>
+              }
+            />
+            <Route path='/login' element={<>loginpage</>} />
+          </Routes>
         </UserContext.Provider>
       </TestProvider>,
     )
-    expect(screen.getByText('Children')).not.toBeInTheDocument()
+
     expect(location.pathname).toEqual('/login')
   })
 })

@@ -10,7 +10,7 @@ export default function useReviewsByUser(username: GetUserByNameRequest) {
     reviews: [
       {
         id: 1,
-        userId: 1,
+        userId: '1',
         restaurantId: 1,
         content: 'one of my favs',
         rating: 5,
@@ -19,7 +19,7 @@ export default function useReviewsByUser(username: GetUserByNameRequest) {
       },
       {
         id: 2,
-        userId: 1,
+        userId: '1',
         restaurantId: 2,
         content: 'So So',
         rating: 3,

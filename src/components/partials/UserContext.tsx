@@ -7,11 +7,23 @@ export type UserContextType = {
   clearUser: () => void
 }
 
-const UserContext = createContext<UserContextType | null>(null)
+const UserContext = createContext<UserContextType>({
+  currentUser: null,
+  setUser: () => undefined,
+  clearUser: () => undefined,
+})
 
 const UserProvider = ({ children }: { children: React.ReactElement }) => {
   // User is the name of the "data" that gets stored in context
-  const [currentUser, setCurrentUser] = useState<UserContextType['currentUser']>(null)
+  const [currentUser, setCurrentUser] = useState<UserContextType['currentUser']>({
+    username: 'kitty',
+    token: 't',
+  })
+
+  // {
+  //   username: 'kitty',
+  //   token: 't',
+  // }
 
   // Login updates the user data with a name parameter
   const setUser = (loginData: LoginPayload) => {

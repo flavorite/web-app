@@ -23,7 +23,8 @@
     "spaced-comment": "error",
     "quotes": ["error", "single"],
     "no-duplicate-imports": "error",
-    "react/prop-types": "off"
+    "react/prop-types": "off",
+    "@typescript-eslint/no-non-null-assertion": "off"
   },
   "settings": {
     "import/resolver": {
