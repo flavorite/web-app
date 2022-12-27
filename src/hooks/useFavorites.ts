@@ -13,6 +13,11 @@ export default function useFavorites(username: GetFavoriteFoodsRequest) {
     ],
   }
 
+  const favoriteNames = favorites.favoriteFoods.map((food) => {
+    return food.name
+  })
+
+
   return {
     // loading: userData.isLoading,
     // error: userData.isError,
@@ -21,5 +26,6 @@ export default function useFavorites(username: GetFavoriteFoodsRequest) {
     error: null,
     success: true,
     favorites: favorites.favoriteFoods,
+    favoriteNames: favoriteNames,
   }
 }

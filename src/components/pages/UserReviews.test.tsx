@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, within } from '@testing-library/react'
 import TestProvider from '../partials/TestProvider'
 import UserReviews from './UserReviews'
 
@@ -17,17 +17,33 @@ jest.mock('../../hooks/useFavorites', () => {
 })
 
 describe('UserReviews', () => {
-  test('renders selection box and reviews without crashing', () => {
+  test('renders autocomplete box and reviews without crashing', () => {
     render(
       <TestProvider>
         <UserReviews />
       </TestProvider>,
     )
-    const selectBox = screen.getByLabelText('selectFavs')
-    expect(selectBox).toBeInTheDocument()
+    const autocomplete = screen.getByLabelText('selectFavs')
+    expect(autocomplete).toBeInTheDocument()
 
     const reviewsBox = screen.getByLabelText('reviews-list')
     expect(reviewsBox).toBeInTheDocument()
+  })
+  test('autocomplete box should change input value based on user selection', async () => {
+    render(
+      <TestProvider>
+        <UserReviews />
+      </TestProvider>,
+    )
+    const autocomplete = screen.getByLabelText('selectFavs')
+    const input = within(autocomplete).getByRole('combobox')
+    autocomplete.focus()
+
+    fireEvent.change(input, { target: { value: 'sus' } })
+    fireEvent.keyDown(autocomplete, { key: 'ArrowDown' })
+    fireEvent.keyDown(autocomplete, { key: 'Enter' })
+
+    await expect(input).toHaveValue('sushi')
   })
 
   test('displays error message if error in fetching favorite foods for select options', async () => {
