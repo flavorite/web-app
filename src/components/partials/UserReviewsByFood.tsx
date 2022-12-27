@@ -37,7 +37,11 @@ export default function UserReviews({ inputValue }: reviewProps) {
   )
 
   const displayReviews = reviewsToDisplay.map((review, idx) => {
-    return <Stack key={`${review.id}-${idx}`}>{review.content}</Stack>
+    return (
+      <Stack data-testid='reviewItems' key={`${review.id}-${idx}`}>
+        {review.content}
+      </Stack>
+    )
   })
 
   return (

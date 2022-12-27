@@ -40,33 +40,38 @@ describe('UserReviewsByFood', () => {
         <UserReviewsByFood inputValue={'All'} />
       </TestProvider>,
     )
-    // TODO
+    const reviewForSushi = screen.getByText('one of my fav sushi')
+    expect(reviewForSushi).toBeVisible()
+    const reviewForPizza = screen.getByText('So So pizza')
+    expect(reviewForPizza).toBeVisible()
+    expect(screen.queryAllByTestId('reviewItems')).toHaveLength(2)
   })
 
-  test('displays filtered reviews by favoriteFood name if inputValue is not All ', async () => {
+  test('displays filtered reviews by favoriteFood name if inputValue is not All ', () => {
     render(
       <TestProvider>
         <UserReviewsByFood inputValue={'sushi'} />
       </TestProvider>,
     )
-    const reviewForSushi = await screen.findByText('one of my fav sushi')
+    const reviewForSushi = screen.getByText('one of my fav sushi')
     expect(reviewForSushi).toBeVisible()
-
-    const reviewsList = screen.getByLabelText('reviews-list')
-    expect(reviewsList).toHaveLength(1)
+    const reviewForPizza = screen.queryByText('So So pizza')
+    expect(reviewForPizza).toBeNull()
+    expect(screen.queryAllByTestId('reviewItems')).toHaveLength(1)
   })
 
-  test('if no reviews to display for specific inputValue selected, should display noReviewMsg', async () => {
+  test('if no reviews to display for specific inputValue selected, should display noReviewMsg', () => {
     render(
       <TestProvider>
         <UserReviewsByFood inputValue={'food without review'} />
       </TestProvider>,
     )
-    const noReviewMsg = await screen.getByRole('no-review-msg')
-    expect(noReviewMsg).toHaveTextContent('No reviews yet!')
+    const noReviewMsg = screen.getByRole('no-reviews-msg')
+    expect(noReviewMsg).toBeVisible()
+    expect(screen.queryAllByTestId('reviewItems')).toHaveLength(0)
   })
 
-  test('if user does not have any reviews, should display noReviewMsg', async () => {
+  test('if user does not have any reviews, should display noReviewMsg', () => {
     mockReviews = []
 
     render(
@@ -75,11 +80,12 @@ describe('UserReviewsByFood', () => {
       </TestProvider>,
     )
 
-    const noReviewMsg = await screen.getByRole('no-review-msg')
-    expect(noReviewMsg).toHaveTextContent('No reviews yet!')
+    const noReviewMsg = screen.getByRole('no-reviews-msg')
+    expect(noReviewMsg).toBeVisible()
+    expect(screen.queryAllByTestId('reviewItems')).toHaveLength(0)
   })
 
-  test('displays error message if error in fetching reviews', async () => {
+  test('displays error message if error in fetching reviews', () => {
     render(
       <TestProvider>
         <UserReviewsByFood inputValue={'All'} />

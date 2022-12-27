@@ -12,6 +12,7 @@ jest.mock('../../hooks/useFavorites', () => {
         { id: 1, name: 'sushi' },
         { id: 2, name: 'pizza' },
       ],
+      favoriteNames: ['sushi', 'pizza'],
     }
   }
 })
