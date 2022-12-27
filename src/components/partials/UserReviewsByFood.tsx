@@ -8,19 +8,19 @@ import Spinner from './Spinner'
 import { UserContext } from './UserContext'
 
 type reviewProps = {
-  selected: string
+  inputValue: string
 }
 
-export default function UserReviews({ selected }: reviewProps) {
+export default function UserReviews({ inputValue }: reviewProps) {
   const { currentUser } = useContext(UserContext)
   const username = currentUser!.username
   const { reviews, loading: loadingReviews, error: errorReviews } = useReviewsByUser({ username })
 
   const displayReviews = reviews.map((review, id) => {
-    if (selected === 'All' || selected === '') {
+    if (inputValue === 'All' || inputValue === '') {
       return <Stack key={id}>{review.content}</Stack>
     } else {
-      if (selected === review.favoriteFood) {
+      if (inputValue === review.favoriteFood) {
         return <Stack key={id}>{review.content}</Stack>
       }
     }

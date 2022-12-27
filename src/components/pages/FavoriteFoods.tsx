@@ -1,4 +1,5 @@
 import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
@@ -22,6 +23,11 @@ export default function FavoriteFoods() {
   } = useFavorites({ username: username })
   const { error: errorUpdateFavorites, mutate: updateFavorites } = useUpdateFavorites()
 
+  const handleSelection = () => {
+    // TODO styling view review button based on mouse hover or click
+    console.log('review pop up')
+  }
+
   const favoritesList = favorites.map(({ id, name: foodName }, idx) => {
     return (
       <Draggable key={id} draggableId={`${id}`} index={idx}>
@@ -32,8 +38,11 @@ export default function FavoriteFoods() {
             {...provided.draggableProps}
             {...provided.dragHandleProps}
           >
-            <Typography>
-              {id}.<Link to={`/${username}/reviews/${foodName}`}>{foodName}</Link>
+            <Typography onClick={handleSelection} paragraph component='span'>
+              {id}.{foodName}{' '}
+              <Link to={`/${username}/reviews`} state={{ foodName: foodName }}>
+                <Button>View Reviews</Button>
+              </Link>
             </Typography>
           </Stack>
         )}
