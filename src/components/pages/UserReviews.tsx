@@ -13,22 +13,19 @@ export default function FavoriteFood() {
   const location = useLocation()
   const { currentUser } = useContext(UserContext)
   const username = currentUser!.username
-  // const initialSelection = location.state ? location.state.foodName : ''
   const {
     favorites,
     loading: loadingFavorites,
     error: errorFavorites,
   } = useFavorites({ username: username })
-  const [filter, setFilter] = useState<string[]>(['All'])
+  const [options, setOptions] = useState<string[]>(['All'])
   const [inputValue, setInputValue] = useState<string>('')
-  const [value, setValue] = useState<string | null>(filter[0])
+  const [value, setValue] = useState<string | null>(options[0])
 
   useEffect(() => {
-    const optionsList = Array.from(filter)
     favorites.forEach((item) => {
-      optionsList.push(item.name)
+      setOptions((prevOptions) => [...prevOptions, item.name])
     })
-    setFilter(optionsList)
 
     if (location.state) {
       setValue(location.state.foodName)
@@ -43,9 +40,9 @@ export default function FavoriteFood() {
         </Typography>
         <Autocomplete
           disablePortal
-          options={filter}
+          options={options}
           value={value}
-          onChange={(event: any, newValue: string | null) => {
+          onChange={(event, newValue: string | null) => {
             setValue(newValue)
           }}
           inputValue={inputValue}

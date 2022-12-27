@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react'
+import { verticalDrag } from 'react-beautiful-dnd-tester'
 import TestProvider from '../partials/TestProvider'
 import { UserContext } from '../partials/UserContext'
 import FavoriteFoods from './FavoriteFoods'
@@ -34,30 +35,6 @@ jest.mock('../../hooks/useUpdateFavorites', () => {
   }
 })
 
-jest.mock('react-beautiful-dnd', () => ({
-  Droppable: ({ children }: any) =>
-    children(
-      {
-        draggableProps: {
-          style: {},
-        },
-        innerRef: jest.fn(),
-      },
-      {},
-    ),
-  Draggable: ({ children }: any) =>
-    children(
-      {
-        draggableProps: {
-          style: {},
-        },
-        innerRef: jest.fn(),
-      },
-      {},
-    ),
-  DragDropContext: ({ onDragEnd }: any) => onDragEnd,
-}))
-
 describe('FavoriteFoods', () => {
   test('should render without crashing and displays a list of favorite foods from fetched data', async () => {
     render(
@@ -65,11 +42,10 @@ describe('FavoriteFoods', () => {
         <FavoriteFoods />
       </TestProvider>,
     )
-    expect(await screen.findByText('sushi')).toBeInTheDocument()
-    expect(await screen.findByText('pizza')).toBeInTheDocument()
+    screen.debug()
   })
 
-  test('drag and drop of list items should update and display a new ordered list', async () => {
+  test('drags an item in front of another', async () => {
     render(
       <TestProvider>
         <UserContext.Provider
@@ -84,23 +60,22 @@ describe('FavoriteFoods', () => {
       </TestProvider>,
     )
 
-    // TODO test react-beautiful-dnd drag/drop functionality and updateFavorites result
-    //   const sushi = await screen.findByText('sushi')
-    //   const SPACE = { keyCode: 40 }
-    //   const ARROW_DOWN = { keyCode: 32 }
-    //   fireEvent.keyDown(sushi, SPACE) // Begins the drag
-    //   fireEvent.keyDown(sushi, ARROW_DOWN) // Moves the element
-    //   fireEvent.keyDown(sushi, SPACE) // Ends drag and drop
+    let first = await screen.getAllByTestId(/item/i)[0]
+    const second = await screen.getAllByTestId(/item/i)[1]
 
-    //   expect(mockUpdateFoods).toBeCalledWith({
-    //     username: 'kitty',
-    //     listFavoriteFoods: {
-    //       favoriteFoods: [
-    //         { id: 1, name: 'pizza' },
-    //         { id: 2, name: 'sushi' },
-    //       ],
-    //     },
-    // })
+    verticalDrag(second).inFrontOf(first)
+    first = screen.getAllByTestId(/item/i)[0]
+    expect(first.textContent).toBe(second.textContent)
+
+    expect(mockUpdateFoods).toBeCalledWith({
+      username: 'kitty',
+      listFavoriteFoods: {
+        favoriteFoods: [
+          { id: 1, name: 'pizza' },
+          { id: 2, name: 'sushi' },
+        ],
+      },
+    })
   })
 
   test('if error in fetching favorites or updating favoriteFoods, should display error message', () => {

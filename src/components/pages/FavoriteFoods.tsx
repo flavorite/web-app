@@ -28,28 +28,6 @@ export default function FavoriteFoods() {
     console.log('review pop up')
   }
 
-  const favoritesList = favorites.map(({ id, name: foodName }, idx) => {
-    return (
-      <Draggable key={id} draggableId={`${id}`} index={idx}>
-        {(provided) => (
-          <Stack
-            spacing={2}
-            ref={provided.innerRef}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-          >
-            <Typography onClick={handleSelection} paragraph component='span'>
-              {id}.{foodName}{' '}
-              <Link to={`/${username}/reviews`} state={{ foodName: foodName }}>
-                <Button>View Reviews</Button>
-              </Link>
-            </Typography>
-          </Stack>
-        )}
-      </Draggable>
-    )
-  })
-
   const handleUpdateFavorites = (result: any) => {
     const items = Array.from(favorites)
     const [reorderedItem] = items.splice(result.source.index, 1)
@@ -77,7 +55,27 @@ export default function FavoriteFoods() {
           <StrictModeDroppable droppableId='favorites'>
             {(provided) => (
               <Box {...provided.droppableProps} ref={provided.innerRef}>
-                {favoritesList}
+                {favorites.map(({ id, name: foodName }, idx) => (
+                  <Draggable key={id} draggableId={`${id}`} index={idx}>
+                    {(provided) => (
+                      <Stack
+                        spacing={2}
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        aria-label={`${idx}`}
+                        data-testid='item'
+                      >
+                        <Typography onClick={handleSelection} paragraph component='span'>
+                          {id}.{foodName}{' '}
+                          <Link to={`/${username}/reviews`} state={{ foodName: foodName }}>
+                            <Button>View Reviews</Button>
+                          </Link>
+                        </Typography>
+                      </Stack>
+                    )}
+                  </Draggable>
+                ))}
                 {provided.placeholder}
               </Box>
             )}
