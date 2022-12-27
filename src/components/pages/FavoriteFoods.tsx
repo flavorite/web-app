@@ -28,18 +28,18 @@ export default function FavoriteFoods() {
     console.log('review pop up')
   }
 
-  const handleUpdateFavorites = (result: any) => {
+  const handleUpdateFavorites = async (result: any) => {
     const items = Array.from(favsList)
     const [reorderedItem] = items.splice(result.source.index, 1)
     items.splice(result.destination.index, 0, reorderedItem)
     items.forEach((item, idx) => {
       item.id = idx + 1
     })
-    setFavsList(items)
-    updateFavorites({
+    await updateFavorites({
       username: username,
       listFavoriteFoods: { favoriteFoods: items },
     })
+    setFavsList(favorites)
   }
 
   return (
