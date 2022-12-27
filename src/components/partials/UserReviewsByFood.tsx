@@ -1,4 +1,5 @@
 import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
@@ -11,12 +12,16 @@ import { UserContext } from './UserContext'
 
 type reviewProps = {
   inputValue: string | null
+  profileUsername: string
 }
 
-export default function UserReviews({ inputValue }: reviewProps) {
+export default function UserReviews({ inputValue, profileUsername }: reviewProps) {
   const { currentUser } = useContext(UserContext)
-  const username = currentUser!.username
-  const { reviews, loading: loadingReviews, error: errorReviews } = useReviewsByUser({ username })
+  const {
+    reviews,
+    loading: loadingReviews,
+    error: errorReviews,
+  } = useReviewsByUser({ username: profileUsername })
   const [reviewsToDisplay, setReviewsToDisplay] = useState<ListReviews['reviews']>(reviews)
 
   useEffect(() => {
@@ -40,6 +45,13 @@ export default function UserReviews({ inputValue }: reviewProps) {
     return (
       <Stack data-testid='reviewItems' key={`${review.id}-${idx}`}>
         {review.content}
+        {currentUser!.username === profileUsername ? (
+          <Button aria-label='edit-review'>
+            <Link to={`/${profileUsername}/reviews/${review.id}`}>Edit</Link>
+          </Button>
+        ) : (
+          ''
+        )}
       </Stack>
     )
   })
