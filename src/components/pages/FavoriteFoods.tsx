@@ -1,14 +1,13 @@
+import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
-import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { useContext } from 'react'
-import { DragDropContext, Draggable } from 'react-beautiful-dnd'
+import { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { FavoriteFood } from '../../client/flavorite'
 import useFavorites from '../../hooks/useFavorites'
 import useUpdateFavorites from '../../hooks/useUpdateFavorites'
-import { StrictModeDroppable } from '../helpers/strictModeDroppable'
 import AddFavorite from '../partials/AddFavorite'
 import Spinner from '../partials/Spinner'
 import { UserContext } from '../partials/UserContext'
@@ -22,6 +21,7 @@ export default function FavoriteFoods() {
     error: errorFavorites,
   } = useFavorites({ username: username })
   const { error: errorUpdateFavorites, mutate: updateFavorites } = useUpdateFavorites()
+  const [favsList, setFavsList] = useState<FavoriteFood[]>(favorites)
 
   const handleSelection = () => {
     // TODO styling view review button based on mouse hover or click
@@ -29,12 +29,13 @@ export default function FavoriteFoods() {
   }
 
   const handleUpdateFavorites = (result: any) => {
-    const items = Array.from(favorites)
+    const items = Array.from(favsList)
     const [reorderedItem] = items.splice(result.source.index, 1)
     items.splice(result.destination.index, 0, reorderedItem)
     items.forEach((item, idx) => {
       item.id = idx + 1
     })
+    setFavsList(items)
     updateFavorites({
       username: username,
       listFavoriteFoods: { favoriteFoods: items },
@@ -45,41 +46,41 @@ export default function FavoriteFoods() {
     <Spinner loading={loadingFavorites}>
       <Container fixed>
         <AddFavorite username={username} favorites={favorites} />
-        <Typography role='error-message-userData'>
+        <Typography role='error-message-userFavs'>
           {errorFavorites ? `${errorFavorites}` : ''}
         </Typography>
         <Typography role='error-message-updateFavs'>
           {errorUpdateFavorites ? `${errorUpdateFavorites}` : ''}
         </Typography>
         <DragDropContext onDragEnd={handleUpdateFavorites}>
-          <StrictModeDroppable droppableId='favorites'>
+          <Droppable droppableId='favorites'>
             {(provided) => (
-              <Box {...provided.droppableProps} ref={provided.innerRef}>
-                {favorites.map(({ id, name: foodName }, idx) => (
-                  <Draggable key={id} draggableId={`${id}`} index={idx}>
+              <Box {...provided.droppableProps} ref={provided.innerRef} aria-label='favorites-list'>
+                {favsList.map(({ id, name: foodName }, idx) => (
+                  <Draggable key={`${id}`} draggableId={`${id}`} index={idx}>
                     {(provided) => (
-                      <Stack
-                        spacing={2}
+                      <Box
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
                         aria-label={`${idx}`}
+                        draggable
                         data-testid='item'
                       >
-                        <Typography onClick={handleSelection} paragraph component='span'>
-                          {id}.{foodName}{' '}
+                        <Typography>
+                          {idx + 1}.{foodName}{' '}
                           <Link to={`/${username}/reviews`} state={{ foodName: foodName }}>
                             <Button>View Reviews</Button>
                           </Link>
                         </Typography>
-                      </Stack>
+                      </Box>
                     )}
                   </Draggable>
                 ))}
                 {provided.placeholder}
               </Box>
             )}
-          </StrictModeDroppable>
+          </Droppable>
         </DragDropContext>
       </Container>
     </Spinner>

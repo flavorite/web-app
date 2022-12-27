@@ -32,7 +32,7 @@ export default function UserReviews({ inputValue }: reviewProps) {
         <Typography role='error-message-userReviews'>
           {errorReviews ? `${errorReviews}` : ''}
         </Typography>
-        <Box>{displayReviews}</Box>
+        <Box aria-label='reviews-list'>{displayReviews}</Box>
       </Container>
     </Spinner>
   )

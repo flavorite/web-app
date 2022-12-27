@@ -51,6 +51,7 @@ export default function FavoriteFood() {
           }}
           sx={{ width: 300 }}
           renderInput={(params) => <TextField {...params} label='Favorite Dishes' />}
+          aria-label='selectFavs'
         />
         <UserReviewsByFood inputValue={inputValue} />
       </Container>
