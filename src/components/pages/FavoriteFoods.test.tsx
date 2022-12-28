@@ -75,6 +75,7 @@ describe('FavoriteFoods', () => {
       </TestProvider>,
     )
 
+    // preset label for first draggable element from library
     const first = screen.getByLabelText('0')
 
     first.focus()
