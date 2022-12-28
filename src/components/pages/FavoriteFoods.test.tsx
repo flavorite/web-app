@@ -1,6 +1,4 @@
 import { fireEvent, render, screen } from '@testing-library/react'
-// import userEvent from '@testing-library/user-event'
-// import { verticalDrag } from 'react-beautiful-dnd-tester'
 import TestProvider from '../partials/TestProvider'
 import { UserContext } from '../partials/UserContext'
 import FavoriteFoods from './FavoriteFoods'
@@ -16,6 +14,7 @@ jest.mock('../../hooks/useFavorites', () => {
       favorites: [
         { id: 1, name: 'sushi' },
         { id: 2, name: 'pizza' },
+        { id: 3, name: 'taco' },
       ],
     }
   }
@@ -31,51 +30,46 @@ jest.mock('../../hooks/useUpdateFavorites', () => {
       favorites: [
         { id: 1, name: 'sushi' },
         { id: 2, name: 'pizza' },
+        { id: 3, name: 'taco' },
       ],
     }
   }
 })
 
-jest.mock('@hello-pangea/dnd', () => ({
-  Droppable: ({ children }: any) =>
-    children(
-      {
-        draggableProps: {
-          style: {},
-        },
-        innerRef: jest.fn(),
-      },
-      {},
-    ),
-  Draggable: ({ children }: any) =>
-    children(
-      {
-        draggableProps: {
-          style: {},
-        },
-        innerRef: jest.fn(),
-      },
-      {},
-    ),
-  DragDropContext: ({ children }: any) => children,
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({
+    username: 'kitty',
+  }),
 }))
 
-describe('FavoriteFoods', () => {
-  test('should render without crashing and displays addFavorite component and a list of favorite foods from fetched data', async () => {
-    render(
-      <TestProvider>
-        <FavoriteFoods />
-      </TestProvider>,
-    )
-    const addFavoriteField = screen.getByRole('textbox', { name: /Add a new Favorite Dish/i })
-    const addFavoriteBtn = screen.getByRole('button', { name: /add/i })
-    expect(addFavoriteField).toBeInTheDocument()
-    expect(addFavoriteBtn).toBeInTheDocument()
-    expect(screen.getByLabelText(/favorites-list/i)).toBeInTheDocument()
-  })
+// jest.mock('@hello-pangea/dnd', () => ({
+//   Droppable: ({ children }: any) =>
+//     children(
+//       {
+//         draggableProps: {
+//           style: {},
+//         },
+//         innerRef: jest.fn(),
+//       },
+//       {},
+//     ),
+//   Draggable: ({ children }: any) =>
+//     children(
+//       {
+//         draggableProps: {
+//           style: {},
+//         },
+//         innerRef: jest.fn(),
+//       },
+//       {},
+//     ),
+//   DragDropContext: ({ children }: any) => children,
+// }))
 
-  test('drags an item in front of another', async () => {
-    const { getAllByTestId } = render(
+describe('FavoriteFoods', () => {
+  test('if currentUser matches profileUser, should display addFavorite component draggable list of favoriteFoods', async () => {
+    render(
       <TestProvider>
         <UserContext.Provider
           value={{
@@ -88,31 +82,68 @@ describe('FavoriteFoods', () => {
         </UserContext.Provider>
       </TestProvider>,
     )
+
+    expect(await screen.findByLabelText(/favorites-list-draggable/i)).toBeInTheDocument()
+    const addFavoriteField = screen.getByRole('textbox', { name: /Add a new Favorite Dish/i })
+    const addFavoriteBtn = screen.getByRole('button', { name: /add/i })
+    expect(addFavoriteField).toBeInTheDocument()
+    expect(addFavoriteBtn).toBeInTheDocument()
+  })
+
+  test('if currentUser matches profileUser, user should be able to drag and drop favorites to change order', async () => {
+    render(
+      <TestProvider>
+        <UserContext.Provider
+          value={{
+            currentUser: { username: 'kitty', token: 'tokenString' },
+            setUser: jest.fn(),
+            clearUser: jest.fn(),
+          }}
+        >
+          <FavoriteFoods />
+        </UserContext.Provider>
+      </TestProvider>,
+    )
+
+    const sushi = screen.getByTestId('item0')
+    const pizza = screen.getByTestId('item1')
+
+    const SPACE = { key: ' ', code: 'Space', charCode: 32 }
+    const ARROW_DOWN = { key: 'ArrowDown', code: 'ArrowDown', charCode: 40 }
+
+    sushi.focus()
+    expect(sushi).toHaveFocus()
+    await fireEvent.keyDown(sushi, SPACE)
+    await fireEvent.keyDown(sushi, ARROW_DOWN)
+    await fireEvent.keyDown(sushi, ARROW_DOWN)
+    await fireEvent.keyDown(sushi, SPACE)
+    // verticalDrag(sushi).inFrontOf(taco)
     // screen.debug()
-    const first = getAllByTestId(/item/i)[0]
-    const second = getAllByTestId(/item/i)[1]
 
-    const SPACE = { key: ' ', code: 'Space' }
-    const ARROW_DOWN = { key: 'ArrowDown', code: 'ArrowDown' }
-    fireEvent.keyDown(first, SPACE) // Begins the dnd
-    fireEvent.keyDown(first, ARROW_DOWN) // Moves the element
-    fireEvent.keyDown(first, SPACE) // Ends the dnd
+    expect(mockUpdateFoods).toBeCalled()
+  })
 
-    // verticalDrag(second).inFrontOf(first)
-    // const newSecond = await screen.findByText('2.sushi')
+  test('if currentUser does not match profileUser, should only display non-draggable list of favoritefoods', async () => {
+    render(
+      <TestProvider>
+        <UserContext.Provider
+          value={{
+            currentUser: { username: 'otherUser', token: 'tokenString' },
+            setUser: jest.fn(),
+            clearUser: jest.fn(),
+          }}
+        >
+          <FavoriteFoods />
+        </UserContext.Provider>
+      </TestProvider>,
+    )
+    const addFavoriteField = screen.queryByRole('textbox', { name: /Add a new Favorite Dish/i })
+    const addFavoriteBtn = screen.queryByRole('button', { name: /add/i })
+    expect(addFavoriteField).not.toBeInTheDocument()
+    expect(addFavoriteBtn).not.toBeInTheDocument()
+    expect(screen.queryByLabelText(/favorites-list-draggable/i)).not.toBeInTheDocument()
 
-    // expect(newFirst).toBeInTheDocument()
-    // expect(newSecond).toBeInTheDocument()
-
-    // expect(mockUpdateFoods).toBeCalledWith({
-    //   username: 'kitty',
-    //   listFavoriteFoods: {
-    //     favoriteFoods: [
-    //       { id: 1, name: 'pizza' },
-    //       { id: 2, name: 'sushi' },
-    //     ],
-    //   },
-    // })
+    expect(await screen.findByLabelText(/favorites-otheruser/i)).toBeInTheDocument()
   })
 
   test('if error in fetching favorites or updating favoriteFoods, should display error message', () => {
