@@ -75,14 +75,15 @@ describe('FavoriteFoods', () => {
       </TestProvider>,
     )
 
-    // preset label for first draggable element from library
     const first = screen.getByLabelText('0')
 
     first.focus()
     expect(first).toHaveFocus()
 
     await fireEvent.keyDown(first, { key: ' ', keyCode: 32 })
+
     await fireEvent.keyDown(first, { key: 'ArrowDown', keyCode: 40 })
+
     await fireEvent.keyDown(first, { key: ' ', keyCode: 32 })
 
     expect(mockUpdateFoods).toBeCalledWith({

@@ -3,6 +3,7 @@ import Box from '@mui/material/Box'
 import Fab from '@mui/material/Fab'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
+import { useState } from 'react'
 import useUpdateFavorites from '../../hooks/useUpdateFavorites'
 import Spinner from './Spinner'
 
@@ -12,6 +13,7 @@ type favProps = {
 }
 
 export default function AddFavorite({ username, favorites }: favProps) {
+  const [inputValue, setInputValue] = useState<string>('')
   const {
     loading: loadingUpdateFavorites,
     error: errorUpdateFavorites,
@@ -20,14 +22,13 @@ export default function AddFavorite({ username, favorites }: favProps) {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const inputForm = new FormData(event.currentTarget)
-    const input = inputForm.get('favorite') as string
     const newFavorites = favorites
-    newFavorites.push({ id: favorites.length + 1, name: input })
+    newFavorites.push({ id: favorites.length + 1, name: inputValue })
     await updateFavorites({
       username: username,
       listFavoriteFoods: { favoriteFoods: newFavorites },
     })
+    setInputValue('')
   }
   return (
     <Spinner loading={loadingUpdateFavorites}>
@@ -38,6 +39,8 @@ export default function AddFavorite({ username, favorites }: favProps) {
           label='Add a new Favorite Dish'
           name='favorite'
           variant='standard'
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
         />
         <Fab color='primary' aria-label='add' role='button' type='submit'>
           <AddIcon />

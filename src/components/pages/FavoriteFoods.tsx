@@ -2,6 +2,9 @@ import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
+import Paper from '@mui/material/Paper'
+import Stack from '@mui/material/Stack'
+import { styled } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
 import { useContext, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
@@ -23,11 +26,18 @@ export default function FavoriteFoods() {
   } = useFavorites({ username: profileUsername })
   const { error: errorUpdateFavorites, mutate: updateFavorites } = useUpdateFavorites()
   const [favsList, setFavsList] = useState<FavoriteFood[]>(favorites)
+  const [mouse, setMouse] = useState({
+    isHovering: false,
+    id: '',
+  })
 
-  const handleSelection = () => {
-    // TODO styling view review button based on mouse hover or click
-    console.log('review pop up')
-  }
+  const Item = styled(Paper)(({ theme }) => ({
+    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+    ...theme.typography.body2,
+    padding: theme.spacing(3),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+  }))
 
   const handleUpdateFavorites = async (result: any) => {
     const items = Array.from(favsList)
@@ -70,12 +80,35 @@ export default function FavoriteFoods() {
                       aria-label={`${idx}`}
                       draggable
                     >
-                      <Box>
-                        {idx + 1}.{foodName}{' '}
-                        <Link to={`/${username}/reviews`} state={{ foodName: foodName }}>
-                          <Button>View Reviews</Button>
-                        </Link>
-                      </Box>
+                      <Stack spacing={4}>
+                        <Item
+                          onMouseOver={(e) =>
+                            setMouse({
+                              isHovering: true,
+                              id: (e.target as Element).id,
+                            })
+                          }
+                          onMouseOut={() =>
+                            setMouse({
+                              isHovering: false,
+                              id: '',
+                            })
+                          }
+                          id={`${idx}`}
+                        >
+                          {idx + 1}.{foodName}{' '}
+                          <Button
+                            sx={{
+                              display:
+                                mouse.isHovering && mouse.id === `${idx}` ? 'inline-block' : 'none',
+                            }}
+                          >
+                            <Link to={`/${username}/reviews`} state={{ foodName: foodName }}>
+                              View Reviews
+                            </Link>
+                          </Button>
+                        </Item>
+                      </Stack>
                     </Box>
                   )}
                 </Draggable>
