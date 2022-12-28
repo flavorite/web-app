@@ -76,7 +76,6 @@ describe('FavoriteFoods', () => {
     )
 
     const first = screen.getByLabelText('0')
-    const second = screen.getByLabelText('1')
 
     first.focus()
     expect(first).toHaveFocus()
