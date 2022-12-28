@@ -62,6 +62,11 @@ export default function FavoriteFoods() {
               ref={provided.innerRef}
               aria-label='favorites-list-draggable'
             >
+            <Box
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+              aria-label='favorites-list-draggable'
+            >
               {favsList.map(({ id, name: foodName }, idx) => (
                 <Draggable
                   key={`${id}`}
@@ -75,6 +80,7 @@ export default function FavoriteFoods() {
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
                       aria-label={`${idx}`}
+                      data-testid={`item${idx}`}
                       draggable
                     >
                       <FoodItem
