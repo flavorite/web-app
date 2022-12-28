@@ -63,15 +63,14 @@ export default function FavoriteFoods() {
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
                       aria-label={`${idx}`}
-                      data-testid={`item${idx}`}
                       draggable
                     >
-                      <Typography>
+                      <Box data-testid={`item${idx}`}>
                         {idx + 1}.{foodName}{' '}
                         <Link to={`/${username}/reviews`} state={{ foodName: foodName }}>
                           <Button>View Reviews</Button>
                         </Link>
-                      </Typography>
+                      </Box>
                     </Box>
                   )}
                 </Draggable>

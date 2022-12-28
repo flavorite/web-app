@@ -105,18 +105,17 @@ describe('FavoriteFoods', () => {
       </TestProvider>,
     )
 
-    const sushi = screen.getByTestId('item0')
+    const first = screen.getByTestId('item0')
     const pizza = screen.getByTestId('item1')
 
     const SPACE = { key: ' ', code: 'Space', charCode: 32 }
     const ARROW_DOWN = { key: 'ArrowDown', code: 'ArrowDown', charCode: 40 }
 
-    sushi.focus()
-    expect(sushi).toHaveFocus()
-    await fireEvent.keyDown(sushi, SPACE)
-    await fireEvent.keyDown(sushi, ARROW_DOWN)
-    await fireEvent.keyDown(sushi, ARROW_DOWN)
-    await fireEvent.keyDown(sushi, SPACE)
+    first.focus()
+    expect(first).toHaveFocus()
+    await fireEvent.keyDown(first, SPACE)
+    await fireEvent.keyDown(first, ARROW_DOWN)
+    await fireEvent.keyDown(first, SPACE)
     // verticalDrag(sushi).inFrontOf(taco)
     // screen.debug()
 
