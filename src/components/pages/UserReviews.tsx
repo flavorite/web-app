@@ -30,7 +30,7 @@ export default function FavoriteFood() {
     <Spinner loading={loadingFavorites}>
       <Container fixed>
         <Typography role='error-message-userFavs'>
-          {errorFavorites ? `${errorFavorites}` : ''}
+          {errorFavorites && `${errorFavorites}`}
         </Typography>
         <Autocomplete
           disablePortal

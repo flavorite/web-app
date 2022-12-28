@@ -44,7 +44,7 @@ export default function AddFavorite({ username, favorites }: favProps) {
         </Fab>
         <Typography role='error-message'>
           {/* TODO Style Typography */}
-          {errorUpdateFavorites ? `${errorUpdateFavorites}` : ''}
+          {errorUpdateFavorites && `${errorUpdateFavorites}`}
         </Typography>
       </Box>
     </Spinner>

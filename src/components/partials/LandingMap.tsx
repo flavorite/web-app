@@ -116,7 +116,7 @@ export default function LandingMap() {
       <Container>
         <Typography role='geolocation-error-message'>
           {/* TODO Style Typography */}
-          {locationMsg ? `${locationMsg}` : ''}
+          {locationMsg && `${locationMsg}`}
         </Typography>
         <LoadScript googleMapsApiKey={`${API_KEY}`} libraries={lib}>
           <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={15}>
@@ -146,7 +146,7 @@ export default function LandingMap() {
         </Box>
         <Typography role='error-message'>
           {/* TODO Style Typography */}
-          {errorLoadingRestaurants ? `${errorLoadingRestaurants}` : ''}
+          {errorLoadingRestaurants && `${errorLoadingRestaurants}`}
         </Typography>
       </Container>
     </Spinner>

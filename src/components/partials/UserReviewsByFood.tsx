@@ -45,12 +45,10 @@ export default function UserReviews({ inputValue, profileUsername }: reviewProps
     return (
       <Stack data-testid='reviewItems' key={`${review.id}-${idx}`}>
         {review.content}
-        {currentUser!.username === profileUsername ? (
+        {currentUser!.username === profileUsername && (
           <Button aria-label='edit-review'>
             <Link to={`/${profileUsername}/reviews/${review.id}`}>Edit</Link>
           </Button>
-        ) : (
-          ''
         )}
       </Stack>
     )
@@ -60,10 +58,10 @@ export default function UserReviews({ inputValue, profileUsername }: reviewProps
     <Spinner loading={loadingReviews}>
       <Container>
         <Typography role='error-message-userReviews'>
-          {errorReviews ? `${errorReviews}` : ''}
+          {errorReviews && `${errorReviews}`}
         </Typography>
         <Typography role='no-reviews-msg'>
-          {reviewsToDisplay.length === 0 ? `${noReviewsMsg}` : ''}
+          {reviewsToDisplay.length === 0 && `${noReviewsMsg}`}
         </Typography>
         <Box aria-label='reviews-list'>{displayReviews}</Box>
       </Container>

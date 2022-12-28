@@ -76,7 +76,7 @@ export default function Login() {
           </Typography>
           <Typography role='error-message'>
             {/* TODO Style Typography */}
-            {errorLoginUser ? `${errorLoginUser}` : ''}
+            {errorLoginUser && `${errorLoginUser}`}
           </Typography>
           <Box component='form' onSubmit={handleSubmit} sx={{ mt: 1 }}>
             <TextField

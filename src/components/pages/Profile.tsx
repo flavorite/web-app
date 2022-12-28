@@ -1,9 +1,9 @@
-import { Link, useParams } from 'react-router-dom'
-import useUser from '../../hooks/useUser'
+import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
-import Button from '@mui/material/Button'
-import { useContext, useState } from 'react'
+import { useContext } from 'react'
+import { Link, useParams } from 'react-router-dom'
+import useUser from '../../hooks/useUser'
 import Spinner from '../partials/Spinner'
 import { UserContext } from '../partials/UserContext'
 
@@ -16,7 +16,7 @@ export default function Profile() {
   return (
     <Spinner loading={loadingUser}>
       <Container>
-        <Typography role='error-message-userData'>{errorUser ? `${errorUser}` : ''}</Typography>
+        <Typography role='error-message-userData'>{errorUser && `${errorUser}`}</Typography>
         <Typography variant='h3' component='h3'>
           @{user.username}
         </Typography>
