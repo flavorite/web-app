@@ -56,7 +56,12 @@ export default function FavoriteFoods() {
               aria-label='favorites-list-draggable'
             >
               {favsList.map(({ id, name: foodName }, idx) => (
-                <Draggable key={`${id}`} draggableId={`${id}`} index={idx}>
+                <Draggable
+                  key={`${id}`}
+                  draggableId={`${id}`}
+                  index={idx}
+                  aria-label={`item${idx}`}
+                >
                   {(provided) => (
                     <Box
                       ref={provided.innerRef}
@@ -65,7 +70,7 @@ export default function FavoriteFoods() {
                       aria-label={`${idx}`}
                       draggable
                     >
-                      <Box data-testid={`item${idx}`}>
+                      <Box>
                         {idx + 1}.{foodName}{' '}
                         <Link to={`/${username}/reviews`} state={{ foodName: foodName }}>
                           <Button>View Reviews</Button>

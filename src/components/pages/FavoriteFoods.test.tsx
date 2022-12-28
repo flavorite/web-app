@@ -14,7 +14,6 @@ jest.mock('../../hooks/useFavorites', () => {
       favorites: [
         { id: 1, name: 'sushi' },
         { id: 2, name: 'pizza' },
-        { id: 3, name: 'taco' },
       ],
     }
   }
@@ -27,11 +26,6 @@ jest.mock('../../hooks/useUpdateFavorites', () => {
       loading: false,
       error: 'there is an error in updating favorite foods',
       success: true,
-      favorites: [
-        { id: 1, name: 'sushi' },
-        { id: 2, name: 'pizza' },
-        { id: 3, name: 'taco' },
-      ],
     }
   }
 })
@@ -42,30 +36,6 @@ jest.mock('react-router-dom', () => ({
     username: 'kitty',
   }),
 }))
-
-// jest.mock('@hello-pangea/dnd', () => ({
-//   Droppable: ({ children }: any) =>
-//     children(
-//       {
-//         draggableProps: {
-//           style: {},
-//         },
-//         innerRef: jest.fn(),
-//       },
-//       {},
-//     ),
-//   Draggable: ({ children }: any) =>
-//     children(
-//       {
-//         draggableProps: {
-//           style: {},
-//         },
-//         innerRef: jest.fn(),
-//       },
-//       {},
-//     ),
-//   DragDropContext: ({ children }: any) => children,
-// }))
 
 describe('FavoriteFoods', () => {
   test('if currentUser matches profileUser, should display addFavorite component draggable list of favoriteFoods', async () => {
@@ -105,21 +75,25 @@ describe('FavoriteFoods', () => {
       </TestProvider>,
     )
 
-    const first = screen.getByTestId('item0')
-    const pizza = screen.getByTestId('item1')
-
-    const SPACE = { key: ' ', code: 'Space', charCode: 32 }
-    const ARROW_DOWN = { key: 'ArrowDown', code: 'ArrowDown', charCode: 40 }
+    const first = screen.getByLabelText('0')
+    const second = screen.getByLabelText('1')
 
     first.focus()
     expect(first).toHaveFocus()
-    await fireEvent.keyDown(first, SPACE)
-    await fireEvent.keyDown(first, ARROW_DOWN)
-    await fireEvent.keyDown(first, SPACE)
-    // verticalDrag(sushi).inFrontOf(taco)
-    // screen.debug()
 
-    expect(mockUpdateFoods).toBeCalled()
+    await fireEvent.keyDown(first, { key: ' ', keyCode: 32 })
+    await fireEvent.keyDown(first, { key: 'ArrowDown', keyCode: 40 })
+    await fireEvent.keyDown(first, { key: ' ', keyCode: 32 })
+
+    expect(mockUpdateFoods).toBeCalledWith({
+      username: 'kitty',
+      listFavoriteFoods: {
+        favoriteFoods: [
+          { id: 1, name: 'pizza' },
+          { id: 2, name: 'sushi' },
+        ],
+      },
+    })
   })
 
   test('if currentUser does not match profileUser, should only display non-draggable list of favoritefoods', async () => {
