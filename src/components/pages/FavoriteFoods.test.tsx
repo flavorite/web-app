@@ -14,6 +14,7 @@ jest.mock('../../hooks/useFavorites', () => {
       favorites: [
         { id: 1, name: 'sushi' },
         { id: 2, name: 'pizza' },
+        { id: 3, name: 'taco' },
       ],
     }
   }
@@ -26,6 +27,11 @@ jest.mock('../../hooks/useUpdateFavorites', () => {
       loading: false,
       error: 'there is an error in updating favorite foods',
       success: true,
+      favorites: [
+        { id: 1, name: 'sushi' },
+        { id: 2, name: 'pizza' },
+        { id: 3, name: 'taco' },
+      ],
     }
   }
 })
@@ -35,7 +41,36 @@ jest.mock('react-router-dom', () => ({
   useParams: () => ({
     username: 'kitty',
   }),
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({
+    username: 'kitty',
+  }),
 }))
+
+// jest.mock('@hello-pangea/dnd', () => ({
+//   Droppable: ({ children }: any) =>
+//     children(
+//       {
+//         draggableProps: {
+//           style: {},
+//         },
+//         innerRef: jest.fn(),
+//       },
+//       {},
+//     ),
+//   Draggable: ({ children }: any) =>
+//     children(
+//       {
+//         draggableProps: {
+//           style: {},
+//         },
+//         innerRef: jest.fn(),
+//       },
+//       {},
+//     ),
+//   DragDropContext: ({ children }: any) => children,
+// }))
 
 describe('FavoriteFoods', () => {
   test('if currentUser matches profileUser, should display addFavorite component and draggable list of favoriteFoods. On mouse hover on list item, should show View Review button and Delete button', async () => {
