@@ -118,10 +118,10 @@ export default function FavoriteFoods() {
   )
 
   const otherUserDisplay = (
-    <Box aria-label='favorites-otheruser'>
+    <Stack aria-label='favorites-otheruser'>
       {favsList.map(({ id, name: foodName }, idx) => {
         return (
-          <Typography
+          <Item
             key={id}
             aria-label={`item${idx}`}
             onMouseEnter={(e) => setMouseIdx((e.target as Element).id)}
@@ -140,10 +140,10 @@ export default function FavoriteFoods() {
                 View Reviews
               </Button>
             </Link>
-          </Typography>
+          </Item>
         )
       })}
-    </Box>
+    </Stack>
   )
 
   return (
