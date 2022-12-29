@@ -26,10 +26,7 @@ export default function FavoriteFoods() {
   } = useFavorites({ username: profileUsername })
   const { error: errorUpdateFavorites, mutate: updateFavorites } = useUpdateFavorites()
   const [favsList, setFavsList] = useState<FavoriteFood[]>(favorites)
-  const [mouse, setMouse] = useState({
-    isHovering: false,
-    id: '',
-  })
+  const [mouseIdx, setMouseIdx] = useState('none')
 
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -73,43 +70,31 @@ export default function FavoriteFoods() {
                   aria-label={`item${idx}`}
                 >
                   {(provided) => (
-                    <Box
+                    <Stack
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
                       aria-label={`${idx}`}
                       draggable
                     >
-                      <Stack spacing={4}>
-                        <Item
-                          onMouseOver={(e) =>
-                            setMouse({
-                              isHovering: true,
-                              id: (e.target as Element).id,
-                            })
-                          }
-                          onMouseOut={() =>
-                            setMouse({
-                              isHovering: false,
-                              id: '',
-                            })
-                          }
-                          id={`${idx}`}
-                        >
-                          {idx + 1}.{foodName}{' '}
+                      <Item
+                        onMouseEnter={(e) => setMouseIdx((e.target as Element).id)}
+                        onMouseLeave={() => setMouseIdx('none')}
+                        id={`${idx}`}
+                      >
+                        {idx + 1}.{foodName}{' '}
+                        <Link to={`/${username}/reviews`} state={{ foodName: foodName }}>
                           <Button
                             sx={{
-                              display:
-                                mouse.isHovering && mouse.id === `${idx}` ? 'inline-block' : 'none',
+                              display: mouseIdx === `${idx}` ? 'inline-block' : 'none',
+                              pointerEvents: 'none',
                             }}
                           >
-                            <Link to={`/${username}/reviews`} state={{ foodName: foodName }}>
-                              View Reviews
-                            </Link>
+                            View Reviews
                           </Button>
-                        </Item>
-                      </Stack>
-                    </Box>
+                        </Link>
+                      </Item>
+                    </Stack>
                   )}
                 </Draggable>
               ))}
