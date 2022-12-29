@@ -62,7 +62,7 @@ export default function DeleteFavorite({
     <Spinner loading={loadingUpdateFavorites}>
       <Box>
         <IconButton
-          aria-label='delete'
+          aria-label={`delete-${idx}`}
           sx={{
             display: mouseIdx === `${idx}` ? 'inline-block' : 'none',
           }}

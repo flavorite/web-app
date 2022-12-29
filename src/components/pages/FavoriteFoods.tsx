@@ -91,7 +91,7 @@ export default function FavoriteFoods() {
                               display: mouseIdx === `${idx}` ? 'inline-block' : 'none',
                               pointerEvents: 'none',
                             }}
-                            aria-label='view-reviews'
+                            aria-label={`viewReview-${idx}`}
                           >
                             View Reviews
                           </Button>
@@ -135,7 +135,7 @@ export default function FavoriteFoods() {
                   display: mouseIdx === `${idx}` ? 'inline-block' : 'none',
                   pointerEvents: 'none',
                 }}
-                role='view-reviews'
+                aria-label={`viewReview-${idx}`}
               >
                 View Reviews
               </Button>
