@@ -120,6 +120,31 @@ describe('FavoriteFoods', () => {
     expect(await screen.findByLabelText(/favorites-otheruser/i)).toBeInTheDocument()
   })
 
+  test('if food item has mouseHover, should show link button to View Reviews (otherwise button is hidden), and onClick View Reviews, should reroute to reviews page', () => {
+    render(
+      <TestProvider>
+        <UserContext.Provider
+          value={{
+            currentUser: { username: 'kitty', token: 'tokenString' },
+            setUser: jest.fn(),
+            clearUser: jest.fn(),
+          }}
+        >
+          <FavoriteFoods />
+        </UserContext.Provider>
+      </TestProvider>,
+    )
+
+    // expect(screen.findByLabelText('view-reviews'))
+    // const viewReviewsBtns
+    // const firstItem = screen.getByLabelText('item0')
+
+    // expect(errorMsgUserFavs).toHaveTextContent('there is an error in fetching favorites')
+
+    const errorMsgUpdateFavs = screen.getByRole('error-message-updateFavs')
+    expect(errorMsgUpdateFavs).toHaveTextContent('there is an error in updating favorite foods')
+  })
+
   test('if error in fetching favorites or updating favoriteFoods, should display error message', () => {
     render(
       <TestProvider>

@@ -12,6 +12,7 @@ import { FavoriteFood } from '../../client/flavorite'
 import useFavorites from '../../hooks/useFavorites'
 import useUpdateFavorites from '../../hooks/useUpdateFavorites'
 import AddFavorite from '../partials/AddFavorite'
+import DeleteFavorite from '../partials/DeleteFavorite'
 import Spinner from '../partials/Spinner'
 import { UserContext } from '../partials/UserContext'
 
@@ -40,8 +41,8 @@ export default function FavoriteFoods() {
     const items = Array.from(favsList)
     const [reorderedItem] = items.splice(result.source.index, 1)
     items.splice(result.destination.index, 0, reorderedItem)
-    items.forEach((item, idx) => {
-      item.id = idx + 1
+    items.forEach((item, index) => {
+      item.id = index + 1
     })
     await updateFavorites({
       username: currentUser!.username,
@@ -81,6 +82,7 @@ export default function FavoriteFoods() {
                         onMouseEnter={(e) => setMouseIdx((e.target as Element).id)}
                         onMouseLeave={() => setMouseIdx('none')}
                         id={`${idx}`}
+                        aria-label={`item${idx}`}
                       >
                         {idx + 1}.{foodName}{' '}
                         <Link to={`/${username}/reviews`} state={{ foodName: foodName }}>
@@ -89,10 +91,19 @@ export default function FavoriteFoods() {
                               display: mouseIdx === `${idx}` ? 'inline-block' : 'none',
                               pointerEvents: 'none',
                             }}
+                            aria-label='view-reviews'
                           >
                             View Reviews
                           </Button>
                         </Link>
+                        <DeleteFavorite
+                          foodName={foodName}
+                          mouseIdx={mouseIdx}
+                          idx={idx}
+                          favsList={favsList}
+                          setFavsList={setFavsList}
+                          username={currentUser!.username}
+                        />
                       </Item>
                     </Stack>
                   )}
@@ -110,10 +121,24 @@ export default function FavoriteFoods() {
     <Box aria-label='favorites-otheruser'>
       {favsList.map(({ id, name: foodName }, idx) => {
         return (
-          <Typography key={id}>
+          <Typography
+            key={id}
+            aria-label={`item${idx}`}
+            onMouseEnter={(e) => setMouseIdx((e.target as Element).id)}
+            onMouseLeave={() => setMouseIdx('none')}
+            id={`${idx}`}
+          >
             {idx + 1}.{foodName}{' '}
             <Link to={`/${profileUsername}/reviews`} state={{ foodName: foodName }}>
-              <Button>View Reviews</Button>
+              <Button
+                sx={{
+                  display: mouseIdx === `${idx}` ? 'inline-block' : 'none',
+                  pointerEvents: 'none',
+                }}
+                role='view-reviews'
+              >
+                View Reviews
+              </Button>
             </Link>
           </Typography>
         )
