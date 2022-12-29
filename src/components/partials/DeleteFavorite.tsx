@@ -79,8 +79,7 @@ export default function DeleteFavorite({
           <DialogTitle id='alert-dialog-title'>{'Are you sure?'}</DialogTitle>
           <DialogContent>
             <DialogContentText id='alert-dialog-description'>
-              This will also delete all reviews you have posted for {foodName}. <br></br>Please
-              click Delete if you want to proceed with deletion.
+              This may also delete reviews you have posted for {foodName}.
             </DialogContentText>
           </DialogContent>
           <DialogActions>
