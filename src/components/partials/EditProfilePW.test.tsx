@@ -95,11 +95,7 @@ describe('EditProfilePW', () => {
 
     await userEvent.click(screen.getByLabelText('changepw-submit'))
 
-    expect(
-      await screen.findByText(
-        'Current password provided does not match our records. Please try again',
-      ),
-    ).toBeVisible()
+    expect(screen.getByRole('error-message-pwcheck')).toBeVisible()
     expect(mockUpdateUser).not.toBeCalled()
   })
 
@@ -131,9 +127,7 @@ describe('EditProfilePW', () => {
 
     await userEvent.click(screen.getByLabelText('changepw-submit'))
 
-    expect(
-      await screen.findByText('New password inputs do not match. Please try again'),
-    ).toBeVisible()
+    expect(screen.getByRole('error-message-pwcheck')).toBeVisible()
     expect(mockUpdateUser).not.toBeCalled()
   })
 
@@ -161,7 +155,7 @@ describe('EditProfilePW', () => {
 
     await userEvent.click(screen.getByLabelText('changepw-submit'))
 
-    expect(await screen.findByText('New password was not provided. Please try again')).toBeVisible()
+    expect(screen.getByRole('error-message-pwcheck')).toBeVisible()
     expect(mockUpdateUser).not.toBeCalled()
   })
 
