@@ -58,10 +58,10 @@ export default function UserReviews({ inputValue, profileUsername }: reviewProps
     <Spinner loading={loadingReviews}>
       <Container>
         <Typography role='error-message-userReviews'>
-          {errorReviews && `${errorReviews}`}
+          {errorReviews ? `${errorReviews}` : ''}
         </Typography>
         <Typography role='no-reviews-msg'>
-          {reviewsToDisplay.length === 0 && `${noReviewsMsg}`}
+          {reviewsToDisplay.length === 0 ? `${noReviewsMsg}` : ''}
         </Typography>
         <Box aria-label='reviews-list'>{displayReviews}</Box>
       </Container>

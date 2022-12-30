@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
-import { UserContext, UserContextType } from './UserContext'
+import { UserContext } from './UserContext'
 
 type privateProps = {
   children: React.ReactElement
@@ -8,7 +8,7 @@ type privateProps = {
 
 const PrivateRoute: React.FC<privateProps> = ({ children }) => {
   const location = useLocation()
-  const { currentUser } = useContext(UserContext) as UserContextType
+  const { currentUser } = useContext(UserContext)
 
   return (
     <>
