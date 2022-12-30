@@ -38,6 +38,7 @@ export default function FavoriteFoods() {
   }))
 
   const handleUpdateFavorites = async (result: any) => {
+    console.log(result)
     const items = Array.from(favsList)
     const [reorderedItem] = items.splice(result.source.index, 1)
     items.splice(result.destination.index, 0, reorderedItem)
