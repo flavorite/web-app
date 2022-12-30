@@ -78,7 +78,7 @@ export default function DeleteFavorite({
           aria-describedby='alert-dialog-description'
         >
           <DialogTitle aria-label='alert-dialog' id='alert-dialog-title'>
-            {'Are you sure?'}
+            Are you sure?
           </DialogTitle>
           <DialogContent>
             <DialogContentText id='alert-dialog-description'>
