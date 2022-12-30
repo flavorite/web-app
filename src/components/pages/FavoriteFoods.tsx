@@ -1,4 +1,4 @@
-import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd'
+import { DragDropContext, Draggable, Droppable, DropResult } from '@hello-pangea/dnd'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
@@ -37,10 +37,10 @@ export default function FavoriteFoods() {
     color: theme.palette.text.secondary,
   }))
 
-  const handleUpdateFavorites = async (result: any) => {
+  const handleUpdateFavorites = async (result: DropResult) => {
     const items = Array.from(favsList)
     const [reorderedItem] = items.splice(result.source.index, 1)
-    items.splice(result.destination.index, 0, reorderedItem)
+    items.splice(result.destination!.index, 0, reorderedItem)
     items.forEach((item, index) => {
       item.id = index + 1
     })
