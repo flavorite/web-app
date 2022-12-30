@@ -52,16 +52,10 @@ export default function FavoriteFoods() {
 
   const currentUserDisplay = (
     <>
-
       <AddFavorite username={profileUsername} favorites={favsList} />
       <DragDropContext onDragEnd={handleUpdateFavorites}>
         <Droppable droppableId='favorites'>
           {(provided) => (
-            <Box
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-              aria-label='favorites-list-draggable'
-            >
             <Box
               {...provided.droppableProps}
               ref={provided.innerRef}
@@ -80,7 +74,6 @@ export default function FavoriteFoods() {
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
                       aria-label={`${idx}`}
-                      data-testid={`item${idx}`}
                       draggable
                     >
                       <FoodItem
@@ -155,10 +148,10 @@ export default function FavoriteFoods() {
     <Spinner loading={loadingFavorites}>
       <Container fixed>
         <Typography role='error-message-userFavs'>
-          {errorFavorites && `${errorFavorites}`}
+          {errorFavorites ? `${errorFavorites}` : ''}
         </Typography>
         <Typography role='error-message-updateFavs'>
-          {errorUpdateFavorites && `${errorUpdateFavorites}`}
+          {errorUpdateFavorites ? `${errorUpdateFavorites}` : ''}
         </Typography>
         {currentUser!.username === profileUsername ? currentUserDisplay : otherUserDisplay}
       </Container>
