@@ -1,4 +1,4 @@
-import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd'
+import { DragDropContext, Draggable, Droppable, DropResult } from '@hello-pangea/dnd'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
@@ -29,13 +29,11 @@ export default function FavoriteFoods() {
     console.log('review pop up')
   }
 
-  const handleUpdateFavorites = async (result: any) => {
-    const items = Array.from(favsList)
+  const handleUpdateFavorites = async (result: DropResult) => {
+    let items = Array.from(favsList)
     const [reorderedItem] = items.splice(result.source.index, 1)
-    items.splice(result.destination.index, 0, reorderedItem)
-    items.forEach((item, idx) => {
-      item.id = idx + 1
-    })
+    items.splice(result.destination!.index, 0, reorderedItem)
+    items = items.map((item, idx) => ({ ...item, id: idx + 1 }))
     await updateFavorites({
       username: currentUser!.username,
       listFavoriteFoods: { favoriteFoods: items },
