@@ -1,4 +1,4 @@
-import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd'
+import { DragDropContext, Draggable, Droppable, DropResult } from '@hello-pangea/dnd'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
