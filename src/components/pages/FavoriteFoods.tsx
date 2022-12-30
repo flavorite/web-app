@@ -37,13 +37,11 @@ export default function FavoriteFoods() {
     color: theme.palette.text.secondary,
   }))
 
-  const handleUpdateFavorites = async (result: any) => {
-    const items = Array.from(favsList)
+  const handleUpdateFavorites = async (result: DropResult) => {
+    let items = Array.from(favsList)
     const [reorderedItem] = items.splice(result.source.index, 1)
-    items.splice(result.destination.index, 0, reorderedItem)
-    items.forEach((item, index) => {
-      item.id = index + 1
-    })
+    items.splice(result.destination!.index, 0, reorderedItem)
+    items = items.map((item, idx) => ({ ...item, id: idx + 1 }))
     await updateFavorites({
       username: currentUser!.username,
       listFavoriteFoods: { favoriteFoods: items },
