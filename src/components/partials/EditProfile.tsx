@@ -1,24 +1,26 @@
 import Button from '@mui/material/Button'
+import Container from '@mui/material/Container'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import TextField from '@mui/material/TextField'
+import Typography from '@mui/material/Typography'
 import { useState } from 'react'
-import { User } from '../../client/flavorite/models'
+import { UpdateUser, User } from '../../client/flavorite/models'
+import useUpdateUser from '../../hooks/useUpdateUser'
 import EditProfilePW from './EditProfilePW'
+import Spinner from './Spinner'
 
-type profileProps = {
+export type profileProps = {
   user: User
 }
 export default function EditProfile({ user }: profileProps) {
   const [open, setOpen] = useState(false)
-  //   const {
-  //     mutate: updateUser,
-  //     loading: loadingUpdateUser,
-  //     error: errorUpdateUser,
-  //   } = useUpdateUser({ username: user.username })
+  const [updateUserData, setUpdateUserData] = useState<UpdateUser>({})
+  const { mutate: updateUser, loading: loadingUpdateUser, error: errorUpdateUser } = useUpdateUser()
+
   const handleClickOpen = () => {
     setOpen(true)
   }
@@ -27,72 +29,90 @@ export default function EditProfile({ user }: profileProps) {
     setOpen(false)
   }
 
-  const handleSubmit = () => {
-    console.log('edit')
+  const handleSubmit = async () => {
+    setOpen(false)
+    await updateUser({
+      username: user.username,
+      updateUser: updateUserData,
+    })
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUpdateUserData({ ...updateUserData, [e.target.id]: e.target.value })
   }
 
   return (
-    <div>
-      <Button variant='outlined' onClick={handleClickOpen}>
-        Edit Profile
-      </Button>
-      <Dialog fullScreen open={open} onClose={handleClose}>
-        <DialogTitle>Edit Profile</DialogTitle>
-        <DialogActions>
-          <Button onClick={handleSubmit} autoFocus>
-            Save Changes
-          </Button>
-          <Button onClick={handleClose}>Cancel</Button>
-        </DialogActions>
-        <DialogContent>
-          <DialogContentText>Update your profile information:</DialogContentText>
-          <TextField
-            required
-            autoFocus
-            margin='dense'
-            id='username'
-            label='Username'
-            type='username'
-            defaultValue={user.username}
-            fullWidth
-            variant='standard'
-          />
-          <TextField
-            required
-            autoFocus
-            margin='dense'
-            id='firstName'
-            label='First Name'
-            type='firstName'
-            defaultValue={user.firstName}
-            fullWidth
-            variant='standard'
-          />
-          <TextField
-            required
-            autoFocus
-            margin='dense'
-            id='lastName'
-            label='Last Name'
-            type='lastName'
-            defaultValue={user.lastName}
-            fullWidth
-            variant='standard'
-          />
-          <TextField
-            required
-            autoFocus
-            margin='dense'
-            id='email'
-            label='Email Address'
-            type='email'
-            defaultValue={user.email}
-            fullWidth
-            variant='standard'
-          />
-          <EditProfilePW />
-        </DialogContent>
-      </Dialog>
-    </div>
+    <Spinner loading={loadingUpdateUser}>
+      <Container>
+        <Button variant='outlined' onClick={handleClickOpen}>
+          Edit Profile
+        </Button>
+        <Typography role='error-message'>
+          {/* TODO Style Typography */}
+          {errorUpdateUser ? `${errorUpdateUser}` : ''}
+        </Typography>
+        <Dialog fullScreen open={open} onClose={handleClose}>
+          <DialogTitle>Edit Profile</DialogTitle>
+          <DialogActions>
+            <Button onClick={handleSubmit} autoFocus>
+              Save Changes
+            </Button>
+            <Button onClick={handleClose}>Cancel</Button>
+          </DialogActions>
+          <DialogContent>
+            <DialogContentText>Update your profile information:</DialogContentText>
+            <TextField
+              required
+              autoFocus
+              margin='dense'
+              id='username'
+              label='Username'
+              type='username'
+              defaultValue={user.username}
+              fullWidth
+              variant='standard'
+              onChange={handleChange}
+            />
+            <TextField
+              required
+              autoFocus
+              margin='dense'
+              id='firstName'
+              label='First Name'
+              type='firstName'
+              defaultValue={user.firstName}
+              fullWidth
+              variant='standard'
+              onChange={handleChange}
+            />
+            <TextField
+              required
+              autoFocus
+              margin='dense'
+              id='lastName'
+              label='Last Name'
+              type='lastName'
+              defaultValue={user.lastName}
+              fullWidth
+              variant='standard'
+              onChange={handleChange}
+            />
+            <TextField
+              required
+              autoFocus
+              margin='dense'
+              id='email'
+              label='Email Address'
+              type='email'
+              defaultValue={user.email}
+              fullWidth
+              variant='standard'
+              onChange={handleChange}
+            />
+            <EditProfilePW user={user} />
+          </DialogContent>
+        </Dialog>
+      </Container>
+    </Spinner>
   )
 }
