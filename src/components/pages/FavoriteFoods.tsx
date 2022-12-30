@@ -29,7 +29,7 @@ export default function FavoriteFoods() {
   const [favsList, setFavsList] = useState<FavoriteFood[]>(favorites)
   const [mouseIdx, setMouseIdx] = useState('none')
 
-  const Item = styled(Paper)(({ theme }) => ({
+  const FoodItem = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
     ...theme.typography.body2,
     padding: theme.spacing(3),
@@ -38,7 +38,6 @@ export default function FavoriteFoods() {
   }))
 
   const handleUpdateFavorites = async (result: any) => {
-    console.log(result)
     const items = Array.from(favsList)
     const [reorderedItem] = items.splice(result.source.index, 1)
     items.splice(result.destination.index, 0, reorderedItem)
@@ -79,7 +78,7 @@ export default function FavoriteFoods() {
                       aria-label={`${idx}`}
                       draggable
                     >
-                      <Item
+                      <FoodItem
                         onMouseEnter={(e) => setMouseIdx((e.target as Element).id)}
                         onMouseLeave={() => setMouseIdx('none')}
                         id={`${idx}`}
@@ -105,7 +104,7 @@ export default function FavoriteFoods() {
                           setFavsList={setFavsList}
                           username={currentUser!.username}
                         />
-                      </Item>
+                      </FoodItem>
                     </Stack>
                   )}
                 </Draggable>
@@ -122,7 +121,7 @@ export default function FavoriteFoods() {
     <Stack aria-label='favorites-otheruser'>
       {favsList.map(({ id, name: foodName }, idx) => {
         return (
-          <Item
+          <FoodItem
             key={id}
             aria-label={`item${idx}`}
             onMouseEnter={(e) => setMouseIdx((e.target as Element).id)}
@@ -141,7 +140,7 @@ export default function FavoriteFoods() {
                 View Reviews
               </Button>
             </Link>
-          </Item>
+          </FoodItem>
         )
       })}
     </Stack>
@@ -151,10 +150,10 @@ export default function FavoriteFoods() {
     <Spinner loading={loadingFavorites}>
       <Container fixed>
         <Typography role='error-message-userFavs'>
-          {errorFavorites && `${errorFavorites}`}
+          {errorFavorites ? `${errorFavorites}` : ''}
         </Typography>
         <Typography role='error-message-updateFavs'>
-          {errorUpdateFavorites && `${errorUpdateFavorites}`}
+          {errorUpdateFavorites ? `${errorUpdateFavorites}` : ''}
         </Typography>
         {currentUser!.username === profileUsername ? currentUserDisplay : otherUserDisplay}
       </Container>
