@@ -29,7 +29,7 @@ export default function FavoriteFoods() {
   const [favsList, setFavsList] = useState<FavoriteFood[]>(favorites)
   const [mouseIdx, setMouseIdx] = useState('none')
 
-  const Item = styled(Paper)(({ theme }) => ({
+  const FoodItem = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
     ...theme.typography.body2,
     padding: theme.spacing(3),
@@ -76,7 +76,7 @@ export default function FavoriteFoods() {
                       aria-label={`${idx}`}
                       draggable
                     >
-                      <Item
+                      <FoodItem
                         onMouseEnter={(e) => setMouseIdx((e.target as Element).id)}
                         onMouseLeave={() => setMouseIdx('none')}
                         id={`${idx}`}
@@ -102,7 +102,7 @@ export default function FavoriteFoods() {
                           setFavsList={setFavsList}
                           username={currentUser!.username}
                         />
-                      </Item>
+                      </FoodItem>
                     </Stack>
                   )}
                 </Draggable>
@@ -119,7 +119,7 @@ export default function FavoriteFoods() {
     <Stack aria-label='favorites-otheruser'>
       {favsList.map(({ id, name: foodName }, idx) => {
         return (
-          <Item
+          <FoodItem
             key={id}
             aria-label={`item${idx}`}
             onMouseEnter={(e) => setMouseIdx((e.target as Element).id)}
@@ -138,7 +138,7 @@ export default function FavoriteFoods() {
                 View Reviews
               </Button>
             </Link>
-          </Item>
+          </FoodItem>
         )
       })}
     </Stack>
