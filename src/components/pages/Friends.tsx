@@ -74,7 +74,7 @@ export default function Friends() {
         )}
         <Box>
           <Typography role='error-message-getFriends'>
-            {errorFetchingFriends && `${errorFetchingFriends}`}
+            {errorFetchingFriends ? `${errorFetchingFriends}` : ''}
           </Typography>
           <Stack spacing={2}>{friendsList}</Stack>
         </Box>
