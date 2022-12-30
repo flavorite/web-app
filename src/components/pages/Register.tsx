@@ -66,7 +66,7 @@ export default function Register() {
           </Typography>
           <Typography role='error-message'>
             {/* TODO Style Typography */}
-            {errorCreateUser && `${errorCreateUser}`}
+            {errorCreateUser ? `${errorCreateUser}` : ''}
           </Typography>
           <Box component='form' data-testid='form' onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>

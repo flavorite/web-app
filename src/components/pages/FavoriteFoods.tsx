@@ -52,6 +52,7 @@ export default function FavoriteFoods() {
 
   const currentUserDisplay = (
     <>
+
       <AddFavorite username={profileUsername} favorites={favsList} />
       <DragDropContext onDragEnd={handleUpdateFavorites}>
         <Droppable droppableId='favorites'>
