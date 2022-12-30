@@ -58,21 +58,23 @@ export default function EditProfilePW({ user }: profileProps) {
   return (
     <Spinner loading={loadingUpdateUser}>
       <Box>
-        <Button variant='outlined' onClick={handleClickOpen}>
+        <Typography role='error-message-updateUser'>
+          {/* TODO Style Typography */}
+          {errorUpdateUser ? `${errorUpdateUser}` : ''}
+        </Typography>
+        <Button variant='outlined' onClick={handleClickOpen} aria-label='editprofile-changepw'>
           Change Password
         </Button>
         <Dialog open={open} onClose={handleClose}>
           <DialogTitle>Change Password</DialogTitle>
-          <Typography role='error-message'>
-            {/* TODO Style Typography */}
-            {errorUpdateUser ? `${errorUpdateUser}` : ''}
-          </Typography>
-          <Typography role='error-message'>
+          <Typography role='error-message-pwcheck'>
             {/* TODO Style Typography */}
             {errorMsgPW}
           </Typography>
           <DialogContent>
-            <DialogContentText>Enter your current password and new password:</DialogContentText>
+            <DialogContentText aria-label='changepw-dialog'>
+              Enter your current password and new password:
+            </DialogContentText>
             <TextField
               autoFocus
               margin='dense'
@@ -105,8 +107,12 @@ export default function EditProfilePW({ user }: profileProps) {
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={handleSubmit}>Submit</Button>
+            <Button onClick={handleClose} aria-label='changepw-cancel'>
+              Cancel
+            </Button>
+            <Button onClick={handleSubmit} aria-label='changepw-submit'>
+              Submit
+            </Button>
           </DialogActions>
         </Dialog>
       </Box>

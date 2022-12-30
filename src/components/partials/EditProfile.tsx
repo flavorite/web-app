@@ -31,10 +31,12 @@ export default function EditProfile({ user }: profileProps) {
 
   const handleSubmit = async () => {
     setOpen(false)
-    await updateUser({
-      username: user.username,
-      updateUser: updateUserData,
-    })
+    if (Object.entries(updateUserData).length > 0) {
+      await updateUser({
+        username: user.username,
+        updateUser: updateUserData,
+      })
+    }
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,20 +46,22 @@ export default function EditProfile({ user }: profileProps) {
   return (
     <Spinner loading={loadingUpdateUser}>
       <Container>
-        <Button variant='outlined' onClick={handleClickOpen}>
+        <Button variant='outlined' onClick={handleClickOpen} aria-label='editprofile-button'>
           Edit Profile
         </Button>
-        <Typography role='error-message'>
+        <Typography role='error-message-updateUser'>
           {/* TODO Style Typography */}
           {errorUpdateUser ? `${errorUpdateUser}` : ''}
         </Typography>
         <Dialog fullScreen open={open} onClose={handleClose}>
-          <DialogTitle>Edit Profile</DialogTitle>
+          <DialogTitle aria-label='editprofile-dialog'>Edit Profile</DialogTitle>
           <DialogActions>
-            <Button onClick={handleSubmit} autoFocus>
+            <Button onClick={handleSubmit} aria-label='editprofile-submit' autoFocus>
               Save Changes
             </Button>
-            <Button onClick={handleClose}>Cancel</Button>
+            <Button onClick={handleClose} aria-label='editprofile-cancel'>
+              Cancel
+            </Button>
           </DialogActions>
           <DialogContent>
             <DialogContentText>Update your profile information:</DialogContentText>
@@ -67,7 +71,7 @@ export default function EditProfile({ user }: profileProps) {
               margin='dense'
               id='username'
               label='Username'
-              type='username'
+              aria-label='username'
               defaultValue={user.username}
               fullWidth
               variant='standard'
@@ -79,7 +83,7 @@ export default function EditProfile({ user }: profileProps) {
               margin='dense'
               id='firstName'
               label='First Name'
-              type='firstName'
+              aria-label='firstName'
               defaultValue={user.firstName}
               fullWidth
               variant='standard'
@@ -91,7 +95,7 @@ export default function EditProfile({ user }: profileProps) {
               margin='dense'
               id='lastName'
               label='Last Name'
-              type='lastName'
+              aria-label='lastName'
               defaultValue={user.lastName}
               fullWidth
               variant='standard'
@@ -103,7 +107,7 @@ export default function EditProfile({ user }: profileProps) {
               margin='dense'
               id='email'
               label='Email Address'
-              type='email'
+              aria-label='email'
               defaultValue={user.email}
               fullWidth
               variant='standard'
