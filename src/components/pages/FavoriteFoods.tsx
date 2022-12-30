@@ -47,9 +47,11 @@ export default function FavoriteFoods() {
   const currentUserDisplay = (
     <>
       <AddFavorite username={currentUser!.username} favorites={favorites} />
-      <Typography role='error-message-userFavs'>{errorFavorites && `${errorFavorites}`}</Typography>
+      <Typography role='error-message-userFavs'>
+        {errorFavorites ? `${errorFavorites}` : ''}
+      </Typography>
       <Typography role='error-message-updateFavs'>
-        {errorUpdateFavorites && `${errorUpdateFavorites}`}
+        {errorUpdateFavorites ? `${errorUpdateFavorites}` : ''}
       </Typography>
       <DragDropContext onDragEnd={handleUpdateFavorites}>
         <Droppable droppableId='favorites'>
