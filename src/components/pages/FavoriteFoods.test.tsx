@@ -1,6 +1,4 @@
 import { fireEvent, render, screen } from '@testing-library/react'
-// import userEvent from '@testing-library/user-event'
-// import { verticalDrag } from 'react-beautiful-dnd-tester'
 import TestProvider from '../partials/TestProvider'
 import { UserContext } from '../partials/UserContext'
 import FavoriteFoods from './FavoriteFoods'
@@ -28,54 +26,20 @@ jest.mock('../../hooks/useUpdateFavorites', () => {
       loading: false,
       error: 'there is an error in updating favorite foods',
       success: true,
-      favorites: [
-        { id: 1, name: 'sushi' },
-        { id: 2, name: 'pizza' },
-      ],
     }
   }
 })
 
-jest.mock('@hello-pangea/dnd', () => ({
-  Droppable: ({ children }: any) =>
-    children(
-      {
-        draggableProps: {
-          style: {},
-        },
-        innerRef: jest.fn(),
-      },
-      {},
-    ),
-  Draggable: ({ children }: any) =>
-    children(
-      {
-        draggableProps: {
-          style: {},
-        },
-        innerRef: jest.fn(),
-      },
-      {},
-    ),
-  DragDropContext: ({ children }: any) => children,
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({
+    username: 'kitty',
+  }),
 }))
 
 describe('FavoriteFoods', () => {
-  test('should render without crashing and displays addFavorite component and a list of favorite foods from fetched data', async () => {
+  test('if currentUser matches profileUser, should display addFavorite component and draggable list of favoriteFoods. On mouse hover on list item, should show View Review button and Delete button', async () => {
     render(
-      <TestProvider>
-        <FavoriteFoods />
-      </TestProvider>,
-    )
-    const addFavoriteField = screen.getByRole('textbox', { name: /Add a new Favorite Dish/i })
-    const addFavoriteBtn = screen.getByRole('button', { name: /add/i })
-    expect(addFavoriteField).toBeInTheDocument()
-    expect(addFavoriteBtn).toBeInTheDocument()
-    expect(screen.getByLabelText(/favorites-list/i)).toBeInTheDocument()
-  })
-
-  test('drags an item in front of another', async () => {
-    const { getAllByTestId } = render(
       <TestProvider>
         <UserContext.Provider
           value={{
@@ -88,31 +52,90 @@ describe('FavoriteFoods', () => {
         </UserContext.Provider>
       </TestProvider>,
     )
-    // screen.debug()
-    const first = getAllByTestId(/item/i)[0]
-    const second = getAllByTestId(/item/i)[1]
 
-    const SPACE = { key: ' ', code: 'Space' }
-    const ARROW_DOWN = { key: 'ArrowDown', code: 'ArrowDown' }
-    fireEvent.keyDown(first, SPACE) // Begins the dnd
-    fireEvent.keyDown(first, ARROW_DOWN) // Moves the element
-    fireEvent.keyDown(first, SPACE) // Ends the dnd
+    const addFavoriteField = screen.getByRole('textbox', { name: /Add a new Favorite Dish/i })
+    const addFavoriteBtn = screen.getByRole('button', { name: /add/i })
+    const draggableList = screen.findByLabelText(/favorites-list-draggable/i)
+    const firstListItem = screen.findByLabelText('item0')
 
-    // verticalDrag(second).inFrontOf(first)
-    // const newSecond = await screen.findByText('2.sushi')
+    expect(addFavoriteField).toBeInTheDocument()
+    expect(addFavoriteBtn).toBeInTheDocument()
+    expect(await draggableList).toBeInTheDocument()
+    expect(screen.queryByLabelText('viewReview-0')).not.toBeVisible()
+    expect(screen.queryByLabelText('delete-0')).not.toBeVisible()
 
-    // expect(newFirst).toBeInTheDocument()
-    // expect(newSecond).toBeInTheDocument()
+    await fireEvent.mouseEnter(await firstListItem)
 
-    // expect(mockUpdateFoods).toBeCalledWith({
-    //   username: 'kitty',
-    //   listFavoriteFoods: {
-    //     favoriteFoods: [
-    //       { id: 1, name: 'pizza' },
-    //       { id: 2, name: 'sushi' },
-    //     ],
-    //   },
-    // })
+    expect(await screen.findByLabelText('viewReview-0')).toBeVisible()
+    expect(await screen.findByLabelText('delete-0')).toBeVisible()
+  })
+
+  test('if currentUser matches profileUser, user should be able to drag and drop favorites to update favorites list to new order', async () => {
+    render(
+      <TestProvider>
+        <UserContext.Provider
+          value={{
+            currentUser: { username: 'kitty', token: 'tokenString' },
+            setUser: jest.fn(),
+            clearUser: jest.fn(),
+          }}
+        >
+          <FavoriteFoods />
+        </UserContext.Provider>
+      </TestProvider>,
+    )
+
+    // Library preset label for draggable list item
+    const first = screen.getByLabelText('0')
+
+    first.focus()
+    expect(first).toHaveFocus()
+
+    await fireEvent.keyDown(first, { key: ' ', keyCode: 32 })
+
+    await fireEvent.keyDown(first, { key: 'ArrowDown', keyCode: 40 })
+
+    await fireEvent.keyDown(first, { key: ' ', keyCode: 32 })
+
+    expect(mockUpdateFoods).toBeCalledWith({
+      username: 'kitty',
+      listFavoriteFoods: {
+        favoriteFoods: [
+          { id: 1, name: 'pizza' },
+          { id: 2, name: 'sushi' },
+        ],
+      },
+    })
+  })
+
+  test('if currentUser does not match profileUser, should only display non-draggable list of favoritefoods. On mouseHover on list item, should display View Reviews button', async () => {
+    render(
+      <TestProvider>
+        <UserContext.Provider
+          value={{
+            currentUser: { username: 'otherUser', token: 'tokenString' },
+            setUser: jest.fn(),
+            clearUser: jest.fn(),
+          }}
+        >
+          <FavoriteFoods />
+        </UserContext.Provider>
+      </TestProvider>,
+    )
+    const addFavoriteField = screen.queryByRole('textbox', { name: /Add a new Favorite Dish/i })
+    const addFavoriteBtn = screen.queryByRole('button', { name: /add/i })
+    expect(addFavoriteField).not.toBeInTheDocument()
+    expect(addFavoriteBtn).not.toBeInTheDocument()
+    expect(screen.queryByLabelText(/favorites-list-draggable/i)).not.toBeInTheDocument()
+
+    expect(await screen.findByLabelText(/favorites-otheruser/i)).toBeInTheDocument()
+
+    expect(screen.queryByLabelText('viewReview-0')).not.toBeVisible()
+
+    const firstListItem = screen.findByLabelText('item0')
+    await fireEvent.mouseEnter(await firstListItem)
+
+    expect(await screen.findByLabelText('viewReview-0')).toBeVisible()
   })
 
   test('if error in fetching favorites or updating favoriteFoods, should display error message', () => {

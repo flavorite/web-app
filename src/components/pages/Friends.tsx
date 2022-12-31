@@ -29,7 +29,7 @@ export default function Friends() {
     } else {
       setEnabled(false)
     }
-  }, [])
+  }, [friends])
 
   const friendsList = friends.map((friend, id) => {
     return (
