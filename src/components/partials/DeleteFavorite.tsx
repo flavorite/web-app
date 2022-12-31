@@ -46,6 +46,7 @@ export default function DeleteFavorite({
   }
 
   const handleDelete = async () => {
+    setOpen(false)
     const newFavorites = favsList.filter((item, index) => index !== idx)
     newFavorites.forEach((item, index) => {
       item.id = index + 1
@@ -76,22 +77,26 @@ export default function DeleteFavorite({
           aria-labelledby='alert-dialog-title'
           aria-describedby='alert-dialog-description'
         >
-          <DialogTitle id='alert-dialog-title'>{'Are you sure?'}</DialogTitle>
+          <DialogTitle aria-label='alert-dialog' id='alert-dialog-title'>
+            Are you sure?
+          </DialogTitle>
           <DialogContent>
             <DialogContentText id='alert-dialog-description'>
               This may also delete reviews you have posted for {foodName}.
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleDelete}>Delete</Button>
-            <Button onClick={handleClose} autoFocus>
+            <Button aria-label='confirm-delete' onClick={handleDelete}>
+              Delete
+            </Button>
+            <Button aria-label='cancel-delete' onClick={handleClose} autoFocus>
               Cancel
             </Button>
           </DialogActions>
         </Dialog>
         <Typography role='error-message'>
           {/* TODO Style Typography */}
-          {errorUpdateFavorites && `${errorUpdateFavorites}`}
+          {errorUpdateFavorites ? `${errorUpdateFavorites}` : ''}
         </Typography>
       </Box>
     </Spinner>
