@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import AddFavorite from './AddFavorite'
 import TestProvider from './TestProvider'
@@ -53,7 +53,7 @@ describe('AddFavorite', () => {
     expect(addFavoriteField).toHaveValue('tacos')
   })
 
-  test('onSubmit, should post form data to update FavoriteFoods and clear textField', async () => {
+  test('onSubmit, should post form data to update FavoriteFoods', async () => {
     render(
       <TestProvider>
         <AddFavorite
@@ -68,7 +68,7 @@ describe('AddFavorite', () => {
     const addFavoriteField = screen.getByRole('textbox', {
       name: /Add a new Favorite Dish/i,
     }) as HTMLInputElement
-    await userEvent.type(addFavoriteField, 'tacos')
+    fireEvent.change(addFavoriteField, { target: { value: 'tacos' } })
 
     const addFavoriteBtn = screen.getByRole('button', { name: /add/i })
     await userEvent.click(addFavoriteBtn)
@@ -82,10 +82,6 @@ describe('AddFavorite', () => {
           { id: 3, name: 'tacos' },
         ],
       },
-    })
-
-    await waitFor(() => {
-      expect(addFavoriteField.value).toBe('')
     })
   })
 
