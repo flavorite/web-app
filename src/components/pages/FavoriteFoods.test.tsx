@@ -1,4 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react'
+// import userEvent from '@testing-library/user-event'
+// import { verticalDrag } from 'react-beautiful-dnd-tester'
 import TestProvider from '../partials/TestProvider'
 import { UserContext } from '../partials/UserContext'
 import FavoriteFoods from './FavoriteFoods'
@@ -34,7 +36,7 @@ jest.mock('../../hooks/useUpdateFavorites', () => {
   }
 })
 
-jest.mock('react-beautiful-dnd', () => ({
+jest.mock('@hello-pangea/dnd', () => ({
   Droppable: ({ children }: any) =>
     children(
       {
@@ -59,18 +61,21 @@ jest.mock('react-beautiful-dnd', () => ({
 }))
 
 describe('FavoriteFoods', () => {
-  test('should render without crashing and displays a list of favorite foods from fetched data', async () => {
+  test('should render without crashing and displays addFavorite component and a list of favorite foods from fetched data', async () => {
     render(
       <TestProvider>
         <FavoriteFoods />
       </TestProvider>,
     )
-    expect(await screen.findByText('sushi')).toBeInTheDocument()
-    expect(await screen.findByText('pizza')).toBeInTheDocument()
+    const addFavoriteField = screen.getByRole('textbox', { name: /Add a new Favorite Dish/i })
+    const addFavoriteBtn = screen.getByRole('button', { name: /add/i })
+    expect(addFavoriteField).toBeInTheDocument()
+    expect(addFavoriteBtn).toBeInTheDocument()
+    expect(screen.getByLabelText(/favorites-list/i)).toBeInTheDocument()
   })
 
-  test('drag and drop of list items should update and display a new ordered list', async () => {
-    render(
+  test('drags an item in front of another', async () => {
+    const { getAllByTestId } = render(
       <TestProvider>
         <UserContext.Provider
           value={{
@@ -83,14 +88,21 @@ describe('FavoriteFoods', () => {
         </UserContext.Provider>
       </TestProvider>,
     )
+    // screen.debug()
+    const first = getAllByTestId(/item/i)[0]
+    const second = getAllByTestId(/item/i)[1]
 
-    // TODO test react-beautiful-dnd drag/drop functionality and updateFavorites result
-    const sushi = await screen.findByText('sushi')
-    const SPACE = { keyCode: 40 }
-    const ARROW_DOWN = { keyCode: 32 }
-    fireEvent.keyDown(sushi, SPACE) // Begins the drag
-    fireEvent.keyDown(sushi, ARROW_DOWN) // Moves the element
-    fireEvent.keyDown(sushi, SPACE) // Ends drag and drop
+    const SPACE = { key: ' ', code: 'Space' }
+    const ARROW_DOWN = { key: 'ArrowDown', code: 'ArrowDown' }
+    fireEvent.keyDown(first, SPACE) // Begins the dnd
+    fireEvent.keyDown(first, ARROW_DOWN) // Moves the element
+    fireEvent.keyDown(first, SPACE) // Ends the dnd
+
+    // verticalDrag(second).inFrontOf(first)
+    // const newSecond = await screen.findByText('2.sushi')
+
+    // expect(newFirst).toBeInTheDocument()
+    // expect(newSecond).toBeInTheDocument()
 
     // expect(mockUpdateFoods).toBeCalledWith({
     //   username: 'kitty',
@@ -110,8 +122,8 @@ describe('FavoriteFoods', () => {
       </TestProvider>,
     )
 
-    const errorMsgUserData = screen.getByRole('error-message-userData')
-    expect(errorMsgUserData).toHaveTextContent('there is an error in fetching favorites')
+    const errorMsgUserFavs = screen.getByRole('error-message-userFavs')
+    expect(errorMsgUserFavs).toHaveTextContent('there is an error in fetching favorites')
 
     const errorMsgUpdateFavs = screen.getByRole('error-message-updateFavs')
     expect(errorMsgUpdateFavs).toHaveTextContent('there is an error in updating favorite foods')

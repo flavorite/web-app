@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import './App.css'
 const queryClient = new QueryClient()
 
-import FavoriteFood from './components/pages/FavoriteFood'
 import FavoriteFoods from './components/pages/FavoriteFoods'
 import Friends from './components/pages/Friends'
 import Home from './components/pages/Home'
@@ -64,14 +63,14 @@ function App() {
                     </PrivateRoute>
                   }
                 />
-                <Route
-                  path='/:username/favorites/:favorite'
+                {/* <Route
+                  path='/:username/reviews/:favorite'
                   element={
                     <PrivateRoute>
-                      <FavoriteFood />
+                      <UserReviews />
                     </PrivateRoute>
                   }
-                />
+                /> */}
                 <Route path='/restaurants/:restaurantId' element={<Restaurant />} />
                 <Route path='/register' element={<Register />} />
                 <Route path='/login' element={<Login />} />
