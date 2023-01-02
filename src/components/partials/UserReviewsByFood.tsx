@@ -4,6 +4,7 @@ import Container from '@mui/material/Container'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { useContext, useEffect, useState } from 'react'
+import Moment from 'react-moment'
 import { Link } from 'react-router-dom'
 import { ListReviews } from '../../client/flavorite'
 import useReviewsByUser from '../../hooks/useReviewsByUser'
@@ -44,12 +45,24 @@ export default function UserReviews({ inputValue, profileUsername }: reviewProps
   const displayReviews = reviewsToDisplay.map((review, idx) => {
     return (
       <Stack data-testid='reviewItems' key={`${review.id}-${idx}`}>
-        {review.content}
-        {currentUser!.username === profileUsername && (
+        {/* TODO discuss efficient way to pull restaurant name  */}
+        {currentUser!.username === profileUsername ? (
           <Button aria-label='edit-review'>
             <Link to={`/${profileUsername}/reviews/${review.id}`}>Edit</Link>
           </Button>
+        ) : (
+          <Typography>{profileUsername}</Typography>
         )}
+        {review.createdAt === review.updatedAt ? (
+          <Typography>
+            Posted <Moment fromNow>{review.createdAt}</Moment>
+          </Typography>
+        ) : (
+          <Typography>
+            Edited <Moment fromNow>{review.updatedAt}</Moment>
+          </Typography>
+        )}
+        {review.content}
       </Stack>
     )
   })

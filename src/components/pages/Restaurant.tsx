@@ -1,11 +1,11 @@
-import useRestaurantReviews from '../../hooks/useRestaurantReviews'
-import Container from '@mui/material/Container'
 import Box from '@mui/material/Box'
+import Container from '@mui/material/Container'
 import Stack from '@mui/material/Stack'
+import useRestaurantReviews from '../../hooks/useRestaurantReviews'
 
 export default function Restaurant() {
   // TODO: Need to obtain restaurant ID from RestaurantList
-  const restaurantId = 1
+  const restaurantId = '1'
   const { reviews, loading, error } = useRestaurantReviews({ restaurantId })
 
   const reviewsData = reviews.map((review, id) => {

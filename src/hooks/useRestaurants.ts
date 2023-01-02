@@ -1,6 +1,5 @@
-import { ListRestaurants } from '../client/flavorite/models'
-import { useQuery } from 'react-query'
 import { GetRestaurantsRequest, RestaurantsApi } from '../client/flavorite/apis'
+import { ListRestaurants } from '../client/flavorite/models'
 
 export default function useRestaurants(location: GetRestaurantsRequest) {
   const Restaurants = new RestaurantsApi()
@@ -10,14 +9,14 @@ export default function useRestaurants(location: GetRestaurantsRequest) {
   const restaurantsList: ListRestaurants = {
     restaurants: [
       {
-        id: 1,
+        id: '1',
         name: 'Kansai Sushi',
         longitude: 37.9729811,
         latitude: -122.0455746,
         address: '1669 Willow Pass Rd, Concord, CA 94520',
       },
       {
-        id: 2,
+        id: '2',
         name: 'Tang Tang Tang',
         longitude: 37.9736553,
         latitude: -122.0443956,
