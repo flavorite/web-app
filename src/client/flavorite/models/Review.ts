@@ -13,6 +13,17 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import {
+    Restaurant,
+    RestaurantFromJSON,
+    RestaurantFromJSONTyped,
+    RestaurantToJSON,
+    User,
+    UserFromJSON,
+    UserFromJSONTyped,
+    UserToJSON,
+} from './';
+
 /**
  * 
  * @export
@@ -21,22 +32,22 @@ import { exists, mapValues } from '../runtime';
 export interface Review {
     /**
      * 
-     * @type {number}
-     * @memberof Review
-     */
-    id: number;
-    /**
-     * 
      * @type {string}
      * @memberof Review
      */
-    userId: string;
+    id: string;
     /**
      * 
-     * @type {string}
+     * @type {User}
      * @memberof Review
      */
-    restaurantId: string;
+    user: User;
+    /**
+     * 
+     * @type {Restaurant}
+     * @memberof Review
+     */
+    restaurant: Restaurant;
     /**
      * 
      * @type {number}
@@ -92,8 +103,8 @@ export function ReviewFromJSONTyped(json: any, ignoreDiscriminator: boolean): Re
     return {
         
         'id': json['id'],
-        'userId': json['userId'],
-        'restaurantId': json['restaurantId'],
+        'user': UserFromJSON(json['user']),
+        'restaurant': RestaurantFromJSON(json['restaurant']),
         'rating': json['rating'],
         'content': !exists(json, 'content') ? undefined : json['content'],
         'photoUrl': !exists(json, 'photoUrl') ? undefined : json['photoUrl'],
@@ -114,8 +125,8 @@ export function ReviewToJSON(value?: Review | null): any {
     return {
         
         'id': value.id,
-        'userId': value.userId,
-        'restaurantId': value.restaurantId,
+        'user': UserToJSON(value.user),
+        'restaurant': RestaurantToJSON(value.restaurant),
         'rating': value.rating,
         'content': value.content,
         'photoUrl': value.photoUrl,

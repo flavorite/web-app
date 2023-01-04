@@ -32,6 +32,12 @@ export interface ListFriends {
      * @memberof ListFriends
      */
     friends: Array<User>;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ListFriends
+     */
+    fbConnected?: boolean;
 }
 
 export function ListFriendsFromJSON(json: any): ListFriends {
@@ -45,6 +51,7 @@ export function ListFriendsFromJSONTyped(json: any, ignoreDiscriminator: boolean
     return {
         
         'friends': ((json['friends'] as Array<any>).map(UserFromJSON)),
+        'fbConnected': !exists(json, 'fbConnected') ? undefined : json['fbConnected'],
     };
 }
 
@@ -58,6 +65,7 @@ export function ListFriendsToJSON(value?: ListFriends | null): any {
     return {
         
         'friends': ((value.friends as Array<any>).map(UserToJSON)),
+        'fbConnected': value.fbConnected,
     };
 }
 

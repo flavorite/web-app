@@ -9,9 +9,22 @@ export default function useRestaurantReviews(restaurantId: GetReviewByRestaurant
   const reviewsList: ListReviews = {
     reviews: [
       {
-        id: 1,
-        userId: '2',
-        restaurantId: '1',
+        id: '1',
+        user: {
+          id: '1',
+          username: 'kitty',
+          email: 'v@b.com',
+          firstName: 'valerie',
+          lastName: 'yang',
+          password: 'testpw',
+        },
+        restaurant: {
+          id: '2',
+          name: 'Pizzaria',
+          longitude: 37.9736553,
+          latitude: -122.0443956,
+          address: '1679 Willow Pass Rd, Concord, CA 94520',
+        },
         content: 'this is a good restaurant',
         rating: 5,
         favoriteFood: 'pizza',
@@ -20,9 +33,22 @@ export default function useRestaurantReviews(restaurantId: GetReviewByRestaurant
         updatedAt: '12/20/2022',
       },
       {
-        id: 2,
-        userId: '1',
-        restaurantId: '1',
+        id: '2',
+        user: {
+          id: '1',
+          username: 'kitty',
+          email: 'v@b.com',
+          firstName: 'valerie',
+          lastName: 'yang',
+          password: 'testpw',
+        },
+        restaurant: {
+          id: '2',
+          name: 'Pizzaria',
+          longitude: 37.9736553,
+          latitude: -122.0443956,
+          address: '1679 Willow Pass Rd, Concord, CA 94520',
+        },
         content: 'pretty good',
         rating: 4,
         favoriteFood: 'pizza',

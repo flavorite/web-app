@@ -475,8 +475,8 @@ components:
     Review:
       required:
         - id
-        - userId
-        - restaurantId
+        - user
+        - restaurant
         - rating
         - favoriteFood
         - starred
@@ -485,15 +485,12 @@ components:
       type: object
       properties:
         id:
-          type: integer
-          format: int64
-          example: 10
-        userId:
           type: string
-          example: '198772'
-        restaurantId:
-          type: string
-          example: '19877'
+          example: '10'
+        user:
+          $ref: '#/components/schemas/User'
+        restaurant:
+          $ref: '#/components/schemas/Restaurant'
         rating:
           type: integer
           format: int64
@@ -739,6 +736,9 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/User'
+        fbConnected:
+          type: boolean
+          example: true
     ApiResponse:
       type: object
       properties:

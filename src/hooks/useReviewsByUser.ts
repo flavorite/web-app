@@ -9,9 +9,22 @@ export default function useReviewsByUser(username: GetUserByNameRequest) {
   const reviewsList: ListReviews = {
     reviews: [
       {
-        id: 1,
-        userId: '1',
-        restaurantId: '1',
+        id: '1',
+        user: {
+          id: '1',
+          username: 'kitty',
+          email: 'v@b.com',
+          firstName: 'valerie',
+          lastName: 'yang',
+          password: 'testpw',
+        },
+        restaurant: {
+          id: '2',
+          name: 'Kansai Sushi',
+          longitude: 37.9736553,
+          latitude: -122.0443956,
+          address: '1679 Willow Pass Rd, Concord, CA 94520',
+        },
         content: 'one of my fav sushi',
         rating: 5,
         favoriteFood: 'sushi',
@@ -20,9 +33,22 @@ export default function useReviewsByUser(username: GetUserByNameRequest) {
         updatedAt: '12/20/2022',
       },
       {
-        id: 2,
-        userId: '1',
-        restaurantId: '2',
+        id: '2',
+        user: {
+          id: '1',
+          username: 'kitty',
+          email: 'v@b.com',
+          firstName: 'valerie',
+          lastName: 'yang',
+          password: 'testpw',
+        },
+        restaurant: {
+          id: '2',
+          name: 'Pizzaria',
+          longitude: 37.9736553,
+          latitude: -122.0443956,
+          address: '1690 Willow Pass Rd, Concord, CA 94520',
+        },
         content: 'So So pizza',
         rating: 3,
         favoriteFood: 'pizza',
