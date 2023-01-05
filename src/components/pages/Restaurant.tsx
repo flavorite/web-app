@@ -3,8 +3,7 @@ import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { useParams } from 'react-router'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useParams } from 'react-router-dom'
 import useRestaurantReviews from '../../hooks/useRestaurantReviews'
 
 export default function Restaurant() {

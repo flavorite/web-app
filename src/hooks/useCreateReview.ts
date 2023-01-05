@@ -16,7 +16,7 @@ export default function useCreateReview() {
   )
 
   const review: CreateReview = {
-    userId: '1',
+    username: 'kitty',
     restaurantId: '2',
     rating: 5,
     content: 'good',

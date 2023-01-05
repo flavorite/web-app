@@ -11,12 +11,11 @@ import Select, { SelectChangeEvent } from '@mui/material/Select'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { useContext, useState } from 'react'
-import { useNavigate, useParams } from 'react-router'
-import { useLocation } from 'react-router-dom'
+import { useNavigate } from 'react-router'
+import { useLocation, useParams } from 'react-router-dom'
 import { CreateReview } from '../../client/flavorite/models'
 import useCreateReview from '../../hooks/useCreateReview'
 import useFavorites from '../../hooks/useFavorites'
-import useUser from '../../hooks/useUser'
 import Spinner from '../partials/Spinner'
 import { UserContext } from '../partials/UserContext'
 
@@ -28,12 +27,6 @@ export default function NewReview() {
     error: errorCreateReview,
     mutate: createReview,
   } = useCreateReview()
-  // TODO: may not need this once LoginPayload is finalized with Cognito
-  const {
-    user,
-    loading: loadingUser,
-    error: errorUser,
-  } = useUser({ username: currentUser!.username })
   const {
     favorites,
     loading: loadingFavorites,
@@ -71,31 +64,30 @@ export default function NewReview() {
     }
     const formData = new FormData(event.currentTarget)
     const formDataObj: CreateReview = {
-      userId: user.id,
-      restaurantId: location.state.restaurant.id,
+      username: currentUser!.username,
+      restaurantId: restaurantId,
       starred: false,
       rating: rating!,
       content: formData.get('content') as string,
       favoriteFood: selectedFood,
       // TODO: enable photo upload. Need to discuss format of image upload.
     }
-
+    console.log(formDataObj)
     await createReview({ createReview: formDataObj })
     navigate(`/restaurants/${restaurantName}`, { state: { restaurantId: restaurantId } })
   }
 
   return (
-    <Spinner loading={loadingCreateReview || loadingFavorites || loadingUser}>
+    <Spinner loading={loadingCreateReview || loadingFavorites}>
       <Container fixed>
-        <Typography>{restaurantName}</Typography>
-        <Typography role='error-message-user'>{errorUser ? `${errorUser}` : ''} </Typography>
+        <Typography role='restaurant-name'>{restaurantName}</Typography>
         <Typography role='error-message-favorites'>
           {errorFavorites ? `${errorFavorites}` : ''}{' '}
         </Typography>
         <Typography role='error-message-createReview'>
           {errorCreateReview ? `${errorCreateReview}` : ''}{' '}
         </Typography>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} role='review-form'>
           <FormGroup
             sx={{ padding: 2, borderRadius: 2, border: '1px solid', borderColor: 'primary.main' }}
           >
@@ -107,6 +99,7 @@ export default function NewReview() {
               }}
             >
               <Rating
+                aria-label='Star Rating'
                 name='rating'
                 sx={{ paddingBottom: 2 }}
                 value={rating}
@@ -126,8 +119,14 @@ export default function NewReview() {
               )}
             </Box>
             <FormControl fullWidth>
-              <InputLabel>Favorite Dish</InputLabel>
-              <Select label='Favorite Dish' onChange={handleChange} value={selectedFood} required>
+              <InputLabel htmlFor='favorites'>Favorite Dish</InputLabel>
+              <Select
+                required
+                id='favorites'
+                onChange={handleChange}
+                value={selectedFood}
+                aria-label='favorites'
+              >
                 {favorites.map((favorite) => {
                   return (
                     <MenuItem key={favorite.id} value={favorite.name}>
@@ -136,20 +135,19 @@ export default function NewReview() {
                   )
                 })}
               </Select>
+              <TextField
+                required
+                multiline
+                margin='dense'
+                name='content'
+                placeholder='Write a review...'
+                aria-label='content'
+                fullWidth
+              />
+              <Button type='submit' variant='outlined'>
+                Post
+              </Button>
             </FormControl>
-            <TextField
-              required
-              multiline
-              margin='dense'
-              name='content'
-              placeholder='Write a review...'
-              aria-label='content'
-              fullWidth
-              variant='standard'
-            />
-            <Button type='submit' variant='outlined'>
-              Submit
-            </Button>
           </FormGroup>
         </form>
       </Container>

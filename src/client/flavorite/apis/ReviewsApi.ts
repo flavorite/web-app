@@ -34,24 +34,24 @@ export interface AddReviewRequest {
 }
 
 export interface DeleteImageRequest {
-    reviewId: number;
+    reviewId: string;
 }
 
 export interface DeleteReviewRequest {
-    reviewId: number;
+    reviewId: string;
 }
 
 export interface GetReviewByIdRequest {
-    reviewId: number;
+    reviewId: string;
 }
 
 export interface UpdateReviewbyIdRequest {
-    reviewId: number;
+    reviewId: string;
     updateReview: UpdateReview;
 }
 
 export interface UploadImageRequest {
-    reviewId: number;
+    reviewId: string;
     additionalMetadata?: string;
     body?: Blob;
 }
