@@ -111,7 +111,7 @@ export default function LandingMap() {
   const restaurantsData = restaurantsList.map((restaurant, id) => {
     return (
       <Stack key={id}>
-        <Link to={`/restaurants/${restaurant.name}`} state={{ restaurant: restaurant }}>
+        <Link to={`/restaurants/${restaurant.name}`} state={{ restaurantId: restaurant.id }}>
           {restaurant.name}
         </Link>
       </Stack>

@@ -11,18 +11,23 @@ import Select, { SelectChangeEvent } from '@mui/material/Select'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { useContext, useState } from 'react'
-import { useNavigate } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 import { useLocation } from 'react-router-dom'
 import { CreateReview } from '../../client/flavorite/models'
 import useCreateReview from '../../hooks/useCreateReview'
 import useFavorites from '../../hooks/useFavorites'
 import useUser from '../../hooks/useUser'
+import Spinner from '../partials/Spinner'
 import { UserContext } from '../partials/UserContext'
 
 export default function NewReview() {
   const navigate = useNavigate()
-  const mutation = useCreateReview()
   const { currentUser } = useContext(UserContext)
+  const {
+    loading: loadingCreateReview,
+    error: errorCreateReview,
+    mutate: createReview,
+  } = useCreateReview()
   // TODO: may not need this once LoginPayload is finalized with Cognito
   const {
     user,
@@ -35,6 +40,8 @@ export default function NewReview() {
     error: errorFavorites,
   } = useFavorites({ username: currentUser!.username })
   const location = useLocation()
+  const restaurantId = location.state.restaurantId
+  const { restaurantName } = useParams()
 
   const labels: { [index: string]: string } = {
     0: 'Select a rating',
@@ -57,83 +64,95 @@ export default function NewReview() {
     setSelectedFood(event.target.value as string)
   }
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    if (rating === 0) {
+      return
+    }
     const formData = new FormData(event.currentTarget)
     const formDataObj: CreateReview = {
       userId: user.id,
       restaurantId: location.state.restaurant.id,
       starred: false,
-      rating: parseInt(formData.get('rating') as string),
+      rating: rating!,
       content: formData.get('content') as string,
       favoriteFood: selectedFood,
-      // TODO: enable photo upload
-      photoUrl: '',
+      // TODO: enable photo upload. Need to discuss format of image upload.
     }
-    const createReview = () => mutation.mutate({ createReview: formDataObj })
-    navigate('/')
+
+    await createReview({ createReview: formDataObj })
+    navigate(`/restaurants/${restaurantName}`, { state: { restaurantId: restaurantId } })
   }
 
   return (
-    <Container fixed>
-      <Typography>{location.state.restaurant.name}</Typography>
-      <form onSubmit={handleSubmit}>
-        <FormGroup
-          sx={{ padding: 2, borderRadius: 2, border: '1px solid', borderColor: 'primary.main' }}
-        >
-          <Box
-            sx={{
-              width: 400,
-              display: 'flex',
-              alignItems: 'center',
-            }}
+    <Spinner loading={loadingCreateReview || loadingFavorites || loadingUser}>
+      <Container fixed>
+        <Typography>{restaurantName}</Typography>
+        <Typography role='error-message-user'>{errorUser ? `${errorUser}` : ''} </Typography>
+        <Typography role='error-message-favorites'>
+          {errorFavorites ? `${errorFavorites}` : ''}{' '}
+        </Typography>
+        <Typography role='error-message-createReview'>
+          {errorCreateReview ? `${errorCreateReview}` : ''}{' '}
+        </Typography>
+        <form onSubmit={handleSubmit}>
+          <FormGroup
+            sx={{ padding: 2, borderRadius: 2, border: '1px solid', borderColor: 'primary.main' }}
           >
-            <Rating
-              name='rating'
-              sx={{ paddingBottom: 2 }}
-              value={rating}
-              getLabelText={getLabelText}
-              onChange={(event, newValue) => {
-                setRating(newValue)
+            <Box
+              sx={{
+                width: 400,
+                display: 'flex',
+                alignItems: 'center',
               }}
-              onChangeActive={(event, newHover) => {
-                setHover(newHover)
-              }}
-              emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize='inherit' />}
+            >
+              <Rating
+                name='rating'
+                sx={{ paddingBottom: 2 }}
+                value={rating}
+                getLabelText={getLabelText}
+                onChange={(event, newValue) => {
+                  setRating(newValue)
+                }}
+                onChangeActive={(event, newHover) => {
+                  setHover(newHover)
+                }}
+                emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize='inherit' />}
+              />
+              {rating !== null ? (
+                <Box sx={{ ml: 2 }}>{labels[hover !== -1 ? hover : rating]}</Box>
+              ) : (
+                ''
+              )}
+            </Box>
+            <FormControl fullWidth>
+              <InputLabel>Favorite Dish</InputLabel>
+              <Select label='Favorite Dish' onChange={handleChange} value={selectedFood} required>
+                {favorites.map((favorite) => {
+                  return (
+                    <MenuItem key={favorite.id} value={favorite.name}>
+                      {favorite.name}
+                    </MenuItem>
+                  )
+                })}
+              </Select>
+            </FormControl>
+            <TextField
+              required
+              multiline
+              margin='dense'
+              name='content'
+              placeholder='Write a review...'
+              aria-label='content'
+              fullWidth
+              variant='standard'
             />
-            {rating !== null ? (
-              <Box sx={{ ml: 2 }}>{labels[hover !== -1 ? hover : rating]}</Box>
-            ) : (
-              ''
-            )}
-          </Box>
-          <FormControl fullWidth>
-            <InputLabel>Favorite Dish</InputLabel>
-            <Select label='Favorite Dish' onChange={handleChange} value={selectedFood}>
-              {favorites.map((favorite) => {
-                return (
-                  <MenuItem key={favorite.id} value={favorite.name}>
-                    {favorite.name}
-                  </MenuItem>
-                )
-              })}
-            </Select>
-          </FormControl>
-          <TextField
-            required
-            multiline
-            margin='dense'
-            name='content'
-            placeholder='Write a review...'
-            aria-label='content'
-            fullWidth
-            variant='standard'
-          />
-          <Button type='submit' variant='outlined'>
-            Submit
-          </Button>
-        </FormGroup>
-      </form>
-    </Container>
+            <Button type='submit' variant='outlined'>
+              Submit
+            </Button>
+          </FormGroup>
+        </form>
+      </Container>
+    </Spinner>
   )
 }
