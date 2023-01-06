@@ -1,5 +1,7 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import TestProvider from '../partials/TestProvider'
+import { UserContext } from '../partials/UserContext'
 import Friends from './Friends'
 
 const mockUpdateFriends = jest.fn()
@@ -66,19 +68,58 @@ describe('Friends', () => {
     expect(await screen.queryByText('FB Friends Connected')).not.toBeInTheDocument()
   })
 
+  test('on toggle switch to Enable, updateFriends should be triggered to enable FB friends and Sync button should appear', async () => {
+    render(
+      <TestProvider>
+        <UserContext.Provider
+          value={{
+            currentUser: { username: 'kitty', token: 'tokenString' },
+            setUser: jest.fn(),
+            clearUser: jest.fn(),
+          }}
+        >
+          <Friends />
+        </UserContext.Provider>
+      </TestProvider>,
+    )
+    const toggleBtn = screen.getByRole('checkbox', { name: /Toggle Friends/i })
+
+    await userEvent.click(toggleBtn)
+
+    expect(mockUpdateFriends).toBeCalledWith({ username: 'kitty' })
+
+    expect(await screen.findByText('Sync')).toBeInTheDocument()
+  })
+
   test('renders without crashing and display toggle button ON with message if fbConnected is true', async () => {
+    mockStatus = true
     render(
       <TestProvider>
         <Friends />
       </TestProvider>,
     )
-    mockStatus = true
     expect(await screen.queryByText('Connect FB Friends')).not.toBeInTheDocument()
 
     expect(await screen.findByText('FB Friends Connected')).toBeInTheDocument()
   })
 
-  test('on toggle switch to Enable, updateFriends should be triggered to enable FB friends and Sync button should appear', async () => {
+  test('on Sync button click, updateFriends should be triggered to sync friends to latest', async () => {
+    mockStatus = true
+    render(
+      <TestProvider>
+        <Friends />
+      </TestProvider>,
+    )
+
+    const syncBtn = await screen.findByText('Sync')
+
+    await userEvent.click(syncBtn)
+
+    expect(mockUpdateFriends).toBeCalledWith({ username: 'kitty' })
+  })
+
+  test('on toggle switch to Disable, deleteFriends should be triggered to disable FB friends connection and sync button should not be visible', async () => {
+    mockStatus = true
     render(
       <TestProvider>
         <Friends />
@@ -86,24 +127,11 @@ describe('Friends', () => {
     )
     const toggleBtn = screen.getByRole('checkbox', { name: /Toggle Friends/i })
 
-    fireEvent.click(toggleBtn)
-  })
-  test('on Sync button click, updateFriends should be triggered to sync friends to latest', async () => {
-    render(
-      <TestProvider>
-        <Friends />
-      </TestProvider>,
-    )
-    // TODO
-  })
+    await userEvent.click(toggleBtn)
 
-  test('on toggle switch to Disable, updateFriends should be triggered to disable FB friends sync and return empty array', async () => {
-    render(
-      <TestProvider>
-        <Friends />
-      </TestProvider>,
-    )
-    // TODO
+    expect(mockDeleteFriends).toBeCalledWith({ username: 'kitty' })
+
+    expect(await screen.queryByText('Sync')).not.toBeInTheDocument()
   })
 
   test('if API calls have error, should display error message', () => {

@@ -72,7 +72,6 @@ export default function NewReview() {
       favoriteFood: selectedFood,
       // TODO: enable photo upload. Need to discuss format of image upload.
     }
-    console.log(formDataObj)
     await createReview({ createReview: formDataObj })
     navigate(`/restaurants/${restaurantName}`, { state: { restaurantId: restaurantId } })
   }
