@@ -4,9 +4,10 @@ import Typography from '@mui/material/Typography'
 import { useContext } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import useUser from '../../hooks/useUser'
+import EditProfile from '../partials/EditProfile'
 import Spinner from '../partials/Spinner'
 import { UserContext } from '../partials/UserContext'
-import EditProfile from '../partials/EditProfile'
+import UserReviewsByFood from '../partials/UserReviewsByFood'
 
 export default function Profile() {
   const { currentUser } = useContext(UserContext)
@@ -17,11 +18,11 @@ export default function Profile() {
   return (
     <Spinner loading={loadingUser}>
       <Container>
-        <Typography role='error-message-userData'>{errorUser && `${errorUser}`}</Typography>
+        <Typography role='error-message-userData'>{errorUser ? `${errorUser}` : ''}</Typography>
         <Typography variant='h3' component='h3'>
           @{user.username}
         </Typography>
-        {currentUser!.username === profileUsername && <EditProfile user={user}/>}
+        {currentUser!.username === profileUsername ? <EditProfile user={user} /> : ''}
         <Button variant='contained'>
           <Link to={`/${user.username}/friends`}>View Friends</Link>
         </Button>
@@ -31,7 +32,11 @@ export default function Profile() {
         <Button variant='contained'>
           <Link to={`/${user.username}/reviews`}>View all Reviews</Link>
         </Button>
-        {/* User's recent reviews (5 reviews) below Profile options */}
+        <UserReviewsByFood
+          profileUsername={profileUsername}
+          profileView={true}
+          inputValue={'All'}
+        />
       </Container>
     </Spinner>
   )

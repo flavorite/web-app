@@ -75,7 +75,7 @@ describe('UserReviewsByFood', () => {
             clearUser: jest.fn(),
           }}
         >
-          <UserReviewsByFood inputValue={'All'} profileUsername={'kitty'} />
+          <UserReviewsByFood inputValue={'All'} profileUsername={'kitty'} profileView={false} />
         </UserContext.Provider>
       </TestProvider>,
     )
@@ -98,7 +98,11 @@ describe('UserReviewsByFood', () => {
             clearUser: jest.fn(),
           }}
         >
-          <UserReviewsByFood inputValue={'All'} profileUsername={'anotherUser'} />
+          <UserReviewsByFood
+            inputValue={'All'}
+            profileUsername={'anotherUser'}
+            profileView={false}
+          />
         </UserContext.Provider>
       </TestProvider>,
     )
@@ -110,7 +114,7 @@ describe('UserReviewsByFood', () => {
   test('displays all reviews if inputValue is All', () => {
     render(
       <TestProvider>
-        <UserReviewsByFood inputValue={'All'} profileUsername={'kitty'} />
+        <UserReviewsByFood inputValue={'All'} profileUsername={'kitty'} profileView={false} />
       </TestProvider>,
     )
 
@@ -120,7 +124,7 @@ describe('UserReviewsByFood', () => {
   test('displays filtered reviews by favoriteFood name if inputValue is not All ', () => {
     render(
       <TestProvider>
-        <UserReviewsByFood inputValue={'sushi'} profileUsername={'kitty'} />
+        <UserReviewsByFood inputValue={'sushi'} profileUsername={'kitty'} profileView={false} />
       </TestProvider>,
     )
     const reviewForSushi = screen.getByText('one of my fav sushi')
@@ -133,7 +137,11 @@ describe('UserReviewsByFood', () => {
   test('if no reviews to display for specific inputValue selected, should display noReviewMsg', () => {
     render(
       <TestProvider>
-        <UserReviewsByFood inputValue={'food without review'} profileUsername={'kitty'} />
+        <UserReviewsByFood
+          inputValue={'food without review'}
+          profileUsername={'kitty'}
+          profileView={false}
+        />
       </TestProvider>,
     )
     const noReviewMsg = screen.getByRole('no-reviews-msg')
@@ -146,7 +154,7 @@ describe('UserReviewsByFood', () => {
 
     render(
       <TestProvider>
-        <UserReviewsByFood inputValue={'All'} profileUsername={'kitty'} />
+        <UserReviewsByFood inputValue={'All'} profileUsername={'kitty'} profileView={false} />
       </TestProvider>,
     )
 
@@ -158,7 +166,7 @@ describe('UserReviewsByFood', () => {
   test('displays error message if error in fetching reviews', () => {
     render(
       <TestProvider>
-        <UserReviewsByFood inputValue={'All'} profileUsername={'kitty'} />
+        <UserReviewsByFood inputValue={'All'} profileUsername={'kitty'} profileView={false} />
       </TestProvider>,
     )
     const errorMsgUserReviews = screen.getByRole('error-message-userReviews')

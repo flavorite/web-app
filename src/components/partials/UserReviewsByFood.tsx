@@ -13,9 +13,10 @@ import { UserContext } from './UserContext'
 type reviewProps = {
   inputValue: string | null
   profileUsername: string
+  profileView: boolean
 }
 
-export default function UserReviews({ inputValue, profileUsername }: reviewProps) {
+export default function UserReviews({ inputValue, profileUsername, profileView }: reviewProps) {
   const { currentUser } = useContext(UserContext)
   const {
     reviews,
@@ -67,6 +68,32 @@ export default function UserReviews({ inputValue, profileUsername }: reviewProps
     )
   })
 
+  const profileViewReviews = reviewsToDisplay.map((review, idx) => {
+    return (
+      <Box sx={{ marginTop: 5 }} data-testid='reviewItems' key={`${review.id}-${idx}`}>
+        <Typography>{review.restaurant.name}</Typography>
+        <Typography>{profileUsername}</Typography>
+        {currentUser!.username === profileUsername ? (
+          <Button aria-label='edit-review'>
+            <Link to={`/${profileUsername}/reviews/${review.id}`}>Edit</Link>
+          </Button>
+        ) : (
+          ''
+        )}
+        <Typography>{review.content}</Typography>
+        {review.createdAt === review.updatedAt ? (
+          <Typography>
+            Posted <Moment fromNow>{review.createdAt}</Moment>
+          </Typography>
+        ) : (
+          <Typography>
+            Edited <Moment fromNow>{review.updatedAt}</Moment>
+          </Typography>
+        )}
+      </Box>
+    )
+  })
+
   return (
     <Spinner loading={loadingReviews}>
       <Container>
@@ -76,7 +103,7 @@ export default function UserReviews({ inputValue, profileUsername }: reviewProps
         <Typography role='no-reviews-msg'>
           {reviewsToDisplay.length === 0 ? `${noReviewsMsg}` : ''}
         </Typography>
-        <Box aria-label='reviews-list'>{displayReviews}</Box>
+        <Box aria-label='reviews-list'>{profileView ? profileViewReviews : displayReviews}</Box>
       </Container>
     </Spinner>
   )
