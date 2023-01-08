@@ -9,6 +9,9 @@ import Switch from '@mui/material/Switch'
 import Typography from '@mui/material/Typography'
 import { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { ListFriends } from '../../client/flavorite/models'
+import useDeleteFBFriends from '../../hooks/useDeleteFBFriends'
+import useUpdateFriends from '../../hooks/useEnableFBFriends'
 import useFriends from '../../hooks/useFriends'
 import Spinner from '../partials/Spinner'
 import { UserContext } from '../partials/UserContext'
@@ -17,21 +20,40 @@ export default function Friends() {
   const { currentUser } = useContext(UserContext)
   const username = currentUser!.username
   const [enabled, setEnabled] = useState<boolean>(false)
+  const [friendsList, setFriendsList] = useState<ListFriends['friends']>([])
   const {
     friends,
+    fbConnected,
     loading: loadingFriends,
     error: errorFetchingFriends,
   } = useFriends({ username: username })
 
+  const {
+    mutate: updateFriends,
+    loading: loadingUpdateFriends,
+    error: errorUpdateFriends,
+    friends: updatedFriends,
+    fbConnected: updatedFBconnected,
+  } = useUpdateFriends()
+
+  const {
+    mutate: deleteFriends,
+    loading: loadingDeleteFriends,
+    error: errorDeleteFriends,
+    friends: deletedFriends,
+    fbConnected: deletedFBconnected,
+  } = useDeleteFBFriends()
+
   useEffect(() => {
-    if (friends.length !== 0) {
+    if (fbConnected) {
       setEnabled(true)
+      setFriendsList(friends)
     } else {
       setEnabled(false)
     }
-  }, [friends])
+  }, [])
 
-  const friendsList = friends.map((friend, id) => {
+  const displayFriends = friendsList.map((friend, id) => {
     return (
       <Link to={`/${friend.username}`} key={id}>
         {friend.username}
@@ -39,30 +61,37 @@ export default function Friends() {
     )
   })
 
-  const handleToggle = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEnabled(event.target.checked)
-    // TODO useUpdateFriends to enable/disable FB friends
+  const handleSync = async () => {
+    await updateFriends({ username: username })
+    setEnabled(updatedFBconnected!)
+    setFriendsList(updatedFriends)
   }
 
-  const handleSync = () => {
-    // TODO useUpdateFriends to sync FB friends to latest state
-    console.log('sync')
+  const handleToggle = async () => {
+    if (enabled) {
+      await deleteFriends({ username: username })
+      setEnabled(deletedFBconnected!)
+      setFriendsList(deletedFriends)
+    } else {
+      handleSync()
+    }
+    setEnabled(!enabled)
   }
 
   return (
-    <Spinner loading={loadingFriends}>
+    <Spinner loading={loadingFriends || loadingDeleteFriends || loadingUpdateFriends}>
       <Container fixed>
         <FormGroup>
           <FormControlLabel
             control={
               <Switch
                 checked={enabled}
-                onChange={handleToggle}
+                onClick={handleToggle}
                 inputProps={{ 'aria-label': 'Toggle Friends' }}
                 name='toggleFriends'
               />
             }
-            label={enabled ? 'FB friends enabled' : 'Enable FB Friends'}
+            label={enabled ? 'FB Friends Connected' : 'Connect FB Friends'}
           />
         </FormGroup>
         {enabled ? (
@@ -76,7 +105,13 @@ export default function Friends() {
           <Typography role='error-message-getFriends'>
             {errorFetchingFriends ? `${errorFetchingFriends}` : ''}
           </Typography>
-          <Stack spacing={2}>{friendsList}</Stack>
+          <Typography role='error-message-updateFriends'>
+            {errorUpdateFriends ? `${errorUpdateFriends}` : ''}
+          </Typography>
+          <Typography role='error-message-deleteFriends'>
+            {errorDeleteFriends ? `${errorDeleteFriends}` : ''}
+          </Typography>
+          <Stack spacing={2}>{displayFriends}</Stack>
         </Box>
       </Container>
     </Spinner>

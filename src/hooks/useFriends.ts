@@ -7,16 +7,8 @@ export default function useFavorites(username: GetFriendsRequest) {
   //   const friendsList = useQuery(['user', username], fetchFriends)
 
   const friendsList: ListFriends = {
-    friends: [
-      {
-        id: '1',
-        username: 'user1',
-        firstName: 'friend',
-        lastName: 'One',
-        email: 'fone@g.com',
-        password: 'hashed',
-      },
-    ],
+    friends: [],
+    fbConnected: true,
   }
 
   return {
@@ -27,5 +19,6 @@ export default function useFavorites(username: GetFriendsRequest) {
     error: null,
     success: true,
     friends: friendsList.friends,
+    fbConnected: friendsList.fbConnected,
   }
 }
