@@ -1,9 +1,9 @@
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
-import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { useContext, useEffect, useState } from 'react'
+import Moment from 'react-moment'
 import { Link } from 'react-router-dom'
 import { ListReviews } from '../../client/flavorite'
 import useReviewsByUser from '../../hooks/useReviewsByUser'
@@ -43,14 +43,27 @@ export default function UserReviews({ inputValue, profileUsername }: reviewProps
 
   const displayReviews = reviewsToDisplay.map((review, idx) => {
     return (
-      <Stack data-testid='reviewItems' key={`${review.id}-${idx}`}>
-        {review.content}
-        {currentUser!.username === profileUsername && (
+      <Box sx={{ marginTop: 5 }} data-testid='reviewItems' key={`${review.id}-${idx}`}>
+        <Typography>{review.restaurant.name}</Typography>
+        <Typography>{profileUsername}</Typography>
+        {currentUser!.username === profileUsername ? (
           <Button aria-label='edit-review'>
             <Link to={`/${profileUsername}/reviews/${review.id}`}>Edit</Link>
           </Button>
+        ) : (
+          ''
         )}
-      </Stack>
+        <Typography>{review.content}</Typography>
+        {review.createdAt === review.updatedAt ? (
+          <Typography>
+            Posted <Moment fromNow>{review.createdAt}</Moment>
+          </Typography>
+        ) : (
+          <Typography>
+            Edited <Moment fromNow>{review.updatedAt}</Moment>
+          </Typography>
+        )}
+      </Box>
     )
   })
 

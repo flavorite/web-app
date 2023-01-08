@@ -18,7 +18,7 @@ export default function NewReview() {
       // TODO: get UserID from currentUser logged in
       userId: '1',
       // TODO: get restaurantID as props or params
-      restaurantId: 1,
+      restaurantId: '1',
       // TODO: need to finish creating review form and link FormData here
       rating: 5,
       content: 'very good',
