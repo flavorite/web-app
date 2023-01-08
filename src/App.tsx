@@ -71,7 +71,7 @@ function App() {
                     </PrivateRoute>
                   }
                 /> */}
-                <Route path='/restaurants/:restaurantId' element={<Restaurant />} />
+                <Route path='/restaurants/:restaurantName' element={<Restaurant />} />
                 <Route path='/register' element={<Register />} />
                 <Route path='/login' element={<Login />} />
                 <Route

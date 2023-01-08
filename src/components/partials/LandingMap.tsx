@@ -12,6 +12,7 @@ import {
 } from '@react-google-maps/api'
 import { useEffect, useState } from 'react'
 import { useGeolocated } from 'react-geolocated'
+import { Link } from 'react-router-dom'
 import useRestaurants from '../../hooks/useRestaurants'
 import Spinner from './Spinner'
 
@@ -108,7 +109,13 @@ export default function LandingMap() {
   }
 
   const restaurantsData = restaurantsList.map((restaurant, id) => {
-    return <Stack key={id}>{restaurant.name}</Stack>
+    return (
+      <Stack key={id}>
+        <Link to={`/restaurants/${restaurant.name}`} state={{ restaurantId: restaurant.id }}>
+          {restaurant.name}
+        </Link>
+      </Stack>
+    )
   })
 
   return (

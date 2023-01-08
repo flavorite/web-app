@@ -24,7 +24,7 @@ export interface CreateReview {
      * @type {string}
      * @memberof CreateReview
      */
-    userId: string;
+    username: string;
     /**
      * 
      * @type {string}
@@ -73,7 +73,7 @@ export function CreateReviewFromJSONTyped(json: any, ignoreDiscriminator: boolea
     }
     return {
         
-        'userId': json['userId'],
+        'username': json['username'],
         'restaurantId': json['restaurantId'],
         'rating': json['rating'],
         'content': !exists(json, 'content') ? undefined : json['content'],
@@ -92,7 +92,7 @@ export function CreateReviewToJSON(value?: CreateReview | null): any {
     }
     return {
         
-        'userId': value.userId,
+        'username': value.username,
         'restaurantId': value.restaurantId,
         'rating': value.rating,
         'content': value.content,
