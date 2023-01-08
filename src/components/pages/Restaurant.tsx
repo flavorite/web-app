@@ -23,7 +23,7 @@ export default function Restaurant() {
   const displayReviews = reviews.map((review, idx) => {
     return (
       <Box sx={{ marginTop: 5 }} data-testid='reviewItems' key={`${review.id}-${idx}`}>
-        <Typography>{review.restaurant.name}</Typography>
+        <Typography role='page-title'>{review.restaurant.name}</Typography>
         <Typography>{review.user.username}</Typography>
         {currentUser!.username === review.user.username ? (
           <Button aria-label='edit-review'>
