@@ -25,7 +25,7 @@ export default function UserReviews({ inputValue, profileUsername }: reviewProps
   const [reviewsToDisplay, setReviewsToDisplay] = useState<ListReviews['reviews']>(reviews)
 
   useEffect(() => {
-    if (inputValue !== 'All') {
+    if (inputValue !== 'All' && inputValue !== '') {
       const filteredReviews = reviews.filter((review) => {
         return review.favoriteFood === inputValue
       })

@@ -43,7 +43,7 @@ export default function FavoriteFood() {
           onInputChange={(event, newInputValue) => {
             setInputValue(newInputValue)
           }}
-          sx={{ width: 300 }}
+          sx={{ width: 300, marginTop: 5 }}
           renderInput={(params) => <TextField {...params} label='Favorite Dishes' />}
           aria-label='selectFavs'
         />
