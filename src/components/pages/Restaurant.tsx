@@ -53,7 +53,7 @@ export default function Restaurant() {
           {errorReviews ? `${errorReviews}` : ''}
         </Typography>
         <Link to={`/writeareview/${restaurantName}`} state={{ restaurantId: restaurantId }}>
-          <Button>Write a Review</Button>
+          <Button role='new-review-btn'>Write a Review</Button>
         </Link>
         <Box>{displayReviews}</Box>
       </Container>

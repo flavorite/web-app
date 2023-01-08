@@ -71,6 +71,8 @@ describe('UserReviewsByFood', () => {
     expect(restaurantName).toBeInTheDocument()
     expect(restaurantName.textContent).toBe('testRestaurant')
 
+    expect(screen.getByRole('new-review-btn')).toBeInTheDocument()
+
     const reviewContent = screen.getByText('one of my fav sushi')
     expect(reviewContent).toBeVisible()
 
