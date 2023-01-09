@@ -68,7 +68,7 @@ export default function UserReviews({ inputValue, profileUsername, profileView }
     )
   })
 
-  const profileViewReviews = reviewsToDisplay.map((review, idx) => {
+  const profileViewReviews = reviewsToDisplay.slice(0, 5).map((review, idx) => {
     return (
       <Box sx={{ marginTop: 5 }} data-testid='reviewItems' key={`${review.id}-${idx}`}>
         <Typography>{review.restaurant.name}</Typography>
