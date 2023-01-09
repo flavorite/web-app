@@ -9,11 +9,12 @@ import {
   InfoWindow,
   LoadScript,
   LoadScriptProps,
+  MarkerF,
 } from '@react-google-maps/api'
 import { useEffect, useState } from 'react'
 import { useGeolocated } from 'react-geolocated'
-import { Link } from 'react-router-dom'
 import useRestaurants from '../../hooks/useRestaurants'
+import RestaurantList from './RestaurantList'
 import Spinner from './Spinner'
 
 // declared library for 'places' here to avoid react warning for LoadScript performance
@@ -34,7 +35,7 @@ export default function LandingMap() {
 
   const [locationMsg, setLocationMsg] = useState<string | null>(null)
 
-  const [search, setSearch] = useState<any>('')
+  const [search, setSearch] = useState<any>(null)
 
   const {
     restaurants: restaurantsList,
@@ -108,16 +109,6 @@ export default function LandingMap() {
     }
   }
 
-  const restaurantsData = restaurantsList.map((restaurant, id) => {
-    return (
-      <Stack key={id}>
-        <Link to={`/restaurants/${restaurant.name}`} state={{ restaurantId: restaurant.id }}>
-          {restaurant.name}
-        </Link>
-      </Stack>
-    )
-  })
-
   return (
     <Spinner loading={loadingRestaurants}>
       <Container>
@@ -128,10 +119,7 @@ export default function LandingMap() {
         <LoadScript googleMapsApiKey={`${API_KEY}`} libraries={lib}>
           <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={15}>
             {/* TODO: Need to get 'Places' from backend and display with custom Marker */}
-            {/* <Marker
-          icon={svgMarker}
-          position={center}
-        /> */}
+            <MarkerF position={center} />
             {/* TODO: Change InfoWindow to onClick event (user clicking on each restaurant Marker to open InfoWindow with our data display) */}
             <InfoWindow onLoad={onLoadInfo} position={position}>
               <Box style={divStyle}>
@@ -148,8 +136,7 @@ export default function LandingMap() {
         </LoadScript>
 
         <Box>
-          {/* TODO: use 'restaurantsData' to display custom markers on the map & display list below map*/}
-          {restaurantsData}
+          <RestaurantList restaurants={restaurantsList} />
         </Box>
         <Typography role='error-message'>
           {/* TODO Style Typography */}
