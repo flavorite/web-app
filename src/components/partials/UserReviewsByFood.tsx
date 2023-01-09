@@ -1,6 +1,7 @@
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
+import Rating from '@mui/material/Rating'
 import Typography from '@mui/material/Typography'
 import { useContext, useEffect, useState } from 'react'
 import Moment from 'react-moment'
@@ -54,6 +55,7 @@ export default function UserReviews({ inputValue, profileUsername, profileView }
         ) : (
           ''
         )}
+        <Rating name='read-only' value={review.rating} readOnly />
         <Typography>{review.content}</Typography>
         {review.createdAt === review.updatedAt ? (
           <Typography>
@@ -80,6 +82,7 @@ export default function UserReviews({ inputValue, profileUsername, profileView }
         ) : (
           ''
         )}
+        <Rating name='read-only' value={review.rating} readOnly />
         <Typography>{review.content}</Typography>
         {review.createdAt === review.updatedAt ? (
           <Typography>
