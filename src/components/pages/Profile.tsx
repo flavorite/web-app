@@ -19,18 +19,24 @@ export default function Profile() {
     <Spinner loading={loadingUser}>
       <Container>
         <Typography role='error-message-userData'>{errorUser ? `${errorUser}` : ''}</Typography>
-        <Typography variant='h3' component='h3'>
-          @{user.username}
+        <Typography role='profile-name' variant='h3' component='h3'>
+          @{profileUsername}
         </Typography>
         {currentUser!.username === profileUsername ? <EditProfile user={user} /> : ''}
         <Button variant='contained'>
-          <Link to={`/${user.username}/friends`}>View Friends</Link>
+          <Link aria-label='view-friends' to={`/${profileUsername}/friends`}>
+            View Friends
+          </Link>
         </Button>
         <Button variant='contained'>
-          <Link to={`/${user.username}/favorites`}>Favorite Dishes</Link>
+          <Link aria-label='view-favorites' to={`/${profileUsername}/favorites`}>
+            Favorite Dishes
+          </Link>
         </Button>
         <Button variant='contained'>
-          <Link to={`/${user.username}/reviews`}>View all Reviews</Link>
+          <Link aria-label='view-reviews' to={`/${profileUsername}/reviews`}>
+            View all Reviews
+          </Link>
         </Button>
         <UserReviewsByFood
           profileUsername={profileUsername}

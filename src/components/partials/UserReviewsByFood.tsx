@@ -55,7 +55,7 @@ export default function UserReviews({ inputValue, profileUsername, profileView }
         ) : (
           ''
         )}
-        <Rating name='read-only' value={review.rating} readOnly />
+        <Rating value={review.rating} readOnly />
         <Typography>{review.content}</Typography>
         {review.createdAt === review.updatedAt ? (
           <Typography>
@@ -82,7 +82,7 @@ export default function UserReviews({ inputValue, profileUsername, profileView }
         ) : (
           ''
         )}
-        <Rating name='read-only' value={review.rating} readOnly />
+        <Rating value={review.rating} readOnly />
         <Typography>{review.content}</Typography>
         {review.createdAt === review.updatedAt ? (
           <Typography>
