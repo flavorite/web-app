@@ -38,6 +38,9 @@ export default function Profile() {
             View all Reviews
           </Link>
         </Button>
+        <Typography variant='h5' component='h5'>
+          Recent Reviews:
+        </Typography>
         <UserReviewsByFood
           profileUsername={profileUsername}
           profileView={true}
