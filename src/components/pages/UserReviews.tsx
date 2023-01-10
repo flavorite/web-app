@@ -47,7 +47,11 @@ export default function FavoriteFood() {
           renderInput={(params) => <TextField {...params} label='Favorite Dishes' />}
           aria-label='selectFavs'
         />
-        <UserReviewsByFood inputValue={inputValue} profileUsername={profileUsername} />
+        <UserReviewsByFood
+          inputValue={inputValue}
+          profileUsername={profileUsername}
+          profileView={false}
+        />
       </Container>
     </Spinner>
   )

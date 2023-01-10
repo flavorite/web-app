@@ -1,6 +1,7 @@
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
+import Rating from '@mui/material/Rating'
 import Typography from '@mui/material/Typography'
 import { useContext, useEffect, useState } from 'react'
 import Moment from 'react-moment'
@@ -13,9 +14,10 @@ import { UserContext } from './UserContext'
 type reviewProps = {
   inputValue: string | null
   profileUsername: string
+  profileView: boolean
 }
 
-export default function UserReviews({ inputValue, profileUsername }: reviewProps) {
+export default function UserReviews({ inputValue, profileUsername, profileView }: reviewProps) {
   const { currentUser } = useContext(UserContext)
   const {
     reviews,
@@ -53,6 +55,34 @@ export default function UserReviews({ inputValue, profileUsername }: reviewProps
         ) : (
           ''
         )}
+        <Rating value={review.rating} readOnly />
+        <Typography>{review.content}</Typography>
+        {review.createdAt === review.updatedAt ? (
+          <Typography>
+            Posted <Moment fromNow>{review.createdAt}</Moment>
+          </Typography>
+        ) : (
+          <Typography>
+            Edited <Moment fromNow>{review.updatedAt}</Moment>
+          </Typography>
+        )}
+      </Box>
+    )
+  })
+
+  const profileViewReviews = reviewsToDisplay.slice(0, 5).map((review, idx) => {
+    return (
+      <Box sx={{ marginTop: 5 }} data-testid='reviewItems' key={`${review.id}-${idx}`}>
+        <Typography>{review.restaurant.name}</Typography>
+        <Typography>{profileUsername}</Typography>
+        {currentUser!.username === profileUsername ? (
+          <Button aria-label='edit-review'>
+            <Link to={`/${profileUsername}/reviews/${review.id}`}>Edit</Link>
+          </Button>
+        ) : (
+          ''
+        )}
+        <Rating value={review.rating} readOnly />
         <Typography>{review.content}</Typography>
         {review.createdAt === review.updatedAt ? (
           <Typography>
@@ -76,7 +106,7 @@ export default function UserReviews({ inputValue, profileUsername }: reviewProps
         <Typography role='no-reviews-msg'>
           {reviewsToDisplay.length === 0 ? `${noReviewsMsg}` : ''}
         </Typography>
-        <Box aria-label='reviews-list'>{displayReviews}</Box>
+        <Box aria-label='reviews-list'>{profileView ? profileViewReviews : displayReviews}</Box>
       </Container>
     </Spinner>
   )

@@ -4,9 +4,10 @@ import Typography from '@mui/material/Typography'
 import { useContext } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import useUser from '../../hooks/useUser'
+import EditProfile from '../partials/EditProfile'
 import Spinner from '../partials/Spinner'
 import { UserContext } from '../partials/UserContext'
-import EditProfile from '../partials/EditProfile'
+import UserReviewsByFood from '../partials/UserReviewsByFood'
 
 export default function Profile() {
   const { currentUser } = useContext(UserContext)
@@ -17,21 +18,34 @@ export default function Profile() {
   return (
     <Spinner loading={loadingUser}>
       <Container>
-        <Typography role='error-message-userData'>{errorUser && `${errorUser}`}</Typography>
-        <Typography variant='h3' component='h3'>
-          @{user.username}
+        <Typography role='error-message-userData'>{errorUser ? `${errorUser}` : ''}</Typography>
+        <Typography role='profile-name' variant='h3' component='h3'>
+          @{profileUsername}
         </Typography>
-        {currentUser!.username === profileUsername && <EditProfile user={user}/>}
+        {currentUser!.username === profileUsername ? <EditProfile user={user} /> : ''}
         <Button variant='contained'>
-          <Link to={`/${user.username}/friends`}>View Friends</Link>
+          <Link aria-label='view-friends' to={`/${profileUsername}/friends`}>
+            View Friends
+          </Link>
         </Button>
         <Button variant='contained'>
-          <Link to={`/${user.username}/favorites`}>Favorite Dishes</Link>
+          <Link aria-label='view-favorites' to={`/${profileUsername}/favorites`}>
+            Favorite Dishes
+          </Link>
         </Button>
         <Button variant='contained'>
-          <Link to={`/${user.username}/reviews`}>View all Reviews</Link>
+          <Link aria-label='view-reviews' to={`/${profileUsername}/reviews`}>
+            View all Reviews
+          </Link>
         </Button>
-        {/* User's recent reviews (5 reviews) below Profile options */}
+        <Typography variant='h5' component='h5'>
+          Recent Reviews:
+        </Typography>
+        <UserReviewsByFood
+          profileUsername={profileUsername}
+          profileView={true}
+          inputValue={'All'}
+        />
       </Container>
     </Spinner>
   )
