@@ -27,11 +27,11 @@ export default function RestaurantList({ restaurants }: restaurantsProps) {
   }
   const displayRestaurants = restaurants
     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-    .map((restaurant, id) => {
+    .map((restaurant, idx) => {
       return (
-        <Stack aria-label='nearby-restaurants' key={id}>
+        <Stack aria-label='nearby-restaurants' key={idx}>
           <Link
-            aria-label={`restaurantDetail-${id}`}
+            aria-label={`restaurantDetail-${restaurant.id}`}
             to={`/restaurants/${restaurant.name}`}
             state={{ restaurantId: restaurant.id }}
           >
@@ -53,7 +53,7 @@ export default function RestaurantList({ restaurants }: restaurantsProps) {
           onPageChange={handleChangePage}
           rowsPerPage={rowsPerPage}
           onRowsPerPageChange={handleChangeRowsPerPage}
-          rowsPerPageOptions={[5, 10, 25, 50, 100]}
+          rowsPerPageOptions={[5, 10, 25, 50]}
         />
       </Box>
     </Container>
