@@ -29,9 +29,11 @@ export default function LandingMap() {
   }
 
   const [center, setCenter] = useState({
-    lat: 5,
-    lng: 5,
+    lat: 37.7749,
+    lng: 122.4194,
   })
+
+  const [markerCoords, setMarkerCoords] = useState<{ lat: number; lng: number }[]>([center])
 
   const [locationMsg, setLocationMsg] = useState<string | null>(null)
 
@@ -47,8 +49,15 @@ export default function LandingMap() {
     radius: 500,
   })
 
-  // TODO position will be changed to restaurantsList coordinates to display custom markers
-  const position = center
+  const [openMarkerIdx, setOpenMarkerIdx] = useState('')
+
+  const handleToggleOpen = (markerIdx: string) => {
+    setOpenMarkerIdx(markerIdx)
+  }
+
+  const handleToggleClose = () => {
+    setOpenMarkerIdx('')
+  }
 
   const divStyle = {
     background: 'white',
@@ -100,14 +109,49 @@ export default function LandingMap() {
         lng: lng,
       })
 
-      console.log(`Name: ${name}`)
-      console.log(`Business Status: ${status}`)
-      console.log(`Formatted Address: ${formattedAddress}`)
-      console.log(`lat: ${lat}, lng: ${lng}`)
+      const arrCoords: { lat: number; lng: number }[] = []
+      restaurantsList.forEach((restaurant) => {
+        arrCoords.push({ lat: restaurant.latitude, lng: restaurant.longitude })
+      })
+      setMarkerCoords(arrCoords)
+
+      // console.log(`Name: ${name}`)
+      // console.log(`Business Status: ${status}`)
+      // console.log(`Formatted Address: ${formattedAddress}`)
+      // console.log(`lat: ${lat}, lng: ${lng}`)
     } else {
       alert('Please enter text')
     }
   }
+
+  const onLoadMap = () => {
+    const arrCoords: { lat: number; lng: number }[] = []
+    restaurantsList.forEach((restaurant) => {
+      arrCoords.push({ lat: restaurant.latitude, lng: restaurant.longitude })
+    })
+    setMarkerCoords(arrCoords)
+  }
+
+  const displayMarkers = markerCoords.map((coords, idx) => {
+    return (
+      <Box key={idx}>
+        <MarkerF position={coords} onClick={() => handleToggleOpen(`marker${idx}`)} />
+        {openMarkerIdx !== '' ? (
+          <Box style={divStyle}>
+            <InfoWindow
+              onLoad={onLoadInfo}
+              position={coords}
+              onCloseClick={() => handleToggleClose}
+            >
+              <Stack>InfoWindow</Stack>
+            </InfoWindow>
+          </Box>
+        ) : (
+          ''
+        )}
+      </Box>
+    )
+  })
 
   return (
     <Spinner loading={loadingRestaurants}>
@@ -117,15 +161,14 @@ export default function LandingMap() {
           {locationMsg ? `${locationMsg}` : ''}
         </Typography>
         <LoadScript googleMapsApiKey={`${API_KEY}`} libraries={lib}>
-          <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={15}>
-            {/* TODO: Need to get 'Places' from backend and display with custom Marker */}
-            <MarkerF position={center} />
-            {/* TODO: Change InfoWindow to onClick event (user clicking on each restaurant Marker to open InfoWindow with our data display) */}
-            <InfoWindow onLoad={onLoadInfo} position={position}>
-              <Box style={divStyle}>
-                <Stack>InfoWindow</Stack>
-              </Box>
-            </InfoWindow>
+          <GoogleMap
+            mapContainerStyle={containerStyle}
+            center={center}
+            zoom={15}
+            onLoad={onLoadMap}
+          >
+            {displayMarkers}
+
             <Autocomplete onLoad={onLoadSearch} onPlaceChanged={onPlaceChanged}>
               <TextField
                 inputProps={{ style: { backgroundColor: 'white' } }}
@@ -138,8 +181,7 @@ export default function LandingMap() {
         <Box>
           <RestaurantList restaurants={restaurantsList} />
         </Box>
-        <Typography role='error-message'>
-          {/* TODO Style Typography */}
+        <Typography role='error-message-restaurants'>
           {errorLoadingRestaurants ? `${errorLoadingRestaurants}` : ''}
         </Typography>
       </Container>

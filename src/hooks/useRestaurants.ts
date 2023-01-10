@@ -11,24 +11,25 @@ export default function useRestaurants(location: GetRestaurantsRequest) {
       {
         id: '1',
         name: 'Kansai Sushi',
-        longitude: 37.9729811,
-        latitude: -122.0455746,
+        latitude: 37.972981,
+        longitude: -122.0476131,
+
         address: '1669 Willow Pass Rd, Concord, CA 94520',
       },
       {
         id: '2',
         name: 'Tang Tang Tang',
-        longitude: 37.9736553,
-        latitude: -122.0443956,
+        latitude: 37.8974296,
+        longitude: -122.1243279,
         address: '1679 Willow Pass Rd, Concord, CA 94520',
       },
     ],
   }
 
   return {
-    // loading: Reviews.isLoading,
-    // error: Reviews.isError,
-    // user: Reviews.data
+    // loading: restaurants.isLoading,
+    // error: restaurants.isError,
+    // restaurants: restaurants.data
     loading: false,
     error: null,
     restaurants: restaurantsList.restaurants,
