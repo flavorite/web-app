@@ -98,9 +98,9 @@ export default function LandingMap() {
   function onPlaceChanged() {
     if (search !== null) {
       const place = search.getPlace()
-      const name = place.name
-      const status = place.business_status
-      const formattedAddress = place.formatted_address
+      // const name = place.name
+      // const status = place.business_status
+      // const formattedAddress = place.formatted_address
       const lat = place.geometry.location.lat()
       const lng = place.geometry.location.lng()
 
