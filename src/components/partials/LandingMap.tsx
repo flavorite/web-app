@@ -1,12 +1,11 @@
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
-import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import {
   Autocomplete,
   GoogleMap,
-  InfoWindow,
+  InfoWindowF,
   LoadScript,
   LoadScriptProps,
   MarkerF,
@@ -14,6 +13,7 @@ import {
 import { useEffect, useState } from 'react'
 import { useGeolocated } from 'react-geolocated'
 import useRestaurants from '../../hooks/useRestaurants'
+import MapInfoWindow from './MapInfoWindow'
 import RestaurantList from './RestaurantList'
 import Spinner from './Spinner'
 
@@ -87,10 +87,6 @@ export default function LandingMap() {
     }
   }, [coords])
 
-  const onLoadInfo = (infoWindow: any) => {
-    console.log('infoWindow: ', infoWindow)
-  }
-
   function onLoadSearch(autocomplete: any): void {
     setSearch(autocomplete)
   }
@@ -136,15 +132,11 @@ export default function LandingMap() {
     return (
       <Box key={idx}>
         <MarkerF position={coords} onClick={() => handleToggleOpen(`marker${idx}`)} />
-        {openMarkerIdx !== '' ? (
+        {openMarkerIdx === `marker${idx}` ? (
           <Box style={divStyle}>
-            <InfoWindow
-              onLoad={onLoadInfo}
-              position={coords}
-              onCloseClick={() => handleToggleClose}
-            >
-              <Stack>InfoWindow</Stack>
-            </InfoWindow>
+            <InfoWindowF position={coords} onCloseClick={() => handleToggleClose}>
+              <MapInfoWindow restaurants={restaurantsList} coords={coords} />
+            </InfoWindowF>
           </Box>
         ) : (
           ''
@@ -156,8 +148,7 @@ export default function LandingMap() {
   return (
     <Spinner loading={loadingRestaurants}>
       <Container>
-        <Typography role='geolocation-error-message'>
-          {/* TODO Style Typography */}
+        <Typography role='error-message-geolocation'>
           {locationMsg ? `${locationMsg}` : ''}
         </Typography>
         <LoadScript googleMapsApiKey={`${API_KEY}`} libraries={lib}>

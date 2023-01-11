@@ -169,8 +169,6 @@ describe('RestaurantList', () => {
     const rowsPerPageOption5 = screen.getByRole('button', { name: 'Rows per page: 5' })
 
     await userEvent.click(rowsPerPageOption5)
-    // await fireEvent.keyDown(rowsPerPageOption, { key: 'ArrowDown', keyCode: 40 })
-    // await fireEvent.keyDown(rowsPerPageOption, { key: 'Enter', code: 'Enter', charCode: 13 })
 
     const listbox = within(screen.getByRole('presentation')).getByRole('listbox')
 
