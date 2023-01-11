@@ -39,9 +39,10 @@ export default function LandingMap() {
     lng: 122.4194,
   })
   const [markerCoords, setMarkerCoords] = useState<{ lat: number; lng: number }[]>([center])
-  const [locationMsg, setLocationMsg] = useState<string | null>(null)
   const [search, setSearch] = useState<any>(null)
   const [openMarkerIdx, setOpenMarkerIdx] = useState('')
+  const [locationMsg, setLocationMsg] = useState<string | null>(null)
+  const [mapError, setMapError] = useState<string | null>(null)
 
   const {
     restaurants: restaurantsList,
@@ -135,7 +136,12 @@ export default function LandingMap() {
         <Typography role='error-message-geolocation'>
           {locationMsg ? `${locationMsg}` : ''}
         </Typography>
-        <LoadScript googleMapsApiKey={`${API_KEY}`} libraries={lib}>
+        <Typography role='error-message-loadingMap'>{mapError ? `${mapError}` : ''}</Typography>
+        <LoadScript
+          googleMapsApiKey={`${API_KEY}`}
+          libraries={lib}
+          onError={(error: Error) => setMapError(`${error}`)}
+        >
           <GoogleMap
             mapContainerStyle={containerStyle}
             center={center}

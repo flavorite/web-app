@@ -48,6 +48,17 @@ jest.mock('react-geolocated', () => ({
   }),
 }))
 
+const mockCenter: { lat: number; lng: number } = { lat: 5, lng: 5 }
+
+jest.mock('@react-google-maps/api', () => ({
+  ...jest.requireActual('@react-google-maps/api'),
+  LoadScript: () => (
+    <div data-testid='map'>
+      {mockCenter.lat} : {mockCenter.lng}
+    </div>
+  ),
+}))
+
 describe('Map', () => {
   test('renders map without crashing with search field. If Geolocation is not available, display proper error message', async () => {
     render(
@@ -56,8 +67,6 @@ describe('Map', () => {
       </TestProvider>,
     )
 
-    screen.debug()
-
     expect(
       screen.getByText(
         'Your browser does not support Geolocation. Use Search bar to find nearby restaurants',
@@ -65,12 +74,18 @@ describe('Map', () => {
     ).toBeInTheDocument()
   })
   test('If Geolocation is not enabled, display proper error message', async () => {
+    mockAvailability = true
     render(
       <TestProvider>
         <LandingMap />
       </TestProvider>,
     )
+
+    expect(
+      screen.getByText('Geolocation is not enabled. Use Search bar to find nearby restaurants'),
+    ).toBeInTheDocument()
   })
+
   test('If Geolocation is enabled, display map using user location as center. Display Markers for nearby Restaurants', async () => {
     mockUserLocation = { lat: 37.7749, lng: 122.4194 }
     mockAvailability = true
@@ -81,6 +96,8 @@ describe('Map', () => {
         <LandingMap />
       </TestProvider>,
     )
+
+    screen.debug()
   })
 
   test('On Search location, display map using searched location as center. Display Markers for nearby Restaurants retrieved from API call', async () => {
