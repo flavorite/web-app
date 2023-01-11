@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import MapInfoWindow from './MapInfoWindow'
 import TestProvider from './TestProvider'
 
@@ -33,7 +34,7 @@ let coords = {
 }
 
 describe('MapInfoWindow', () => {
-  test('shows data for restaurant that matches marker coordinates (test restaurant id: 1', async () => {
+  test('shows data for restaurant that matches marker coordinates (test restaurant id: 1. onClick restaurant name, should redirect to restaurant detail page', async () => {
     render(
       <TestProvider>
         <MapInfoWindow restaurants={mockRestaurants} coords={coords} />
@@ -43,6 +44,11 @@ describe('MapInfoWindow', () => {
     expect(screen.getByLabelText('restaurantDetail-1')).toBeInTheDocument()
     expect(screen.queryByLabelText('restaurantDetail-2')).not.toBeInTheDocument()
     expect(screen.queryByLabelText('restaurantDetail-3')).not.toBeInTheDocument()
+
+    await userEvent.click(screen.getByLabelText('restaurantDetail-1'))
+
+    // Link takes user to restaurant detail page
+    expect(location.pathname).toEqual('/restaurants/Kansai%20Sushi')
   })
 
   test('shows data for restaurant that matches marker coordinates (test restaurant id: 2', async () => {

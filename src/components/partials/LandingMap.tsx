@@ -28,16 +28,20 @@ export default function LandingMap() {
     height: '60vh',
   }
 
+  const divStyle = {
+    background: 'white',
+    border: '1px solid #ccc',
+    padding: 15,
+  }
+
   const [center, setCenter] = useState({
     lat: 37.7749,
     lng: 122.4194,
   })
-
   const [markerCoords, setMarkerCoords] = useState<{ lat: number; lng: number }[]>([center])
-
   const [locationMsg, setLocationMsg] = useState<string | null>(null)
-
   const [search, setSearch] = useState<any>(null)
+  const [openMarkerIdx, setOpenMarkerIdx] = useState('')
 
   const {
     restaurants: restaurantsList,
@@ -48,22 +52,6 @@ export default function LandingMap() {
     latitude: center.lat,
     radius: 500,
   })
-
-  const [openMarkerIdx, setOpenMarkerIdx] = useState('')
-
-  const handleToggleOpen = (markerIdx: string) => {
-    setOpenMarkerIdx(markerIdx)
-  }
-
-  const handleToggleClose = () => {
-    setOpenMarkerIdx('')
-  }
-
-  const divStyle = {
-    background: 'white',
-    border: '1px solid #ccc',
-    padding: 15,
-  }
 
   const { coords, isGeolocationAvailable, isGeolocationEnabled } = useGeolocated({
     positionOptions: {
@@ -87,6 +75,22 @@ export default function LandingMap() {
     }
   }, [coords])
 
+  const handleToggleOpen = (markerIdx: string) => {
+    setOpenMarkerIdx(markerIdx)
+  }
+
+  const handleToggleClose = () => {
+    setOpenMarkerIdx('')
+  }
+
+  const arrMarkerCoords = () => {
+    const arrCoords: { lat: number; lng: number }[] = []
+    restaurantsList.forEach((restaurant) => {
+      arrCoords.push({ lat: restaurant.latitude, lng: restaurant.longitude })
+    })
+    setMarkerCoords(arrCoords)
+  }
+
   function onLoadSearch(autocomplete: any): void {
     setSearch(autocomplete)
   }
@@ -94,9 +98,6 @@ export default function LandingMap() {
   function onPlaceChanged() {
     if (search !== null) {
       const place = search.getPlace()
-      // const name = place.name
-      // const status = place.business_status
-      // const formattedAddress = place.formatted_address
       const lat = place.geometry.location.lat()
       const lng = place.geometry.location.lng()
 
@@ -105,27 +106,10 @@ export default function LandingMap() {
         lng: lng,
       })
 
-      const arrCoords: { lat: number; lng: number }[] = []
-      restaurantsList.forEach((restaurant) => {
-        arrCoords.push({ lat: restaurant.latitude, lng: restaurant.longitude })
-      })
-      setMarkerCoords(arrCoords)
-
-      // console.log(`Name: ${name}`)
-      // console.log(`Business Status: ${status}`)
-      // console.log(`Formatted Address: ${formattedAddress}`)
-      // console.log(`lat: ${lat}, lng: ${lng}`)
+      arrMarkerCoords()
     } else {
-      alert('Please enter text')
+      alert('Please enter search value')
     }
-  }
-
-  const onLoadMap = () => {
-    const arrCoords: { lat: number; lng: number }[] = []
-    restaurantsList.forEach((restaurant) => {
-      arrCoords.push({ lat: restaurant.latitude, lng: restaurant.longitude })
-    })
-    setMarkerCoords(arrCoords)
   }
 
   const displayMarkers = markerCoords.map((coords, idx) => {
@@ -156,7 +140,7 @@ export default function LandingMap() {
             mapContainerStyle={containerStyle}
             center={center}
             zoom={15}
-            onLoad={onLoadMap}
+            onLoad={arrMarkerCoords}
           >
             {displayMarkers}
 
