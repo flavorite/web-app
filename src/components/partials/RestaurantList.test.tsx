@@ -1,9 +1,10 @@
 import { fireEvent, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { Restaurant } from '../../client/flavorite/models'
 import TestProvider from '../partials/TestProvider'
 import RestaurantList from './RestaurantList'
 
-const mockRestaurants = [
+const mockRestaurants: Restaurant[] = [
   {
     id: '1',
     name: 'Kansai Sushi',
