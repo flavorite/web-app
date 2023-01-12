@@ -108,23 +108,23 @@ In the project directory, you can run:
 2. Launches the test runner in the interactive watch mode.\
    See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-```
-npm test
-```
+   ```
+   npm test
+   ```
 
 3. Builds the app for production to the `build` folder.
    See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-```
-npm run build
-```
+   ```
+   npm run build
+   ```
 
 4. If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
    **Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
-```
-npm run eject
-```
+   ```
+   npm run eject
+   ```
 
 5. Run ESLint
 
