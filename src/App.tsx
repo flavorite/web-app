@@ -21,13 +21,19 @@ function App() {
   const theme = createTheme({
     palette: {
       primary: {
-        main: '#3F51B5',
+        main: '#B0BEC5',
       },
       secondary: {
-        main: '#00BCD4',
+        main: '#455A64',
+      },
+      warning: {
+        main: '#F7F6E9',
+      },
+      info: {
+        main: '#7bb8c4',
       },
       error: {
-        main: '#F44336',
+        main: '#f44336',
       },
     },
   })
