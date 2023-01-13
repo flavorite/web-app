@@ -1,6 +1,6 @@
+import AccountBoxIcon from '@mui/icons-material/AccountBox'
 import MenuIcon from '@mui/icons-material/Menu'
 import AppBar from '@mui/material/AppBar'
-import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
@@ -53,24 +53,16 @@ export default function Navbar() {
     <AppBar position='static'>
       <Container maxWidth='xl'>
         <Toolbar disableGutters>
-          <Typography
-            onClick={() => navigate('/')}
-            variant='h6'
-            noWrap
-            component='a'
-            href='/'
+          <Box
+            component='img'
             sx={{
-              mr: 2,
+              height: 70,
               display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
             }}
-          >
-            Flavorite
-          </Typography>
+            alt='Flavorite Logo'
+            src='/Flavorite-logos_transparent.png'
+            onClick={() => navigate('/')}
+          />
 
           <Box sx={{ flexGrow: 1, display: currentUser ? 'none' : { xs: 'flex', md: 'none' } }}>
             <IconButton
@@ -108,26 +100,17 @@ export default function Navbar() {
               ))}
             </Menu>
           </Box>
-
-          <Typography
-            onClick={() => navigate('/')}
-            variant='h5'
-            noWrap
-            component='a'
-            href=''
+          <Box
+            component='img'
             sx={{
-              mr: 2,
               display: { xs: 'flex', md: 'none' },
+              height: 70,
               flexGrow: 1,
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
             }}
-          >
-            Flavorite
-          </Typography>
+            alt='Flavorite Logo'
+            src='/Flavorite-logos_transparent.png'
+            onClick={() => navigate('/')}
+          />
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             <Box aria-label='loggedOutMenu md' style={{ display: currentUser ? 'none' : '' }}>
               {pages.map((page) => (
@@ -147,10 +130,9 @@ export default function Navbar() {
             style={{ display: currentUser ? 'flex' : 'none' }}
             aria-label='user options'
           >
-            <Tooltip title='Open settings'>
+            <Tooltip title='Open Settings'>
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                {/* TODO change to thumbnail of profile photo or default user image */}
-                <Avatar alt='Remy Sharp' src='/static/images/avatar/2.jpg' />
+                <AccountBoxIcon sx={{ color: 'rgb(241,161,131)' }} fontSize='large' />
               </IconButton>
             </Tooltip>
             <Menu
