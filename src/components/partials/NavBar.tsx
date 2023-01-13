@@ -50,7 +50,7 @@ export default function Navbar() {
   }
 
   return (
-    <AppBar position='static'>
+    <AppBar position='static' sx={{ backgroundColor: 'rgb(123,178,190)' }}>
       <Container maxWidth='xl'>
         <Toolbar disableGutters>
           <Box
@@ -130,9 +130,9 @@ export default function Navbar() {
             style={{ display: currentUser ? 'flex' : 'none' }}
             aria-label='user options'
           >
-            <Tooltip title='Open Settings'>
+            <Tooltip title='Your Account'>
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <AccountBoxIcon sx={{ color: 'rgb(241,161,131)' }} fontSize='large' />
+                <AccountBoxIcon sx={{ color: 'rgb(247,246,233)' }} fontSize='large' />
               </IconButton>
             </Tooltip>
             <Menu
