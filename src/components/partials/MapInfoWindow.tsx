@@ -9,8 +9,11 @@ type infoWindowProps = {
 }
 
 export default function MapInfoWindow({ restaurants, coords }: infoWindowProps) {
-  const displayInfoWindow = restaurants.map((restaurant, idx) => {
-    if (restaurant.latitude === coords.lat && restaurant.longitude === coords.lng) {
+  const displayInfoWindow = restaurants
+    .filter(
+      (restaurant) => restaurant.latitude === coords.lat && restaurant.longitude === coords.lng,
+    )
+    .map((restaurant, idx) => {
       return (
         <Stack aria-label='restaurants-infoWindow' key={idx}>
           <Link
@@ -23,7 +26,7 @@ export default function MapInfoWindow({ restaurants, coords }: infoWindowProps) 
           </Link>
         </Stack>
       )
-    }
-  })
+    })
+
   return <Box>{displayInfoWindow}</Box>
 }

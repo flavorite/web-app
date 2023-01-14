@@ -28,7 +28,7 @@ export default function LandingMap() {
     height: '60vh',
   }
 
-  const divStyle = {
+  const infoBoxStyle = {
     background: 'white',
     border: '1px solid #ccc',
     padding: 15,
@@ -118,7 +118,7 @@ export default function LandingMap() {
       <Box key={idx}>
         <MarkerF position={coords} onClick={() => handleToggleOpen(`marker${idx}`)} />
         {openMarkerIdx === `marker${idx}` ? (
-          <Box style={divStyle}>
+          <Box style={infoBoxStyle}>
             <InfoWindowF position={coords} onCloseClick={() => handleToggleClose}>
               <MapInfoWindow restaurants={restaurantsList} coords={coords} />
             </InfoWindowF>
