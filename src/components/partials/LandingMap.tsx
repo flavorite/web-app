@@ -1,19 +1,20 @@
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
-import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import {
   Autocomplete,
   GoogleMap,
-  InfoWindow,
+  InfoWindowF,
   LoadScript,
   LoadScriptProps,
+  MarkerF,
 } from '@react-google-maps/api'
 import { useEffect, useState } from 'react'
 import { useGeolocated } from 'react-geolocated'
-import { Link } from 'react-router-dom'
 import useRestaurants from '../../hooks/useRestaurants'
+import MapInfoWindow from './MapInfoWindow'
+import RestaurantList from './RestaurantList'
 import Spinner from './Spinner'
 
 // declared library for 'places' here to avoid react warning for LoadScript performance
@@ -27,14 +28,21 @@ export default function LandingMap() {
     height: '60vh',
   }
 
+  const infoBoxStyle = {
+    background: 'white',
+    border: '1px solid #ccc',
+    padding: 15,
+  }
+
   const [center, setCenter] = useState({
-    lat: 5,
-    lng: 5,
+    lat: 37.7749,
+    lng: 122.4194,
   })
-
+  const [markerCoords, setMarkerCoords] = useState<{ lat: number; lng: number }[]>([center])
+  const [search, setSearch] = useState<any>(null)
+  const [openMarkerIdx, setOpenMarkerIdx] = useState('')
   const [locationMsg, setLocationMsg] = useState<string | null>(null)
-
-  const [search, setSearch] = useState<any>('')
+  const [mapError, setMapError] = useState<string | null>(null)
 
   const {
     restaurants: restaurantsList,
@@ -45,15 +53,6 @@ export default function LandingMap() {
     latitude: center.lat,
     radius: 500,
   })
-
-  // TODO position will be changed to restaurantsList coordinates to display custom markers
-  const position = center
-
-  const divStyle = {
-    background: 'white',
-    border: '1px solid #ccc',
-    padding: 15,
-  }
 
   const { coords, isGeolocationAvailable, isGeolocationEnabled } = useGeolocated({
     positionOptions: {
@@ -77,8 +76,20 @@ export default function LandingMap() {
     }
   }, [coords])
 
-  const onLoadInfo = (infoWindow: any) => {
-    console.log('infoWindow: ', infoWindow)
+  const handleToggleOpen = (markerIdx: string) => {
+    setOpenMarkerIdx(markerIdx)
+  }
+
+  const handleToggleClose = () => {
+    setOpenMarkerIdx('')
+  }
+
+  const arrMarkerCoords = () => {
+    const arrCoords: { lat: number; lng: number }[] = []
+    restaurantsList.forEach((restaurant) => {
+      arrCoords.push({ lat: restaurant.latitude, lng: restaurant.longitude })
+    })
+    setMarkerCoords(arrCoords)
   }
 
   function onLoadSearch(autocomplete: any): void {
@@ -88,9 +99,6 @@ export default function LandingMap() {
   function onPlaceChanged() {
     if (search !== null) {
       const place = search.getPlace()
-      const name = place.name
-      const status = place.business_status
-      const formattedAddress = place.formatted_address
       const lat = place.geometry.location.lat()
       const lng = place.geometry.location.lng()
 
@@ -99,45 +107,49 @@ export default function LandingMap() {
         lng: lng,
       })
 
-      console.log(`Name: ${name}`)
-      console.log(`Business Status: ${status}`)
-      console.log(`Formatted Address: ${formattedAddress}`)
-      console.log(`lat: ${lat}, lng: ${lng}`)
+      arrMarkerCoords()
     } else {
-      alert('Please enter text')
+      alert('Please enter search value')
     }
   }
 
-  const restaurantsData = restaurantsList.map((restaurant, id) => {
+  const displayMarkers = markerCoords.map((coords, idx) => {
     return (
-      <Stack key={id}>
-        <Link to={`/restaurants/${restaurant.name}`} state={{ restaurantId: restaurant.id }}>
-          {restaurant.name}
-        </Link>
-      </Stack>
+      <Box key={idx}>
+        <MarkerF position={coords} onClick={() => handleToggleOpen(`marker${idx}`)} />
+        {openMarkerIdx === `marker${idx}` ? (
+          <Box style={infoBoxStyle}>
+            <InfoWindowF position={coords} onCloseClick={() => handleToggleClose}>
+              <MapInfoWindow restaurants={restaurantsList} coords={coords} />
+            </InfoWindowF>
+          </Box>
+        ) : (
+          ''
+        )}
+      </Box>
     )
   })
 
   return (
     <Spinner loading={loadingRestaurants}>
       <Container>
-        <Typography role='geolocation-error-message'>
-          {/* TODO Style Typography */}
+        <Typography role='error-message-geolocation'>
           {locationMsg ? `${locationMsg}` : ''}
         </Typography>
-        <LoadScript googleMapsApiKey={`${API_KEY}`} libraries={lib}>
-          <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={15}>
-            {/* TODO: Need to get 'Places' from backend and display with custom Marker */}
-            {/* <Marker
-          icon={svgMarker}
-          position={center}
-        /> */}
-            {/* TODO: Change InfoWindow to onClick event (user clicking on each restaurant Marker to open InfoWindow with our data display) */}
-            <InfoWindow onLoad={onLoadInfo} position={position}>
-              <Box style={divStyle}>
-                <Stack>InfoWindow</Stack>
-              </Box>
-            </InfoWindow>
+        <Typography role='error-message-loadingMap'>{mapError ? `${mapError}` : ''}</Typography>
+        <LoadScript
+          googleMapsApiKey={`${API_KEY}`}
+          libraries={lib}
+          onError={(error: Error) => setMapError(`${error}`)}
+        >
+          <GoogleMap
+            mapContainerStyle={containerStyle}
+            center={center}
+            zoom={15}
+            onLoad={arrMarkerCoords}
+          >
+            {displayMarkers}
+
             <Autocomplete onLoad={onLoadSearch} onPlaceChanged={onPlaceChanged}>
               <TextField
                 inputProps={{ style: { backgroundColor: 'white' } }}
@@ -148,11 +160,9 @@ export default function LandingMap() {
         </LoadScript>
 
         <Box>
-          {/* TODO: use 'restaurantsData' to display custom markers on the map & display list below map*/}
-          {restaurantsData}
+          <RestaurantList restaurants={restaurantsList} />
         </Box>
-        <Typography role='error-message'>
-          {/* TODO Style Typography */}
+        <Typography role='error-message-restaurants'>
           {errorLoadingRestaurants ? `${errorLoadingRestaurants}` : ''}
         </Typography>
       </Container>
