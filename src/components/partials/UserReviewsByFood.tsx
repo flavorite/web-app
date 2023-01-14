@@ -79,7 +79,7 @@ export default function UserReviews({ inputValue, profileUsername, profileView }
         />
         <CardContent>
           <Rating value={review.rating} readOnly />
-          <Typography variant='body2' color='text.secondary'>
+          <Typography variant='body1' color='text.primary'>
             {review.content}
           </Typography>
         </CardContent>
@@ -94,11 +94,11 @@ export default function UserReviews({ inputValue, profileUsername, profileView }
           </IconButton>
 
           {review.createdAt === review.updatedAt ? (
-            <Typography>
+            <Typography variant='caption'>
               Posted <Moment fromNow>{review.createdAt}</Moment>
             </Typography>
           ) : (
-            <Typography>
+            <Typography variant='caption'>
               Edited <Moment fromNow>{review.updatedAt}</Moment>
             </Typography>
           )}
