@@ -8,6 +8,7 @@ import CardContent from '@mui/material/CardContent'
 import CardHeader from '@mui/material/CardHeader'
 import CardMedia from '@mui/material/CardMedia'
 import Container from '@mui/material/Container'
+import Grid from '@mui/material/Grid'
 import IconButton from '@mui/material/IconButton'
 import Rating from '@mui/material/Rating'
 import Typography from '@mui/material/Typography'
@@ -63,7 +64,7 @@ export default function UserReviews({ inputValue, profileUsername, profileView }
 
   const displayReviews = reviewsToDisplay.map((review, idx) => {
     return (
-      <Card sx={{ marginTop: 5, width: 350 }} data-testid='reviewItems' key={`${review.id}-${idx}`}>
+      <Card sx={{ marginTop: 5, width: 400 }} data-testid='reviewItems' key={`${review.id}-${idx}`}>
         <CardHeader
           action={
             currentUser!.username === profileUsername ? (
@@ -89,19 +90,25 @@ export default function UserReviews({ inputValue, profileUsername, profileView }
           ''
         )}
         <CardActions disableSpacing>
-          <IconButton aria-label='flavoriteReview'>
-            <FavoriteIcon />
-          </IconButton>
+          <Grid container justifyContent='space-between'>
+            {currentUser!.username === profileUsername ? (
+              <IconButton aria-label='flavoriteReview'>
+                <FavoriteIcon />
+              </IconButton>
+            ) : (
+              ''
+            )}
 
-          {review.createdAt === review.updatedAt ? (
-            <Typography variant='caption'>
-              Posted <Moment fromNow>{review.createdAt}</Moment>
-            </Typography>
-          ) : (
-            <Typography variant='caption'>
-              Edited <Moment fromNow>{review.updatedAt}</Moment>
-            </Typography>
-          )}
+            {review.createdAt === review.updatedAt ? (
+              <Typography variant='caption' align='right'>
+                Posted <Moment fromNow>{review.createdAt}</Moment>
+              </Typography>
+            ) : (
+              <Typography variant='caption'>
+                Edited <Moment fromNow>{review.updatedAt}</Moment>
+              </Typography>
+            )}
+          </Grid>
         </CardActions>
       </Card>
     )
