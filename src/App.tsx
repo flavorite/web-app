@@ -18,7 +18,25 @@ import PrivateRoute from './components/partials/PrivateRoute'
 import { UserProvider } from './components/partials/UserContext'
 
 function App() {
-  const theme = createTheme()
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: '#B0BEC5',
+      },
+      secondary: {
+        main: '#455A64',
+      },
+      warning: {
+        main: '#F7F6E9',
+      },
+      info: {
+        main: '#7bb8c4',
+      },
+      error: {
+        main: '#f44336',
+      },
+    },
+  })
 
   return (
     <div className='App'>
@@ -63,14 +81,6 @@ function App() {
                     </PrivateRoute>
                   }
                 />
-                {/* <Route
-                  path='/:username/reviews/:favorite'
-                  element={
-                    <PrivateRoute>
-                      <UserReviews />
-                    </PrivateRoute>
-                  }
-                /> */}
                 <Route path='/restaurants/:restaurantName' element={<Restaurant />} />
                 <Route path='/register' element={<Register />} />
                 <Route path='/login' element={<Login />} />

@@ -1,6 +1,15 @@
+import FavoriteIcon from '@mui/icons-material/Favorite'
+import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
+import Card from '@mui/material/Card'
+import CardActions from '@mui/material/CardActions'
+import CardContent from '@mui/material/CardContent'
+import CardHeader from '@mui/material/CardHeader'
+import CardMedia from '@mui/material/CardMedia'
 import Container from '@mui/material/Container'
+import Grid from '@mui/material/Grid'
+import IconButton from '@mui/material/IconButton'
 import Rating from '@mui/material/Rating'
 import Typography from '@mui/material/Typography'
 import { useContext, useEffect, useState } from 'react'
@@ -43,30 +52,65 @@ export default function UserReviews({ inputValue, profileUsername, profileView }
     </Typography>
   )
 
-  const displayReviews = reviewsToDisplay.map((review, idx) => {
-    return (
-      <Box sx={{ marginTop: 5 }} data-testid='reviewItems' key={`${review.id}-${idx}`}>
-        <Typography>{review.restaurant.name}</Typography>
-        <Typography>{profileUsername}</Typography>
-        {currentUser!.username === profileUsername ? (
+  {
+    /* {currentUser!.username === profileUsername ? (
           <Button aria-label='edit-review'>
             <Link to={`/${profileUsername}/reviews/${review.id}`}>Edit</Link>
           </Button>
         ) : (
           ''
-        )}
-        <Rating value={review.rating} readOnly />
-        <Typography>{review.content}</Typography>
-        {review.createdAt === review.updatedAt ? (
-          <Typography>
-            Posted <Moment fromNow>{review.createdAt}</Moment>
+        )} */
+  }
+
+  const displayReviews = reviewsToDisplay.map((review, idx) => {
+    return (
+      <Card sx={{ marginTop: 5, width: 400 }} data-testid='reviewItems' key={`${review.id}-${idx}`}>
+        <CardHeader
+          action={
+            currentUser!.username === profileUsername ? (
+              <IconButton aria-label='settings'>
+                <MoreVertIcon />
+              </IconButton>
+            ) : (
+              ''
+            )
+          }
+          title={review.restaurant.name}
+          subheader={`@${profileUsername}`}
+        />
+        <CardContent>
+          <Rating value={review.rating} readOnly />
+          <Typography variant='body1' color='text.primary'>
+            {review.content}
           </Typography>
+        </CardContent>
+        {review.photoUrl ? (
+          <CardMedia component='img' height='194' image={review.photoUrl} alt='uploaded img' />
         ) : (
-          <Typography>
-            Edited <Moment fromNow>{review.updatedAt}</Moment>
-          </Typography>
+          ''
         )}
-      </Box>
+        <CardActions disableSpacing>
+          <Grid container justifyContent='space-between'>
+            {currentUser!.username === profileUsername ? (
+              <IconButton aria-label='flavoriteReview'>
+                <FavoriteIcon />
+              </IconButton>
+            ) : (
+              ''
+            )}
+
+            {review.createdAt === review.updatedAt ? (
+              <Typography variant='caption' align='right'>
+                Posted <Moment fromNow>{review.createdAt}</Moment>
+              </Typography>
+            ) : (
+              <Typography variant='caption'>
+                Edited <Moment fromNow>{review.updatedAt}</Moment>
+              </Typography>
+            )}
+          </Grid>
+        </CardActions>
+      </Card>
     )
   })
 
@@ -99,7 +143,7 @@ export default function UserReviews({ inputValue, profileUsername, profileView }
 
   return (
     <Spinner loading={loadingReviews}>
-      <Container>
+      <Container sx={{ display: 'flex', justifyContent: 'center' }}>
         <Typography role='error-message-userReviews'>
           {errorReviews ? `${errorReviews}` : ''}
         </Typography>
