@@ -62,6 +62,10 @@ export default function UserReviews({ inputValue, profileUsername, profileView }
         )} */
   }
 
+  const handleFlavorite = () => {
+    // TODO update review to change starred to true
+    console.log('flavortied')
+  }
   const displayReviews = reviewsToDisplay.map((review, idx) => {
     return (
       <Card sx={{ marginTop: 5, width: 400 }} data-testid='reviewItems' key={`${review.id}-${idx}`}>
@@ -92,7 +96,7 @@ export default function UserReviews({ inputValue, profileUsername, profileView }
         <CardActions disableSpacing>
           <Grid container justifyContent='space-between'>
             {currentUser!.username === profileUsername ? (
-              <IconButton aria-label='flavoriteReview'>
+              <IconButton aria-label='flavoriteReview' onClick={handleFlavorite}>
                 <FavoriteIcon />
               </IconButton>
             ) : (
